@@ -1,0 +1,11 @@
+APGEN script version "apgen-10.0.0pre-Unknown build"
+# udef=(not found)
+# user=root
+# date=2017-273T17:08:33.000
+# hostname=LMC-052973
+# n_apgen_files=0
+OPENFILE 56-act-editor/instances.aaf
+NEWACTDISPLAY
+EDITACTIVITY ID not_generic_10
+    < data_volume = "5.0" >
+#QUIT 0

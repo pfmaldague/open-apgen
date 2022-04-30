@@ -1,0 +1,20 @@
+APGEN version "apgen-10.0.0pre-Unknown build"
+
+
+directive "Activity Legend Layout" = [
+    "",
+    [ "vectors", 32 ], 
+    [ "bars", 32 ]
+    ];
+directive "Resource Legend Layout" = [
+    "",
+    [ "StVec[\"one\"][\"AA\"]", 100 ], 
+    [ "StVec[\"one\"][\"BB\"]", 100 ], 
+    [ "StVec[\"one\"][\"CC\"]", 100 ], 
+    [ "StVec[\"three\"][\"AA\"]", 100 ], 
+    [ "StVec[\"three\"][\"BB\"]", 100 ], 
+    [ "StVec[\"three\"][\"CC\"]", 100 ], 
+    [ "StVec[\"two\"][\"AA\"]", 100 ], 
+    [ "StVec[\"two\"][\"BB\"]", 100 ], 
+    [ "StVec[\"two\"][\"CC\"]", 100 ]
+    ];

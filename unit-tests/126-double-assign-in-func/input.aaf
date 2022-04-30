@@ -1,0 +1,11 @@
+apgen version "double divide"
+
+function divide() {
+	A: duration default to 0:10:0;
+	B: float default to 5.0;
+	C: duration default to 9:00:00;
+	C = A / B;
+	return C;
+}
+
+global duration D = divide();

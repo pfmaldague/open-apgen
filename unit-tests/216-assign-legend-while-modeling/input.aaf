@@ -1,0 +1,13 @@
+apgen version "legend"
+
+activity type Foo
+    begin
+	attributes
+	    "Legend" = "Original Legend";
+	    "Duration" = x;
+
+	parameters
+	    x: duration default to 1:00:00;
+	modeling
+	    legend = "New Legend";
+    end activity type Foo

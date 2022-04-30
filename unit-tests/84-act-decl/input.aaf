@@ -1,0 +1,27 @@
+apgen version "activity definitions out of order"
+
+activity type the_child;
+
+activity type the_parent
+    begin
+	attributes
+		"Duration" = 1:00:00;
+	nonexclusive_decomposition
+		the_child(00:30:00);
+    end activity type the_parent
+
+
+activity type the_child
+    begin
+	attributes
+		"Legend" = "Children";
+		"Duration" = D;
+	parameters
+		D: duration default to 1:00:00;
+    end activity type the_child
+
+activity instance P of type the_parent id PPP_lots_of_kids
+    begin
+	attributes
+		"Legend" = "Parents";
+    end activity instance P

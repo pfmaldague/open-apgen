@@ -1,0 +1,20 @@
+apgen version "foo"
+
+activity type A
+    begin
+	attributes
+		"Duration" = 1:0:0;
+		"Color" = "Orange Red";
+	parameters
+		a: array default to ["first" = 1, "second" = 1];
+	modeling
+		write_to_stdout("a: ", a, "\n");
+    end activity type A
+
+activity instance an_instance of type A
+    begin
+	attributes
+		"Start" = 2019-360T02:20:00;
+	parameters
+		(["first" = 1, "second" = 2044, "third" = -148]);
+    end activity instance an_instance

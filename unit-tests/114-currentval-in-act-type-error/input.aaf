@@ -1,0 +1,28 @@
+apgen version "usage"
+
+global integer Foo = 1;
+resource StateScalar: state integer
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: integer default to 1;
+	states
+		0, 1, 2, 3, 4;
+	profile
+		0;
+	usage
+		x;
+    end resource StateScalar
+
+activity type testStateScalar
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 00:30:00.000;
+		"Legend" = "testers";
+	nonexclusive_decomposition
+		measured: integer default to Foo.currentval();
+		write_to_stdout(get_id_of(this), ": measured = ", measured, "\n");
+    end activity type testStateScalar
+

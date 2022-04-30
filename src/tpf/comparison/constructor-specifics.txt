@@ -1,0 +1,106 @@
+ActivityData {
+	//
+	// Implemented in tol_system.C:
+	//
+	void capture_activity_data();
+m
+ void ActivityData::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	capture_activity_data();
+ }
+e
+}
+OneResourceDatum {
+	//
+	// Implemented in tol_system.C:
+	//
+	void capture_resource_data();
+m
+ void OneResourceDatum::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	capture_resource_data();
+ }
+e
+}
+OneInputFile {
+	//
+	// Implemented in tol_system.C:
+	//
+	void capture_auxiliary_file_name(const Cstring&);
+m
+ void OneInputFile::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	capture_auxiliary_file_name(theData);
+ }
+e
+}
+Record {
+
+	//
+	// Implemented in tol_system.C:
+	//
+	virtual void addExp(const tolExp& pe) override;
+
+	tolNode* first_record_to_delete;
+
+	void transfer_records_so_far(bool last_time = false);
+m
+}
+TolFile {
+ void TolFile::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+
+	//
+	// Improbable as it sounds, this method is called at the very
+	// end of the parsing process, when the parser has finally
+	// identified all the components of a TOL file. Therefore,
+	// this is the natural place for setting the "parsing
+	// complete" flag, indicating to the processing threads
+	// that parsing is done. Before leaving the scene, however,
+	// there is one last task the thread needs to do: delete
+	// the smart pointers inside the input_file and theRecords.
+	//
+	// Since input_file is created by the code in grammar.y
+	// which invokes this method via the TolFile constructor,
+	// the cleanup code must be included in the program
+	// that launches the parsing thread.
+	//
+	// In view of this, we will handle both setting the "parsing
+	// complete" flag and cleaning up global structures in the
+	// launching code.
+	//
+
+	//
+	// Verify that we have a bona fide Record
+	//
+	tol::Record* rec = dynamic_cast<Record*>(records.object());
+	assert(rec);
+
+	//
+	// Finish (or start, if the number of records is less
+	// than 1000) transferring records:
+	//
+	rec->transfer_records_so_far(true);
+ }
+e
+}
+tol_value {
+	//
+	// Implemented in tol_system.C; adds nothing
+	// when a comma is added
+	//
+	virtual void addExp(const tolExp& pe) override;
+m
+}
+KeywordValuePair {
+	//
+	// Implemented in tol_system.C; adds nothing
+	// when a comma is added
+	//
+	virtual void addExp(const tolExp& pe) override;
+m
+}

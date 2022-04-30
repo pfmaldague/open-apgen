@@ -1,0 +1,11 @@
+APGEN version "apgen-X.6-pre1-Custom - Thu Jun 11 09:28:02 PDT 2020"
+
+
+directive "Activity Legend Layout" = [
+    "",
+    [ "Periodic", 32 ]
+    ];
+directive "Resource Legend Layout" = [
+    "",
+    [ "periodic", 100 ]
+    ];

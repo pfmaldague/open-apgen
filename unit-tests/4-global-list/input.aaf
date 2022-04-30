@@ -1,0 +1,14 @@
+apgen version "loop1"
+
+global array List1 = ["one", "two", "three", "four", "five", "six"];
+
+function send_to_user(s)
+    parameters
+	s: string default to "";
+    {
+	write_to_stdout("send_to_user: ", s, "\n");
+	return 1;
+}
+
+global string A = List1[0] + List1[1] + List1[2] + List1[3] + List1[4] + List1[5];
+global integer dummy = send_to_user(A);

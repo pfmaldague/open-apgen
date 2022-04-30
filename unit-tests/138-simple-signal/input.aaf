@@ -1,0 +1,57 @@
+apgen version "FOO"
+
+activity type WaitForUpdate
+    begin
+	attributes
+		"Duration" = 10:00:00;
+		"Color" = "Spring Green";
+	modeling
+		write_to_stdout(now, " - ", id, " waiting for Update...\n");
+		wait until "Update";
+		write_to_stdout(now, " - ", id, " got Update.\n");
+		A: array default to get_sender_info("Update");
+		write_to_stdout(now, ": act. ", get_id_of(this), " got the Update signal; info: ", A, "\n");
+		delete_signal("Update");
+		write_to_stdout(now, ": act. ", id, " is all done.\n");
+    end activity type WaitForUpdate
+
+activity type SendUpdateSignal
+    begin
+	attributes
+		"Duration" = 1:00:00;
+		"Color" = "Orange Red";
+	modeling
+		write_to_stdout(now, " - ", id, " sending Update signal\n");
+		set signal("Update", ["First shot", now]);
+    end activity type SendUpdateSignal
+
+activity instance WaitForUpdate of type WaitForUpdate id WaitForUpdate
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "WaitForUpdate (id WaitForUpdate)";
+	    "Duration" = 10:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "inputs/simple.aaf";
+	    "Start" = 2016-073T19:00:00.000;
+	    "Status" = TRUE;
+	parameters
+	    ();
+    end activity instance WaitForUpdate
+
+activity instance SendUpdateSignal of type SendUpdateSignal id SendUpdateSignal
+    begin
+	attributes
+	    "Color" = "Orange Red";
+	    "Description" = "SendUpdate (id SendUpdate)";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "inputs/simple.aaf";
+	    "Start" = 2016-073T21:00:00.000;
+	    "Status" = TRUE;
+	parameters
+	    ();
+    end activity instance SendUpdateSignal
+

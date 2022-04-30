@@ -1,0 +1,53 @@
+apgen version "foo"
+
+function tellb(b)
+    parameters
+	b: boolean default to 0;
+	{
+	write_to_stdout("tell: b = ", b, "\n");
+	return true;
+	}
+
+function telli(i)
+    parameters
+	i: integer default to 0;
+	{
+	write_to_stdout("tell: i = ", i, "\n");
+	return 12;
+	}
+
+function tellf(f)
+    parameters
+	f: float default to 0;
+	{
+	write_to_stdout("tell: f = ", f, "\n");
+	return 12.9;
+	}
+
+function tellt(T)
+    parameters
+	T: time default to 2017-039T00:00:00;
+	{
+	write_to_stdout("tell: T = ", T, "\n");
+	return 2017-039T00:00:00;
+	}
+
+function telld(d)
+    parameters
+	d: duration default to 00:00:00;
+	{
+	write_to_stdout("tell: d = ", d, "\n");
+	return 12:00:00;
+	}
+
+function tells(s)
+    parameters
+	s: string default to " ";
+	{
+	write_to_stdout("tell: s = ", s, "\n");
+	return "here it is: 12";
+	}
+
+global integer a = true || false;
+global boolean c = tellb(3.0 == 4.0);
+global boolean d = tellb(3 > 4);

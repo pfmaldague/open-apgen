@@ -1,0 +1,66 @@
+apgen version "very qualified"
+
+
+activity type has_C
+    begin
+	C: string default to "see this";
+	attributes
+	    "Color" = "Aquamarine";
+	    "Duration" = 00:15:00;
+    end activity type has_C
+
+activity type has_B
+    begin
+	B: string default to "bees sting";
+	attributes
+	    "Color" = "Purple";
+	    "Duration" = 00:30:00;
+	modeling
+	    write_to_stdout("has_B: parent's parent's bar is ", parent.parent.bar, "\n");
+    end activity type has_B
+
+activity type has_A
+    begin
+	A: array default to [];
+	K: array default to [];
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 01:00:00;
+	nonexclusive_decomposition
+	    kid: instance default to "generic";
+	    call("has_B", [], kid);
+	    K[0] = kid;
+	    call("has_B", [], kid) at start + 2:00:00;
+	    K[1] = kid;
+	modeling
+	    s: array default to [1, 2];
+	    A = [];
+	    A[0] = copy_array(s);
+	    A[1] = K;
+    end activity type has_A
+
+activity type ancestor
+    begin
+	bar: string default to "ancestor's bar";
+	kids: array default to [];
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 2:00:00;
+	nonexclusive_decomposition
+	    kid: instance default to "generic";
+	    call("has_A", [], kid) at start - 1:00:00;
+	    kids[0] = kid;
+	    call("has_A", [], kid);
+	    kids[1] = kid;
+	    call("has_C", [], kid) at start + 1:00:00;
+	    kids[2] = kid;
+	modeling
+	    write_to_stdout("ancestor: kids[0].A[0][1] = ", kids[0].A[0][1],
+		" kids[0].A[1][1].B = ", kids[0].A[1][1].B, "\n");
+    end activity type ancestor
+
+activity instance ancestor of type ancestor
+    begin
+	attributes
+	    "Start" = 2021-100T00:00:00;
+    end activity instance ancestor

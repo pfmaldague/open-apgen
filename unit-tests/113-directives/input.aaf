@@ -1,0 +1,40 @@
+apgen version "test simple globals"
+
+function write_line( line )
+	parameters
+		line:string default to "";
+	{
+		write_to_stdout( "STDOUT:", line, "\n");
+		return "";
+	}
+
+global integer I1 = 1;
+global float F1 = 1.1;
+global boolean B1 = true;
+global duration D1 = 10:11:12.678;
+global time T1 = 2020-010T00:00:00;
+global string S1 = "some string";
+
+function print_all()
+	{
+		write_to_stdout("STDOUT:", "  I1=", I1, "\n");
+		write_to_stdout("STDOUT:", "  F1=", F1, "\n");
+		write_to_stdout("STDOUT:", "  B1=", B1, "\n");
+		write_to_stdout("STDOUT:", "  D1=", D1, "\n");
+		write_to_stdout("STDOUT:", "  T1=", T1, "\n");
+		write_to_stdout("STDOUT:", "  S1=", S1, "\n");
+		return "";
+	}
+
+global string DUMMY1 = write_line("BEFORE directives");
+global string DUMMY2 = print_all();
+
+directive I1 = 2;
+directive F1 = 2.2;
+directive B1 = false;
+directive D1 = 1T10:11:12.678;
+directive T1 = 2020-020T00:00:00;
+directive S1 = "some other string";
+
+global string DUMMY3 = write_line("AFTER directives");
+global string DUMMY4 = print_all();

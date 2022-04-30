@@ -1,0 +1,59 @@
+apgen version "apgen-9.8.9B-Unknown build"
+
+
+# udef=(not found)
+# user=maldague
+# date=2016-354T16:02:55.000
+# hostname=LMC-052973
+# n_apgen_files=4
+# apgen_file=inputs/interp.aaf 2016-354T16:02:38.000
+# apgen_file=inputs/apgen.apf 2016-354T16:02:55.000
+# apgen_file=inputs/layout.apf 2016-354T15:52:39.000
+# apgen_file=New
+
+directive "Legend" = [ "Generic_Activities", 108 ];
+
+activity instance useA of type useA id useA
+    begin
+	attributes
+	    "Duration" = 003T00:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "inputs/apgen.apf";
+	    "Start" = 2016-354T17:34:02.222;
+	    "Status" = "scheduled";
+    end activity instance useA
+
+activity instance useB of type useB id useB
+    begin
+	attributes
+	    "Duration" = 003T00:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "inputs/apgen.apf";
+	    "Start" = 2016-354T17:34:02.222;
+	    "Status" = "scheduled";
+    end activity instance useB
+
+activity instance useC of type useC id useC
+    begin
+	attributes
+	    "Duration" = 003T00:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "inputs/apgen.apf";
+	    "Start" = 2016-354T17:34:02.222;
+	    "Status" = "scheduled";
+    end activity instance useC
+
+activity instance s of type s id s
+    begin
+	attributes
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2016-354T23:59:31.777;
+	    "Status" = "scheduled";
+    end activity instance s
+

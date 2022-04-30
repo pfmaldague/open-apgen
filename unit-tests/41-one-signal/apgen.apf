@@ -1,0 +1,58 @@
+apgen version "apgen-10.0.0pre-Unknown build"
+
+
+# udef=(not found)
+# user=maldague
+# date=2017-268T03:20:47.000
+# hostname=LMC-052973
+# n_apgen_files=2
+# apgen_file=New
+# apgen_file=inputs/simple.aaf 2017-038T18:29:40.000
+
+# global boolean enabled = TRUE;
+
+activity instance WaitForUpdate of type WaitForUpdate id WaitForUpdate
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "WaitForUpdate (id 0x70000007f8e8)";
+	    "Duration" = 10:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "inputs/simple.aaf";
+	    "Start" = 2016-073T19:00:00.000;
+	    "Status" = TRUE;
+	parameters
+	    ();
+    end activity instance WaitForUpdate
+
+activity instance WaitForUpdateAgain of type WaitForUpdateAgain id WaitForUpdateAgain
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "WaitForUpdateAgain (id 0x70000007f8e8)";
+	    "Duration" = 10:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "inputs/simple.aaf";
+	    "Start" = 2016-073T19:00:00.000;
+	    "Status" = TRUE;
+	parameters
+	    ();
+    end activity instance WaitForUpdateAgain
+
+activity instance SendUpdate of type SendUpdate id SendUpdate
+    begin
+	attributes
+	    "Color" = "Orange Red";
+	    "Description" = "SendUpdate (id 0x70000007f8e8)";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "inputs/simple.aaf";
+	    "Start" = 2016-073T23:00:00.000;
+	    "Status" = TRUE;
+	parameters
+	    ();
+    end activity instance SendUpdate
+

@@ -1,0 +1,8 @@
+APGEN script version "apgen-X-pre-july-27-Unknown build"
+OPENFILE 132-currentval-in-func/input.aaf
+NEWACTDISPLAY
+NEWACTIVITY use_DSS NAME use_DSS ID use_DSS TO 2018-248T06:00:13.170 LEGEND "Generic_Activities"
+NEWRESDISPLAY 0
+ADDRESOURCE DSS_avForDL["Altadena"] A1R1
+REMODEL
+OPENFILE 132-currentval-in-func/one_global.aaf

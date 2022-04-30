@@ -1,0 +1,62 @@
+apgen version "usage"
+
+resource States["A", "B", "C"]: state boolean
+    begin
+	parameters
+		x: boolean default to true;
+	states
+		false, true;
+	profile
+		false;
+	usage
+		x;
+    end resource States
+
+function combined() {
+    if(    States["A"].currentval() == FALSE
+           && States["B"].currentval() == FALSE
+           && States["C"].currentval() == FALSE) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+function combined() {
+    return TRUE;
+}
+
+activity type testStates
+  begin
+    attributes
+	"Duration" = 2:00:00;
+    parameters
+	x: string default to "A";
+    modeling
+	write_to_stdout(now, " - (1) All states should be false (the default)\n");
+
+        write_to_stdout("                      - currentval(A): ", States["A"].currentval(),   "\n");
+        write_to_stdout("                      - currentval(B): ", States["B"].currentval(),   "\n");
+        write_to_stdout("                      - currentval(C): ", States["C"].currentval(),   "\n");
+        write_to_stdout("                      - combined():    ", combined(), "\n");
+
+        wait for span / 2;
+
+	set States[x](true) immediately;
+
+	write_to_stdout(now, " - (2) State B = true, others = false\n");
+
+        write_to_stdout("                      - currentval(A): ", States["A"].currentval(),   "\n");
+        write_to_stdout("                      - currentval(B): ", States["B"].currentval(),   "\n");
+        write_to_stdout("                      - currentval(C): ", States["C"].currentval(),   "\n");
+        write_to_stdout("                      - combined():    ", combined(), "\n");
+
+
+  end activity type testStates
+
+activity instance tS of type testStates
+    begin
+	attributes
+		"Start" = 2020-001T00:00:00;
+	parameters
+		("B");
+    end activity instance tS

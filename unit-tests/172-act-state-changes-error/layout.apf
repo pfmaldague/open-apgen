@@ -1,0 +1,18 @@
+APGEN version "apgen-X.1-Custom - Wed Feb 27 09:44:28 PST 2019"
+
+
+directive "Activity Legend Layout" = [
+    "",
+    [ "Generic_Activities", 32 ], 
+    [ "VIEW_PERIODS", 32 ], 
+    [ "Pictures", 32 ], 
+    [ "Generic Activities", 32 ], 
+    [ "VIEW PERIODS", 32 ], 
+    [ "Fake Parents", 32 ]
+    ];
+directive "Resource Legend Layout" = [
+    "",
+    [ "OKtoObserve", 100 ], 
+    [ "ObsInProgress", 100 ], 
+    [ "ObsDecompInProgress", 100 ]
+    ];

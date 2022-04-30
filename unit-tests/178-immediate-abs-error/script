@@ -1,0 +1,8 @@
+APGEN script version "apgen-X.3.pre-2-Custom - Wed Jun 19 17:56:56 UTC 2019"
+# udef=(not found)
+# user=maldague
+# date=2019-170T17:59:30.000
+# hostname=eurcdevapgen.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 178-immediate-abs-error/input.aaf
+OPENFILE input/build.scr

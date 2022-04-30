@@ -1,0 +1,774 @@
+apgen version "APGEN"
+
+#resource light_time["upleg","downleg"]: nonconsumable float
+#    begin
+#        parameters
+#            amount : float default to 1.0;
+#        profile
+#            when ["upleg"] : 1169.459000 until 2015-003T00:00:00.000
+#                then 1169.927000 until 2015-003T08:00:00.000
+#                then 1170.395000 until 2015-003T16:00:00.000
+#                then 1170.861000 until 2015-004T00:00:00.000
+#                then 1171.324000 until 2015-004T08:00:00.000
+#                then 1171.784000 until 2015-004T16:00:00.000
+#                then 1172.241000 until 2015-005T00:00:00.000
+#                then 1172.695000 until 2015-005T08:00:00.000
+#                then 1173.149000 until 2015-005T16:00:00.000
+#                then 1173.603000 until 2015-006T00:00:00.000
+#                then 1174.058000 until 2015-006T08:00:00.000
+#                then 1174.515000 until 2015-006T16:00:00.000
+#                then 1174.974000 until 2015-007T00:00:00.000
+#                then 1175.435000 until 2015-007T08:00:00.000
+#                then 1175.896000 until 2015-007T16:00:00.000
+#                then 1176.356000 until 2015-008T00:00:00.000
+#                then 1176.814000 until 2015-008T08:00:00.000
+#                then 1177.268000 until 2015-008T16:00:00.000
+#                then 1177.607000;
+#            when ["downleg"] : 1569.459000 until 2015-003T00:00:00.000
+#                then 1569.927000 until 2015-003T08:00:00.000
+#                then 1570.395000 until 2015-003T16:00:00.000
+#                then 1570.861000 until 2015-004T00:00:00.000
+#                then 1571.324000 until 2015-004T08:00:00.000
+#                then 1571.784000 until 2015-004T16:00:00.000
+#                then 1572.241000 until 2015-005T00:00:00.000
+#                then 1572.695000 until 2015-005T08:00:00.000
+#                then 1573.149000 until 2015-005T16:00:00.000
+#                then 1573.603000 until 2015-006T00:00:00.000
+#                then 1574.058000 until 2015-006T08:00:00.000
+#                then 1574.515000 until 2015-006T16:00:00.000
+#                then 1574.974000 until 2015-007T00:00:00.000
+#                then 1575.435000 until 2015-007T08:00:00.000
+#                then 1575.896000 until 2015-007T16:00:00.000
+#                then 1576.356000 until 2015-008T00:00:00.000
+#                then 1576.814000 until 2015-008T08:00:00.000
+#                then 1577.268000 until 2015-008T16:00:00.000
+#                then 1577.607000;
+#        usage
+#            amount;
+#    end resource light_time
+
+function print_value(V)
+    parameters
+      V: float default to 0.0;
+    {
+        write_to_stdout( "NC_FLT value=", V, "\n");
+        return V;
+    }
+
+resource NC_INT: nonconsumable integer
+  begin
+    parameters
+      P1: integer default to 10;
+    profile
+      100;
+    usage
+      P1;
+  end resource NC_INT
+
+activity type UseNC_INT
+  begin
+    attributes
+      "Color" = "Cadet Blue";
+      "Pattern" = 45;
+      "Duration" = 1:00:00;
+    parameters
+      P1: local integer default to 10;
+    resource usage
+      use NC_INT(P1);
+  end activity type UseNC_INT
+
+resource DUMMY_FLT: nonconsumable float
+  begin
+    parameters
+      P1: float default to 0.0;
+    profile
+      0.0;
+    usage
+      P1;
+  end resource DUMMY_FLT
+
+resource NC_FLT: consumable float
+  begin
+  attributes
+    "Interpolation" = true;
+    parameters
+      P1: float default to 0.0;
+    profile
+      0.0;
+    usage
+#      NC_FLT.currentval() -P1;
+      -P1;
+#       - print_value(P1);
+  end resource NC_FLT
+
+activity type UseNC_FLT
+  begin
+    attributes
+      "Color" = "Cadet Blue";
+      "Pattern" = 45;
+      "Duration" = 1:00:00;
+    parameters
+      P1: local float default to 100000.0;
+    resource usage
+      use NC_FLT(P1) at start;
+      use NC_FLT(-P1) at start + 6:00:00;
+  end activity type UseNC_FLT
+
+activity type Create_NC_FLT
+  begin
+    attributes
+      "Color" = "Cadet Blue";
+      "Pattern" = 45;
+      "Duration" = theDuration;
+        parameters
+                theDuration: duration default to 15T00:00:00;
+                theStepSize: duration default to 00:01:00;
+	modeling
+		v:float default to 0.0;
+		v1:float default to 0.0;
+		v2:float default to 0.0;
+#		write_to_stdout("Create_NC_FLT\n");
+		while( now <= start + theDuration ) {
+			v2 = v1;
+      			v1 = sin(PI * 2.0 * to_seconds(now - 2015-001T00:00:00)/(24.0 * 3600.0));
+			v = v1-v2;
+#			write_to_stdout("  now=", now, ", v1=", v1, ", v2=", v2, ", v1-v2=", v1-v2, "\n");
+			use NC_FLT(v1-v2);
+			wait for theStepSize ;
+		}
+  end activity type Create_NC_FLT
+
+resource C_INT: consumable integer
+  begin
+    parameters
+      P1: integer default to 8;
+    profile
+      100;
+    usage
+      P1;
+  end resource C_INT
+
+activity type UseC_INT
+  begin
+    attributes
+      "Color" = "Cadet Blue";
+      "Pattern" = 45;
+      "Duration" = 1:00:00;
+    parameters
+      P1: local integer default to 100;
+    resource usage
+      use C_INT(P1);
+  end activity type UseC_INT
+
+
+resource S_STR: state string
+  begin
+    parameters
+      P1: string default to "ON";
+    states
+      "OFF", "ON", "MID";
+    profile
+      "ON";
+    usage
+      P1;
+  end resource S_STR
+
+activity type UseS_STR
+  begin
+    attributes
+      "Color" = "Cadet Blue";
+      "Pattern" = 45;
+      "Duration" = 1:00:00;
+    parameters
+      P1: local string default to "OFF" range ["OFF", "ON", "MID"];
+    resource usage
+      set S_STR(P1);
+  end activity type UseS_STR
+
+
+activity type Window
+    begin
+        attributes
+                "Color" = theColor;
+                "Duration" = theDuration;
+                "Legend" = theLegend;
+		"Decomposition Suffix" = theLabel;
+        parameters
+                theLabel: string default to "NONE";
+                theColor: string default to "Dodger Blue";
+                theLegend: string default to "windows";
+                theDuration: duration default to 1:00:00;
+    end activity type Window
+
+activity type test_get_windows
+    begin
+        attributes
+                "Color" = "Lavender";
+                "Legend" = "Get_Windows";
+                "Duration" = theDuration;
+        parameters
+                theDuration: duration default to 1T00:00:00;
+        decomposition
+                windows: array default to [];
+                a_windows: array default to [];
+                b_windows: array default to [];
+                safe_windows: array default to [];
+                i: integer default to 0;
+                name: string default to "NONE";
+
+		####
+		name = "T1";
+		write_to_stdout(name, "\n");
+                get_windows(C_INT.currentval() > 50 && C_INT.currentval() < 90)
+                        for ["min" = 1T00:00:00, "max" = 15T00:00:00];
+		write_to_stdout("  windows\n");
+                if( length_of(windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(windows)) {
+				write_to_stdout("    start=", windows[i], " end=", windows[i+1], "\n");
+                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+		}
+		write_to_stdout("  safe windows\n");
+                if( length_of(safe_windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(safe_windows)) {
+				write_to_stdout("    start=", safe_windows[i], " end=", safe_windows[i+1], "\n");
+                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+		}
+		####
+		name = "T1a";
+		write_to_stdout(name, "\n");
+                get_windows(C_INT.currentval() > 50)
+                        for ["min" = 1T00:00:00, "max" = 15T00:00:00];
+		write_to_stdout("  windows\n");
+                if( length_of(windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(windows)) {
+				write_to_stdout("    start=", windows[i], " end=", windows[i+1], "\n");
+                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+		}
+		write_to_stdout("  safe windows\n");
+                if( length_of(safe_windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(safe_windows)) {
+				write_to_stdout("    start=", safe_windows[i], " end=", safe_windows[i+1], "\n");
+                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+		}
+		#save windows for T1c below
+		a_windows = copy_array(windows);
+		####
+		name = "T1b";
+		write_to_stdout(name, "\n");
+                get_windows(C_INT.currentval() < 90)
+                        for ["min" = 1T00:00:00, "max" = 15T00:00:00];
+		write_to_stdout("  windows\n");
+                if( length_of(windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(windows)) {
+				write_to_stdout("    start=", windows[i], " end=", windows[i+1], "\n");
+                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+		}
+		write_to_stdout("  safe windows\n");
+                if( length_of(safe_windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(safe_windows)) {
+				write_to_stdout("    start=", safe_windows[i], " end=", safe_windows[i+1], "\n");
+                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+		}
+		#save windows for T1c below
+		b_windows = copy_array(windows);
+		####
+		name = "T1c";
+		write_to_stdout(name, "\n");
+		#combine a_windows & b_windows
+		windows = intervals("and", a_windows, b_windows) ;
+                if( length_of(windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(windows)) {
+				write_to_stdout("    start=", windows[i], " end=", windows[i+1], "\n");
+                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+		}
+		####
+		name = "T2";
+                get_windows(C_INT.currentval() > 50)
+                        for ["min" = 1T00:00:00, "max" = 15T00:00:00, "start" = 2015-005T00:00:00];
+		write_to_stdout("  windows\n");
+                if( length_of(windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(windows)) {
+				write_to_stdout("    start=", windows[i], " end=", windows[i+1], "\n");
+                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+		}
+		write_to_stdout("  safe windows\n");
+                if( length_of(safe_windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(safe_windows)) {
+				write_to_stdout("    start=", safe_windows[i], " end=", safe_windows[i+1], "\n");
+                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+		}
+		####
+		name = "T3";
+		write_to_stdout(name, "\n");
+                get_windows(NC_INT.currentval() < 95.0)
+                        for ["min" = 1:00:00, "max" = 15T00:00:00];
+		write_to_stdout("  windows\n");
+                if( length_of(windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(windows)) {
+				write_to_stdout("    start=", windows[i], " end=", windows[i+1], "\n");
+                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+		}
+		write_to_stdout("  safe windows\n");
+                if( length_of(safe_windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(safe_windows)) {
+				write_to_stdout("    start=", safe_windows[i], " end=", safe_windows[i+1], "\n");
+                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+		}
+		####
+		name = "T4";
+		write_to_stdout(name, "\n");
+                get_windows(S_STR.currentval() == "MID")
+                        for ["min" = 1:00:00, "max" = 15T00:00:00];
+		write_to_stdout("  windows\n");
+                if( length_of(windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(windows)) {
+				write_to_stdout("    start=", windows[i], " end=", windows[i+1], "\n");
+                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+		}
+		write_to_stdout("  safe windows\n");
+                if( length_of(safe_windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(safe_windows)) {
+				write_to_stdout("    start=", safe_windows[i], " end=", safe_windows[i+1], "\n");
+                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+		}
+		####
+		name = "T5";
+		write_to_stdout(name, "\n");
+                get_windows(S_STR.currentval() == "OFF" && NC_INT.currentval() < 95.0 )
+                        for ["min" = 5:00:00, "max" = 8T00:00:00];
+		write_to_stdout("  windows\n");
+                if( length_of(windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(windows)) {
+				write_to_stdout("    start=", windows[i], " end=", windows[i+1], "\n");
+                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+		}
+		write_to_stdout("  safe windows\n");
+                if( length_of(safe_windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(safe_windows)) {
+				write_to_stdout("    start=", safe_windows[i], " end=", safe_windows[i+1], "\n");
+                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+		}
+		####
+		name = "T6";
+		write_to_stdout(name, "\n");
+                get_windows(C_INT.currentval() < 5 )
+                        for ["min" = 5:00:00, "max" = 15T00:00:00];
+		write_to_stdout("  windows\n");
+                if( length_of(windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(windows)) {
+				write_to_stdout("    start=", windows[i], " end=", windows[i+1], "\n");
+                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+		}
+		write_to_stdout("  safe windows\n");
+                if( length_of(safe_windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(safe_windows)) {
+				write_to_stdout("    start=", safe_windows[i], " end=", safe_windows[i+1], "\n");
+                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+		}
+    end activity type test_get_windows
+
+activity type use_DUMMY_FLT_cyclic
+    begin
+        attributes
+                "Color" = "Lavender";
+                "Legend" = "Get_Windows";
+                "Duration" = theDuration;
+        parameters
+                theDuration: duration default to 15T00:00:00;
+                thePeriod: duration default to 00:05:00;
+	modeling
+		d:duration default to 00:00:00;
+
+		while( d <= theDuration ) {
+			use DUMMY_FLT(0.0) from start + d to start + d + 00:00:01;
+			d = d + thePeriod;
+		}
+    end activity type use_DUMMY_FLT_cyclic
+activity type test_interpolate_windows
+    begin
+        attributes
+                "Color" = "Lavender";
+                "Legend" = "Get_Windows";
+                "Duration" = theDuration;
+        parameters
+                theDuration: duration default to 1T00:00:00;
+        decomposition
+                windows: array default to [];
+                a_windows: array default to [];
+                b_windows: array default to [];
+                safe_windows: array default to [];
+                i: integer default to 0;
+                name: string default to "NONE";
+
+		####
+		name = "I1interp";
+		write_to_stdout(name, "\n");
+                get_windows(NC_FLT.interpval() > -0.4 && NC_FLT.interpval() < 0.5)
+                        for ["min" = 3:00:00, "max" = 15T00:00:00];
+		write_to_stdout("  windows\n");
+                if( length_of(windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(windows)) {
+				write_to_stdout("    start=", windows[i], " end=", windows[i+1], "\n");
+				write_to_stdout("      NC_FLT.value(start)=", NC_FLT.value(windows[i]), " NC_FLT.value(end)=", NC_FLT.value(windows[i+1]), "\n");
+#				write_to_stdout("      NC_FLT.interpval(start)=", NC_FLT.interpval(windows[i]), " NC_FLT.interpval(end)=", NC_FLT.interpval(windows[i+1]), "\n");
+                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+		}
+		write_to_stdout("  safe windows\n");
+                if( length_of(safe_windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(safe_windows)) {
+				write_to_stdout("    start=", safe_windows[i], " end=", safe_windows[i+1], "\n");
+				write_to_stdout("      NC_FLT.value(start)=", NC_FLT.value(safe_windows[i]), " NC_FLT.value(end)=", NC_FLT.value(safe_windows[i+1]), "\n");
+#				write_to_stdout("      NC_FLT.interpvalue(start)=", NC_FLT.interpvalue(safe_windows[i]), " NC_FLT.interpvalue(end)=", NC_FLT.interpvalue(safe_windows[i+1]), "\n");
+                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+		}
+		####
+		name = "I1no-interp";
+		write_to_stdout(name, "\n");
+                get_windows(NC_FLT.currentval() > -0.4 && NC_FLT.currentval() < 0.5)
+                        for ["min" = 3:00:00, "max" = 15T00:00:00];
+		write_to_stdout("  windows\n");
+                if( length_of(windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(windows)) {
+				write_to_stdout("    start=", windows[i], " end=", windows[i+1], "\n");
+                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+		}
+		write_to_stdout("  safe windows\n");
+                if( length_of(safe_windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(safe_windows)) {
+				write_to_stdout("    start=", safe_windows[i], " end=", safe_windows[i+1], "\n");
+                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+		}
+#		####
+#		name = "I2interp";
+#                interpolate_windows(NC_FLT.interpval() > 500000)
+#                        for ["min" = 1T00:00:00, "max" = 15T00:00:00];
+#                if( length_of(windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(windows)) {
+#                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+#		}
+#                if( length_of(safe_windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(safe_windows)) {
+#                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+#		}
+#		####
+#		name = "I2no-interp";
+#                get_windows(NC_FLT.interpval() > 500000)
+#                        for ["min" = 1T00:00:00, "max" = 15T00:00:00];
+#                if( length_of(windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(windows)) {
+#                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+#		}
+#                if( length_of(safe_windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(safe_windows)) {
+#                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+#		}
+#		name = "I1b";
+#                interpolate_windows(NC_FLT.interpval() < 90)
+#                        for ["min" = 1T00:00:00, "max" = 15T00:00:00];
+#                if( length_of(windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(windows)) {
+#                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+#		}
+#                if( length_of(safe_windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(safe_windows)) {
+#                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+#		}
+#		#save windows for T1c below
+#		b_windows = copy_array(windows);
+#		####
+#		name = "I1c";
+#		#combine a_windows & b_windows
+#		windows = intervals("and", a_windows, b_windows) ;
+#                if( length_of(windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(windows)) {
+#                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+#		}
+#		####
+#		name = "T2";
+#                interpolate_windows(NC_FLT.interpval() > 50)
+#                        for ["min" = 1T00:00:00, "max" = 15T00:00:00, "start" = 2015-005T00:00:00];
+#                if( length_of(windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(windows)) {
+#                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+#		}
+#                if( length_of(safe_windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(safe_windows)) {
+#                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+#		}
+#		####
+#		name = "I3";
+#                interpolate_windows(NNC_FLT.interpval() < 95.0)
+#                        for ["min" = 1:00:00, "max" = 15T00:00:00];
+#                if( length_of(windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(windows)) {
+#                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+#		}
+#                if( length_of(safe_windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(safe_windows)) {
+#                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+#		}
+#		####
+#		name = "I4";
+#                interpolate_windows(S_STR.interpval() == "MID")
+#                        for ["min" = 1:00:00, "max" = 15T00:00:00];
+#                if( length_of(windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(windows)) {
+#                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+#		}
+#                if( length_of(safe_windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(safe_windows)) {
+#                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+#		}
+#		####
+#		name = "I5";
+#                interpolate_windows(S_STR.interpval() == "OFF" && NNC_FLT.interpval() < 95.0 )
+#                        for ["min" = 5:00:00, "max" = 8T00:00:00];
+#                if( length_of(windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(windows)) {
+#                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+#		}
+#                if( length_of(safe_windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(safe_windows)) {
+#                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+#		}
+#		####
+#		name = "I6";
+#                interpolate_windows(NC_FLT.interpval() < 5 )
+#                        for ["min" = 5:00:00, "max" = 15T00:00:00];
+#                if( length_of(windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(windows)) {
+#                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+#		}
+#                if( length_of(safe_windows) > 0 ) {
+#                	i = 0;
+#                	while(i < length_of(safe_windows)) {
+#                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+#                        	i = i + 2; 
+#			}
+#                }
+#                else {
+#                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+#		}
+    end activity type test_interpolate_windows

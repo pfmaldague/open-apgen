@@ -1,0 +1,78 @@
+apgen version "act-res-1.aaf"
+
+resource Foo: settable duration
+    begin
+	attributes
+		"Units" = "silver coins";
+# 		"Min Abs Delta" = 00:01:00;
+		"Interpolation" = true;
+		"Warning High" = 8:00:00;
+	parameters
+		x: float default to 1.0;
+		y: duration default to 00:20:00;
+	default
+		00:00;
+	usage
+		currentval() + x * y;
+    end resource Foo
+
+activity type setFoo
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "vectors";
+	parameters
+		a: float default to 2.0;
+		b: string default to "three";
+		c: string default to "BB";
+	modeling
+
+		set Foo(a, 00:20:00);
+		// wait for 1:00:00;
+		write_to_stdout(now, " - ", "activity before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity after wait (10:00)...\n");
+		set Foo(a, 00:20:00 + 01:00);
+		write_to_stdout(now, " - ", "activity before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity after wait (10:00)...\n");
+		set Foo(a, 00:20:00 + 03:00);
+		write_to_stdout(now, " - ", "activity before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity after wait (10:00)...\n");
+		set Foo(a, 00:20:00 + 05:00);
+		write_to_stdout(now, " - ", "activity before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity after wait (10:00)...\n");
+		set Foo(a, 00:20:00 + 07:00);
+		write_to_stdout(now, " - ", "activity before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity after wait (10:00)...\n");
+		set Foo(a, 00:20:00 - 07:00);
+		write_to_stdout(now, " - ", "activity before wait (9:00)...\n");
+		wait for 9:00;
+		write_to_stdout(now, " - ", "activity after wait (9:00)...\n");
+		set Foo(a, 00:20:00 - 01:00);
+		
+		write_to_stdout(now, " - ", "activity before wait (1:00)...\n");
+		wait for 1:00;
+		write_to_stdout(now, " - ", "activity after wait (1:00)...\n");
+		a = a + 1.0;
+		set Foo(a, 00:20:00);
+		wait for 1:00:00;
+		a = a + 2.0;
+		set Foo(a, 00:20:00);
+		wait for 1:00:00;
+		a = a + 3.0;
+		set Foo(a, 00:20:00);
+		wait for 1:00:00;
+		a = a - 3.0;
+		set Foo(a, 00:20:00);
+		wait for 1:00:00;
+		a = a - 2.0;
+		set Foo(a, 00:20:00);
+		wait for 1:00:00;
+		a = a - 1.0;
+		set Foo(a, 00:20:00);
+    end activity type setFoo

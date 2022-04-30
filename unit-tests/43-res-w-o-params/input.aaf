@@ -1,0 +1,52 @@
+apgen version "no parameters"
+
+resource sci_activity_active: nonconsumable integer
+    begin
+        attributes
+            "Units" = "Usage";
+            "Minimum" = 0;
+        profile
+            0;
+        usage
+            -1;
+    end resource sci_activity_active
+
+activity type mosaic_hi_child_activity
+    begin
+        attributes
+            "Color" = desired_color;
+            "Pattern" = 45;
+            "Duration" = Observation_Length;
+            "Legend" = "REMOTE_SEN";
+            "Description" = "Hi Powered Mosaic";
+            "Decomposition Suffix" = "mosaic_hi";
+        parameters
+	    desired_color: string default to "Orange Red" ;
+            Observation_Length: local duration default to 01:00:00 ;
+        resource usage
+            use sci_activity_active() ;
+    end activity type mosaic_hi_child_activity
+
+activity instance A of type generic
+    begin
+	attributes
+		"Start" = 2018-011T20:00:00;
+		"Duration" = 00:20:00;
+		"Color" = "Yellow";
+    end activity instance A
+
+activity instance M of type mosaic_hi_child_activity
+    begin
+	attributes
+		"Start" = 2018-012T01:00:00;
+	parameters
+		("Spring Green", 1:20:00);
+    end activity instance M
+
+activity instance B of type generic
+    begin
+	attributes
+		"Start" = 2018-012T06:00:00;
+		"Duration" = 00:20:00;
+		"Color" = "Purple";
+    end activity instance B

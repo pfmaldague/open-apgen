@@ -1,0 +1,12 @@
+APGEN script version "apgen-X-oct-15-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2018-309T23:32:55.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 155-simple-get-windows/input.aaf
+OPENFILE 155-simple-get-windows/input.apf
+NEWACTDISPLAY
+NEWRESDISPLAY 0
+ADDRESOURCE C_INT A1R1
+NEWHORIZON A1 FROM 2018-310T02:32:55.000 TO 2018-311T08:32:55.000

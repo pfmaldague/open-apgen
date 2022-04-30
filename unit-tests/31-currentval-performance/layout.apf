@@ -1,0 +1,11 @@
+APGEN version "apgen-10.0.0pre-Unknown build"
+
+
+directive "Activity Legend Layout" = [
+    "",
+    [ "scalars", 32 ]
+    ];
+directive "Resource Legend Layout" = [
+    "",
+    [ "Scalar", 722 ]
+    ];

@@ -1,0 +1,4 @@
+apgen version "global arrays"
+
+local array A = ["A" = ["a" = 1.0, "b" = 2.0], "B" = ["a" = -2.0, "b" = -4.0] ];
+

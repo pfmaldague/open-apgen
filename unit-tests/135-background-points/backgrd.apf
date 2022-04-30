@@ -1,0 +1,119 @@
+apgen version "V1"
+
+activity instance generic of type generic
+    begin
+        attributes
+            "Color" = "Dodger Blue";
+            "Description" = "";
+            "Duration" = 04:00:00;
+            "Legend" = "Generic Activities";
+            "Pattern" = 56;
+            "Start" = 1996-159T00:00:00.000;
+        parameters
+            ();
+    end activity instance generic
+
+activity instance Yaw_motor of type Yaw_motor
+    begin
+        attributes
+            "Color" = "Hot Pink";
+            "Description" = "";
+            "Duration" = 02:00:02.500;
+            "Legend" = "Generic Activities";
+            "Pattern" = 25;
+            "Start" = 1996-159T21:28:25.264;
+        parameters
+            (2.500000,100);
+    end activity instance Yaw_motor
+
+activity instance Yaw_motor of type Yaw_motor
+    begin
+        attributes
+            "Color" = "Hot Pink";
+            "Description" = "";
+            "Duration" = 02:00:02.500;
+            "Legend" = "Generic Activities";
+            "Pattern" = 25;
+            "Start" = 1996-160T06:56:50.526;
+        parameters
+            (2.500000,100);
+    end activity instance Yaw_motor
+
+activity instance Turn_on_Instruments of type Turn_on_Instruments
+    begin
+        attributes
+            "Color" = "Khaki";
+            "Description" = "";
+            "Duration" = 04:30:00;
+            "Legend" = "Generic Activities";
+            "Pattern" = 31;
+            "Start" = 1996-161T09:46:22.002;
+        parameters
+            (3);
+    end activity instance Turn_on_Instruments
+
+activity instance ConsumeWatts of type ConsumeWatts
+    begin
+        attributes
+            "Color" = "Cadet Blue";
+            "Description" = "";
+            "Duration" = 004T12:30:00;
+            "Legend" = "Generic Activities";
+            "Pattern" = 45;
+            "Start" = 1996-162T03:47:22.105;
+        parameters
+            (5.040000,15);
+    end activity instance ConsumeWatts
+
+activity instance ConsumeWatts of type ConsumeWatts
+    begin
+        attributes
+            "Color" = "Cadet Blue";
+            "Description" = "";
+            "Duration" = 12:30:00;
+            "Legend" = "Generic Activities";
+            "Pattern" = 45;
+            "Start" = 1996-163T18:18:56.842;
+        parameters
+            (5.040000,15);
+    end activity instance ConsumeWatts
+
+activity instance Station of type Station
+    begin
+        attributes
+            "Color" = "Dodger Blue";
+            "Description" = "";
+            "Duration" = 04:00:00;
+            "Legend" = "Generic Activities";
+            "Pattern" = 56;
+            "Start" = 1996-167T02:31:34.737;
+        parameters
+            ();
+    end activity instance Station
+
+activity instance ResetMissionPhase of type ResetMissionPhase
+    begin
+        attributes
+            "Color" = "Dodger Blue";
+            "Description" = "";
+            "Duration" = 01:00:00;
+            "Legend" = "Generic Activities";
+            "Pattern" = 40;
+            "Start" = 1996-168T05:47:44.698;
+        parameters
+            ();
+    end activity instance ResetMissionPhase
+
+activity instance generic of type generic
+    begin
+        attributes
+            "Color" = "Dodger Blue";
+            "Description" = "";
+            "Duration" = 04:00:00;
+            "Legend" = "Generic Activities";
+            "Pattern" = 56;
+            "Start" = 1996-168T20:00:00.000;
+        parameters
+            ();
+    end activity instance generic
+

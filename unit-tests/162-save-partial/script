@@ -1,0 +1,12 @@
+APGEN script version "apgen-X-dec-10-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2018-351T17:09:27.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 162-save-partial/input.aaf
+NEWACTDISPLAY
+NEWHORIZON A1 FROM 2028-162T11:09:27.000 TO 2028-163T11:09:27.000
+NEWACTIVITY regular_decomp_parent NAME regular_decomp_parent ID regular_decomp_parent TO 2028-162T16:23:24.736 LEGEND "Parents"
+SAVEPARTIALFILE New save-new-only.apf
+#QUIT 0

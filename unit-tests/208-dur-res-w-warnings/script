@@ -1,0 +1,6 @@
+APGEN script version "apgen-X.3.16-Custom - Tue Aug 20 10:22:50 PDT 2019"
+OPENFILE 208-dur-res-w-warnings/input.aaf
+BUILD
+NEWACTDISPLAY
+NEWACTIVITY setFoo NAME setFoo ID setFoo TO 2019-233T04:00:00.000 LEGEND "Generic_Activities"
+REMODEL

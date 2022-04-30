@@ -1,0 +1,15 @@
+APGEN script version "apgen-10.0.0pre-oct-4-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2017-291T14:40:51.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 72-state-w-func-in-profile/dsn_config.aaf
+OPENFILE 72-state-w-func-in-profile/input.aaf
+OPENFILE 72-state-w-func-in-profile/SAF.apf
+NEWACTDISPLAY
+NEWRESDISPLAY 0
+ADDRESOURCE Any_34M_DSS_avForDL A1R1
+ADDRESOURCE DSS_avForDL["DSS-24"] A1R1
+ADDRESOURCE DSS_avForDL["DSS-34"] A1R1
+ADDRESOURCE DSS_avForDL["DSS-54"] A1R1

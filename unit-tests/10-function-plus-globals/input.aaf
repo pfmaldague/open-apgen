@@ -1,0 +1,12 @@
+apgen version "faster"
+
+function A(i)
+    parameters
+	i: integer default to 0;
+    {
+	i = i + 2;
+	return i;
+}
+
+global integer B = A(4);
+global string C = to_string(B);

@@ -1,0 +1,24 @@
+apgen version "9"
+
+global float x = 1.038237592E+00;
+
+activity type one_param
+    begin
+	attributes
+		"Duration" = 1:00:00;
+		"Color" = "Spring Green";
+	parameters
+		one_int: integer default to 0;
+	modeling
+		write_to_stdout("x: ", x, "\n");
+    end activity type one_param
+
+activity instance Foo of type one_param
+    begin
+	attributes
+		"Start" = 2020-001T00:00:00;
+		"Duration" = 1:00:00;
+		// "Legend" = "Make sure this exists";
+	parameters
+		(10.0);
+    end activity instance Foo

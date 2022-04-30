@@ -1,0 +1,13 @@
+APGEN script version "apgen-X-dec-10-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2018-351T20:52:37.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 163-ungroup-acts/input.aaf
+NEWACTDISPLAY
+NEWHORIZON A1 FROM 2028-162T11:52:37.000 TO 2028-163T11:52:37.000
+ABSTRACTALL_QUIET
+UNGROUPACTIVITIES ID generic
+SAVEFILE APF "apgen.apf" [ GLOBALS = "NOTHING", EPOCHS = "NOTHING", TIME_SYSTEMS = "NOTHING", LEGENDS = "NOTHING", TIME_PARAMS = "NOTHING", WIN_SIZE = "NOTHING"] 
+#QUIT 0

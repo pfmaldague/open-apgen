@@ -1,0 +1,239 @@
+apgen version "foo"
+
+global array cancellations = [];
+
+activity type signal_no_data
+    begin
+	attributes
+		"Color" = "Orange Red";
+		"Duration" = 1:00:00;
+	parameters
+		signal_string: string default to "some dumb string";
+	modeling
+		set signal(signal_string);
+    end activity type signal_no_data
+
+activity type signal_with_data
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:00:00;
+	parameters
+		signal_string: string default to "some dumb string";
+		signal_data: array default to ["send_time" = now, "info" = "some info", "id" = "foo"];
+	modeling
+		cancellations["foo"] = false;
+		set signal(signal_string, signal_data);
+    end activity type signal_with_data
+
+activity type monitor
+    begin
+	attributes
+		"Color" = "Purple";
+		"Duration" = Dur;
+	parameters
+		Dur: duration default to 1T00:00:00;
+		Pattern: string default to "some.*";
+	modeling
+		while(true) {
+			wait until regexp Pattern;
+			sigs: array default to get_all_signals();
+			i: integer default to 0;
+			relevant_sigs: array default to get_matching_signals(Pattern);
+			write_to_stdout("signals: ", sigs, "; relevant signals: ", relevant_sigs, "\n");
+			while(i < length_of(relevant_sigs)) {
+				sig: string default to relevant_sigs[i];
+				A: array default to get_sender_info(sig);
+				write_to_stdout(sig, " info: ", A, "\n");
+				delete_signal(sig);
+				i = i + 1; }
+			filtered_signals: array default to find_matches(sigs, Pattern);
+			write_to_stdout("Filtered signals: ", filtered_signals, "\n\n");
+			# wait for 1:00;
+			}
+    end activity type monitor
+
+activity instance monitor of type monitor id monitor
+    begin
+	attributes
+	    "Color" = "Purple";
+	    "Duration" = 001T00:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2016-073T04:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    001T00:00:00,
+	    "same.*"
+	    );
+    end activity instance monitor
+
+activity instance signal_no_data of type signal_no_data id signal_no_data
+    begin
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2016-073T06:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    "some dumb string"
+	    );
+    end activity instance signal_no_data
+
+activity instance signal_with_data of type signal_with_data id signal_with_data
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2016-073T06:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    "something else",
+	    [ 2016-073T06:00:00.000, "additional info" ]
+	    );
+    end activity instance signal_with_data
+
+activity instance monitor of type monitor id monitor_16
+    begin
+	attributes
+	    "Color" = "Purple";
+	    "Duration" = 001T00:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2016-073T08:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    001T00:00:00,
+	    "same.*"
+	    );
+    end activity instance monitor
+
+activity instance signal_with_data of type signal_with_data id signal_with_data_6
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2016-073T09:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    "some dumb string",
+	    [ 2016-073T03:08:16.000, "some info" ]
+	    );
+    end activity instance signal_with_data
+
+activity instance signal_with_data of type signal_with_data id signal_with_data_14
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2016-073T11:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    "same nonsense",
+	    [ 2016-073T06:00:00.000, "additional info" ]
+	    );
+    end activity instance signal_with_data
+
+activity instance signal_with_data of type signal_with_data id signal_with_data_7
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2016-073T14:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    "some dumb string",
+	    [ 2016-073T03:08:16.000, "some info" ]
+	    );
+    end activity instance signal_with_data
+
+activity instance signal_no_data of type signal_no_data id signal_no_data_10
+    begin
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2016-073T16:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    "some dumb string"
+	    );
+    end activity instance signal_no_data
+
+activity instance signal_with_data of type signal_with_data id signal_with_data_8
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2016-073T18:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    "some dumb string",
+	    [ 2016-073T03:08:16.000, "some info" ]
+	    );
+    end activity instance signal_with_data
+
+activity instance signal_no_data of type signal_no_data id signal_no_data_11
+    begin
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2016-073T18:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    "something interesting"
+	    );
+    end activity instance signal_no_data
+
+activity instance signal_with_data of type signal_with_data id signal_with_data_5
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2016-073T21:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    "some dumb string",
+	    [ 2016-073T03:08:16.000, "some info" ]
+	    );
+    end activity instance signal_with_data
+

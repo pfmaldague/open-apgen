@@ -1,0 +1,67 @@
+apgen version "global methods"
+
+activity type child;
+
+nonexclusive_decomposition function set_current_time(a)
+    parameters
+	a: integer default to 0;
+    {
+	child() at 2020-020T00:00:00;
+
+	//
+	// Test for the bug steve found
+	//
+	A: array default to [["A", "B", "C"], ["D", "E", "F"]];
+	write_to_stdout(now, " - decomp func: A = ", A, "\n");
+	parent.A = copy_array(A);
+	write_to_stdout("   in detail:\n");
+	i: integer default to 0;
+	B: array default to [];
+	while(i < length_of(parent.A)) {
+
+	    //
+	    // Hopefully, a simple assignment will be easy to debug
+	    //
+	    start_debug();
+	    B = parent.A[i];
+	    write_to_stdout("parent.A[", i, "] = ", B, "\n");
+	    i = i + 1;
+	}
+    }
+
+activity type child
+    begin
+	attributes
+	    "Duration" = 00:10:00;
+    end activity type child
+
+activity type foo
+    begin
+	attributes
+	    "Duration" = 1:00:00;
+	parameters
+	    T: duration default to 1:00:00;
+	nonexclusive_decomposition
+	    A: array default to [];
+	    T0: time default to start;
+	    write_to_stdout(now, " - parent setting child at T0 = ", T0, "\n");
+	    child() at T0;
+	    set_current_time(2);
+	    write_to_stdout(now, " - parent's T0 after call to set_current_time(): ", T0, "\n");
+
+	    write_to_stdout(now, " - parent: A = ", A, "\n");
+	    write_to_stdout(now, " - parent in more detail:\n");
+	    i: integer default to 0;
+	    while(i < length_of(A)) {
+		write_to_stdout("A[", i, "] = ", A[i], "\n");
+		i = i + 1;
+	    }
+    end activity type foo
+
+activity instance F of type foo
+    begin
+	attributes
+	    "Start" = 2021-189T00:00:00;
+	parameters
+	    (5:00:00);
+    end activity instance F

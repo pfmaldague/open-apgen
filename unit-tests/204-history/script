@@ -1,0 +1,16 @@
+APGEN script version "apgen-X.7.4-Custom - Sat Jan 9 13:15:31 PST 2021"
+# udef=(not found)
+# user=maldague
+# date=2021-010T15:02:23.000
+# hostname=MT-206177
+# n_apgen_files=0
+OPENFILE 204-history/input.aaf
+OPENFILE 204-history/apgen.apf
+OPENFILE input/build.scr
+NEWACTDISPLAY
+NEWRESDISPLAY 0
+ADDRESOURCE S["beta"] A1R1
+ADDRESOURCE C A1R1
+ADDRESOURCE N A1R1
+ADDRESOURCE T A1R1
+SCHEDULEACTIVITY ALL

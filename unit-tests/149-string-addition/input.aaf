@@ -1,0 +1,15 @@
+apgen version "foo"
+
+function evaluate_sum_of_strings(s, i)
+    parameters
+	s: string default to "";
+	i: integer default to 0;
+    {
+	t: string default to "";
+	t = s + "_" + i;
+	write_to_stdout("evaluate sum of strings: result = ", t, "\n");
+	return t;
+    }
+
+global string ST = evaluate_sum_of_strings("Hello", 4);
+

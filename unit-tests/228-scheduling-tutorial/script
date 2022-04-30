@@ -1,0 +1,12 @@
+APGEN script version "apgen-X.9.0-Custom - Wed Dec 29 09:02:51 PST 2021"
+# udef=(not found)
+# user=maldague
+# date=2022-004T17:29:37.000
+# hostname=eurcdevapgen2.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 228-scheduling-tutorial/input.aaf
+BUILD
+NEWACTDISPLAY
+OPENFILE 228-scheduling-tutorial/layout.apf
+NEWRESDISPLAY 0
+NEWHORIZON A1 FROM 2022-098T03:45:00.000 TO 2022-102T20:15:00.000

@@ -1,0 +1,70 @@
+apgen version "multi attributes"
+
+global array A = ["one", "two", "three", "four"];
+
+resource R(A): consumable float
+    begin
+	attributes
+		when ["one"]:
+			"Subsystem" = "Foo";
+		when ["three"]:
+			"Description" = "item Three";
+		when default:
+			"Interpolation" = true;
+	parameters
+		x: float default to 0.0;
+	profile
+		0.0;
+	usage
+		-x;
+    end resource R
+
+resource S(A): consumable float
+    begin
+	attributes
+		when default:
+			"Interpolation" = true;
+		when ["one"]:
+			"Subsystem" = "Foo";
+		when ["three"]:
+			"Description" = "item Three";
+	parameters
+		x: float default to 0.0;
+	profile
+		0.0;
+	usage
+		-x;
+    end resource S
+
+activity type B
+    begin
+	attributes
+		"Legend" = "Bar";
+		"Duration" = 1:00:00;
+	parameters
+		z: float default to 1.0;
+		s: string default to "one";
+	modeling
+		write_to_stdout("Exercising modeling for ", id, "\n");
+		use R[s](z);
+		wait for 00:30:00;
+		use S[s](1.0 + z);
+    end activity type B
+
+activity instance K of type B
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Start" = 2015-001T00:00:00;
+	parameters
+		(-3.0, "two");
+    end activity instance K
+
+activity instance K2 of type B
+    begin
+	attributes
+		"Color" = "Yellow";
+		"Start" = 2015-001T03:00:00;
+	parameters
+		(3.0, "two");
+    end activity instance K2

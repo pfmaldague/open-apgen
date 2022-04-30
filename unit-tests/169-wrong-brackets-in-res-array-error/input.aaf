@@ -1,0 +1,11 @@
+apgen version "foo"
+
+global array A = ["one", "two"];
+
+resource R_based_on_A[A]: consumable integer
+    begin
+	profile
+		0;
+	usage
+		1;
+    end resource R_based_on_A

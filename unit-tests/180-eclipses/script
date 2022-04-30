@@ -1,0 +1,16 @@
+APGEN script version "apgen-X.3.beta-Custom - Fri Jul 26 16:20:30 PDT 2019"
+# udef=(not found)
+# user=maldague
+# date=2019-210T16:30:19.000
+# hostname=MT-206177
+# n_apgen_files=0
+OPENFILE 180-eclipses/input.aaf
+BUILD
+NEWACTDISPLAY
+NEWHORIZON A1 FROM 2022-009T21:34:23.224 TO 2022-010T05:26:14.776
+NEWRESDISPLAY 0
+ADDRESOURCE Eclipse["CALLISTO"] A1R1
+ADDRESOURCE Eclipse["EUROPA"] A1R1
+ADDRESOURCE Eclipse["JUPITER"] A1R1
+ADDRESOURCE Eclipses A1R1
+#QUIT 0

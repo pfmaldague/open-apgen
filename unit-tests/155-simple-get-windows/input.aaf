@@ -1,0 +1,85 @@
+apgen version "APGEN"
+
+resource C_INT: consumable integer
+  begin
+    parameters
+      P1: integer default to 8;
+    profile
+      100;
+    usage
+      P1;
+  end resource C_INT
+
+activity type UseC_INT
+  begin
+    attributes
+      "Color" = "Cadet Blue";
+      "Pattern" = 45;
+      "Duration" = 1:00:00;
+    parameters
+      P1: local integer default to 10;
+    resource usage
+      use C_INT(P1);
+  end activity type UseC_INT
+
+
+activity type Window
+    begin
+        attributes
+                "Color" = theColor;
+                "Duration" = theDuration;
+                "Legend" = theLegend;
+		"Decomposition Suffix" = theLabel;
+        parameters
+                theLabel: string default to "NONE";
+                theColor: string default to "Dodger Blue";
+                theLegend: string default to "windows";
+                theDuration: duration default to 1:00:00;
+    end activity type Window
+
+activity type test_get_windows
+    begin
+        attributes
+                "Color" = "Lavender";
+                "Legend" = "Get_Windows";
+                "Duration" = theDuration;
+        parameters
+                theDuration: duration default to 1T00:00:00;
+        decomposition
+                windows: array default to [];
+                safe_windows: array default to [];
+                i: integer default to 0;
+                name: string default to "NONE";
+
+		name = "T1";
+		write_to_stdout(name, "\n");
+                get_windows(C_INT.currentval() > 50 && C_INT.currentval() < 90)
+                        for [
+				// "start" = start,
+				"min" = 01:00:00,
+				"max" = 15T00:00:00];
+		write_to_stdout("  windows\n");
+                if( length_of(windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(windows)) {
+				write_to_stdout("    start=", windows[i], " end=", windows[i+1], "\n");
+                        	Window("Win", "Purple", name, windows[i + 1] - windows[i]) at windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Win", "Violet Red", name, theDuration) at start;
+		}
+		write_to_stdout("  safe windows\n");
+                if( length_of(safe_windows) > 0 ) {
+                	i = 0;
+                	while(i < length_of(safe_windows)) {
+				write_to_stdout("    start=", safe_windows[i], " end=", safe_windows[i+1], "\n");
+                        	Window("Safe_Win", "Spring Green", name, safe_windows[i + 1] - safe_windows[i]) at safe_windows[i];
+                        	i = i + 2; 
+			}
+                }
+                else {
+                     	Window("No_Safe_Win", "Violet Red", name, theDuration) at start;
+		}
+    end activity type test_get_windows

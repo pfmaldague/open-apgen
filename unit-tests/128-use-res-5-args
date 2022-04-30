@@ -1,0 +1,20 @@
+APGEN script version "apgen-X-pre-sept-02-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2018-246T22:06:44.000
+# hostname=LMC-052973
+# n_apgen_files=0
+OPENFILE 128-use-res-5-args/input.aaf
+
+# APGEN Error -- OPENFILE 128-use-res-5-args/input.aaf - Execution Error
+# File 128-use-res-5-args/input.aaf not found #
+
+# APGEN Error -- OPENFILE 128-use-res-5-args/input.aaf - Execution Error
+# 
+
+# APGEN Error -- OPENFILE 128-use-res-5-args/input.aaf - Execution Error
+# (error occurred in "OPENFILE 128-use-res-5-args/input.aaf")
+OPENFILE input/write_report.aaf
+OPENFILE remodel.scr
+  # REMODEL
+#QUIT 0

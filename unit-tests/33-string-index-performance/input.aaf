@@ -1,0 +1,150 @@
+apgen version "act-res-23.aaf"
+global array A = [
+		"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+		"one_1", "two_1", "three_1", "four_1", "five_1", "six_1", "seven_1", "eight_1", "nine_1", "ten_1",
+		"one_2", "two_2", "three_2", "four_2", "five_2", "six_2", "seven_2", "eight_2", "nine_2", "ten_2",
+		"one_3", "two_3", "three_3", "four_3", "five_3", "six_3", "seven_3", "eight_3", "nine_3", "ten_3",
+		"one_4", "two_4", "three_4", "four_4", "five_4", "six_4", "seven_4", "eight_4", "nine_4", "ten_4",
+		"one_5", "two_5", "three_5", "four_5", "five_5", "six_5", "seven_5", "eight_5", "nine_5", "ten_5"
+];
+// global array C = [1.0, 10000.0, -1.0/10.0, 1.0/10.0, -1.0/1.0E4, 1.0E-2];
+global array C = [1.0, 2/1000, 1.0E-6, 1.0E-8, 1.0E-11, 2.2E-15];
+
+resource Vec(A): consumable integer
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: integer default to 1;
+	profile
+		0;
+	usage
+		# Vec[string_index_of(this)].currentval() - x;
+		currentval() - x;
+    end resource Vec
+
+activity type useVec
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "scalars";
+	parameters
+		a: integer default to 4;
+		b: string default to "horrible";
+	modeling
+		i: integer default to 0;
+		while(i < 20000) {
+			y: integer default to a * (
+				C[0]
+				- C[1] * (i / 10.0)
+				+ C[2] * ((i / 10.0) * (i / 10.0))
+				- C[3] * ((i / 10.0) * (i / 10.0) * (i / 10.0))
+				+ C[4] * ((i / 10.0) * (i / 10.0) * (i / 10.0) * (i / 10.0))
+				- C[5] * ((i / 10.0) * (i / 10.0) * (i / 10.0) * (i / 10.0) * (i / 10.0)));
+			use Vec["two"](y);
+			// write_to_stdout(now, " - using ", y, "\n");
+			wait for 00:00:10;
+			i = i + 1;
+		}
+    end activity type useVec
+
+activity instance Foo of type useVec id James_Bond_007
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-039T09:42:07.823;
+	parameters
+		(12, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useVec id James_Bond_008
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-041T09:42:07.823;
+	parameters
+		(12, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useVec id James_Bond_009
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-043T09:42:07.823;
+	parameters
+		(-3, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useVec id James_Bond_010
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-045T09:42:07.823;
+	parameters
+		(-7, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useVec id James_Bond_011
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-047T09:42:07.823;
+	parameters
+		(-2, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useVec id James_Bond_012
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-049T09:42:07.823;
+	parameters
+		(-4, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useVec id James_Bond_013
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-051T09:42:07.823;
+	parameters
+		(-2, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useVec id James_Bond_014
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-053T09:42:07.823;
+	parameters
+		(3, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useVec id James_Bond_015
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-055T09:42:07.823;
+	parameters
+		(-3, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useVec id James_Bond_016
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-057T09:42:07.823;
+	parameters
+		(1, "Hello");
+    end activity instance Foo

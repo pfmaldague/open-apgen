@@ -1,0 +1,10 @@
+apgen version "faster"
+
+activity instance Foo of type the_parent
+    begin
+	attributes
+		"Start" = 2028-163T01:02:03;
+		"Color" = "Yellow";
+	parameters
+		(3);
+    end activity instance Foo

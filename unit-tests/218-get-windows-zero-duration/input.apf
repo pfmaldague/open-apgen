@@ -1,0 +1,300 @@
+apgen version "apgen-X-oct-15-Unknown build"
+
+
+# udef=(not found)
+# user=maldague
+# date=2018-309T23:31:58.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=2
+# apgen_file=New
+# apgen_file=Standalone Expression
+
+activity instance generic of type generic id generic
+    begin
+	attributes
+            "Color" = "Dodger Blue";
+            "Decomposition Suffix" = "";
+            "Description" = "generic (id generic)";
+            "Duration" = 00:01:40;
+            "Label" = "";
+            "Legend" = "Generic Activities";
+            "Pattern" = 0;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-310T00:22:41.377;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+    end activity instance generic
+
+activity instance DefineOpportunities_d1 of type ObsOpportunity id ObsOpportunity
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+            "Color" = "Orange Red";
+            "Decomposition Suffix" = "";
+            "Description" = " (id ObsOpportunity)";
+            "Duration" = 01:40:49.352;
+            "Label" = "";
+            "Legend" = "VIEW PERIODS";
+            "Pattern" = 56;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-310T01:10:59.491;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+	parameters
+	    (
+	    01:40:49.352
+	    );
+    end activity instance DefineOpportunities_d1
+
+activity instance DefineOpportunities of type DefineOpportunities id DefineOpportunities
+    begin
+	decomposed into ObsOpportunity, ObsOpportunity_5, ObsOpportunity_6, ObsOpportunity_7, 
+		ObsOpportunity_8, ObsOpportunity_9, ObsOpportunity_10, ObsOpportunity_11, 
+		ObsOpportunity_12, ObsOpportunity_13;
+	attributes
+            "Color" = "Dodger Blue";
+            "Decomposition Suffix" = "";
+            "Description" = "DefineOpportunities (id DefineOpportunities)";
+            "Duration" = 02:00:00;
+            "Label" = "";
+            "Legend" = "VIEW PERIODS";
+            "Pattern" = 13;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-310T01:10:59.491;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+	parameters
+	    (
+	    02:00:00,
+	    10
+	    );
+    end activity instance DefineOpportunities
+
+activity instance decompose_via_windows of type decompose_via_windows id decompose_via_windows
+    begin
+	attributes
+            "Color" = "Violet Red";
+            "Decomposition Suffix" = "";
+            "Description" = "decompose_via_windows (id decompose_via_windows)";
+            "Duration" = 002T00:00:00;
+            "Label" = "";
+            "Legend" = "Generic Activities";
+            "Pattern" = 0;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-310T08:00:00.000;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+	parameters
+	    (
+	    2018-310T09:00:00.000,	// start
+#	    003T00:00:00,		// max
+	    00:00:00.001,		// max
+	    00:00:01			// min
+	    );
+    end activity instance decompose_via_windows
+
+activity instance DefineOpportunities_d2 of type ObsOpportunity id ObsOpportunity_5
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+            "Color" = "Orange Red";
+            "Decomposition Suffix" = "";
+            "Description" = " (id ObsOpportunity)";
+            "Duration" = 00:47:19.557;
+            "Label" = "";
+            "Legend" = "VIEW PERIODS";
+            "Pattern" = 56;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-310T13:10:59.491;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+	parameters
+	    (
+	    00:47:19.557
+	    );
+    end activity instance DefineOpportunities_d2
+
+activity instance DefineOpportunities_d3 of type ObsOpportunity id ObsOpportunity_6
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+            "Color" = "Orange Red";
+            "Decomposition Suffix" = "";
+            "Description" = " (id ObsOpportunity)";
+            "Duration" = 01:33:58.314;
+            "Label" = "";
+            "Legend" = "VIEW PERIODS";
+            "Pattern" = 56;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-311T01:10:59.491;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+	parameters
+	    (
+	    01:33:58.314
+	    );
+    end activity instance DefineOpportunities_d3
+
+activity instance DefineOpportunities_d4 of type ObsOpportunity id ObsOpportunity_7
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+            "Color" = "Orange Red";
+            "Decomposition Suffix" = "";
+            "Description" = " (id ObsOpportunity)";
+            "Duration" = 01:35:48.768;
+            "Label" = "";
+            "Legend" = "VIEW PERIODS";
+            "Pattern" = 56;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-311T13:10:59.491;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+	parameters
+	    (
+	    01:35:48.768
+	    );
+    end activity instance DefineOpportunities_d4
+
+activity instance DefineOpportunities_d5 of type ObsOpportunity id ObsOpportunity_8
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+            "Color" = "Orange Red";
+            "Decomposition Suffix" = "";
+            "Description" = " (id ObsOpportunity)";
+            "Duration" = 01:49:23.861;
+            "Label" = "";
+            "Legend" = "VIEW PERIODS";
+            "Pattern" = 56;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-312T01:10:59.491;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+	parameters
+	    (
+	    01:49:23.861
+	    );
+    end activity instance DefineOpportunities_d5
+
+activity instance DefineOpportunities_d6 of type ObsOpportunity id ObsOpportunity_9
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+            "Color" = "Orange Red";
+            "Decomposition Suffix" = "";
+            "Description" = " (id ObsOpportunity)";
+            "Duration" = 00:23:42.370;
+            "Label" = "";
+            "Legend" = "VIEW PERIODS";
+            "Pattern" = 56;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-312T13:10:59.491;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+	parameters
+	    (
+	    00:23:42.370
+	    );
+    end activity instance DefineOpportunities_d6
+
+activity instance DefineOpportunities_d7 of type ObsOpportunity id ObsOpportunity_10
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+            "Color" = "Orange Red";
+            "Decomposition Suffix" = "";
+            "Description" = " (id ObsOpportunity)";
+            "Duration" = 00:40:13.604;
+            "Label" = "";
+            "Legend" = "VIEW PERIODS";
+            "Pattern" = 56;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-313T01:10:59.491;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+	parameters
+	    (
+	    00:40:13.604
+	    );
+    end activity instance DefineOpportunities_d7
+
+activity instance DefineOpportunities_d8 of type ObsOpportunity id ObsOpportunity_11
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+            "Color" = "Orange Red";
+            "Decomposition Suffix" = "";
+            "Description" = " (id ObsOpportunity)";
+            "Duration" = 01:32:11.253;
+            "Label" = "";
+            "Legend" = "VIEW PERIODS";
+            "Pattern" = 56;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-313T13:10:59.491;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+	parameters
+	    (
+	    01:32:11.253
+	    );
+    end activity instance DefineOpportunities_d8
+
+activity instance DefineOpportunities_d9 of type ObsOpportunity id ObsOpportunity_12
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+            "Color" = "Orange Red";
+            "Decomposition Suffix" = "";
+            "Description" = " (id ObsOpportunity)";
+            "Duration" = 00:33:19.978;
+            "Label" = "";
+            "Legend" = "VIEW PERIODS";
+            "Pattern" = 56;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-314T01:10:59.491;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+	parameters
+	    (
+	    00:33:19.978
+	    );
+    end activity instance DefineOpportunities_d9
+
+activity instance DefineOpportunities_d10 of type ObsOpportunity id ObsOpportunity_13
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+            "Color" = "Orange Red";
+            "Decomposition Suffix" = "";
+            "Description" = " (id ObsOpportunity)";
+            "Duration" = 01:06:28.584;
+            "Label" = "";
+            "Legend" = "VIEW PERIODS";
+            "Pattern" = 56;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-314T13:10:59.491;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+	parameters
+	    (
+	    01:06:28.584
+	    );
+    end activity instance DefineOpportunities_d10
+
+activity instance generic of type generic id generic_2
+    begin
+	attributes
+            "Color" = "Dodger Blue";
+            "Decomposition Suffix" = "";
+            "Description" = "generic (id generic)";
+            "Duration" = 00:01:40;
+            "Label" = "";
+            "Legend" = "Generic Activities";
+            "Pattern" = 0;
+            "Plan" = "Standalone Expression";
+            "Start" = 2018-314T21:32:27.649;
+            "Status" = "scheduled";
+            "Subsystem" = "";
+    end activity instance generic
+

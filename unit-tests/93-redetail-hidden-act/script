@@ -1,0 +1,12 @@
+APGEN script version "apgen-X-pre-nov-09-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2017-315T15:40:58.000
+# hostname=LMC-052973
+# n_apgen_files=0
+OPENFILE 93-redetail-hidden-act/input.aaf
+NEWACTDISPLAY
+DETAILALL
+# ABSTRACTACTIVITY ID the_child
+REDETAILACTIVITY ID Foo
+#QUIT 0

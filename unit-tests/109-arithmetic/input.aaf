@@ -1,0 +1,15 @@
+apgen version "optimized"
+
+function few()
+    {
+	a: integer default to 17;
+	b: integer default to 1;
+	c: integer default to 0;
+
+	write_to_stdout("c before computation: ", c, "\n");
+	c = a + b;
+	write_to_stdout("c = ", a, " + ", b, ": ", c, "\n");
+	return 0;
+    }
+
+global integer I = few();

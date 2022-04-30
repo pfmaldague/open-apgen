@@ -1,0 +1,15 @@
+APGEN script version "apgen-10.0.0pre-nov-05-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2017-312T22:25:09.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 89-use-res-when-only-decl/input.aaf
+
+# APGEN Error -- OPENFILE 89-use-res-when-only-decl/input.aaf - Execution Error
+# resource R was declared but never implemented; -noremodel flag was specified, but some instances were created. These instances will be lost because they cannot be implemented without consolidation, which requires that all resources be defined.
+
+# APGEN Error -- OPENFILE 89-use-res-when-only-decl/input.aaf - Execution Error
+# (error occurred in "OPENFILE 89-use-res-when-only-decl/input.aaf")
+OPENFILE 89-use-res-when-only-decl/one-res.aaf
+#QUIT 0

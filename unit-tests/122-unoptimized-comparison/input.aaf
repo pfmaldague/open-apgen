@@ -1,0 +1,40 @@
+apgen version "act-res-1.aaf"
+
+global array A = ["one" = 1, "two" = true, "seventeen" = 17];
+
+activity type useScalar
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "scalars";
+	parameters
+		a: integer default to 4;
+		b: string default to "horrible";
+	creation
+		if(a >= A["one"]) {
+			write_to_stdout(a, " is >= ", A["one"], "\n");
+		} else if(a < A["seventeen"]) {
+			write_to_stdout(a, " is < ", A["seventeen"], "\n");
+		}
+		if(A["two"] == false) {
+			write_to_stdout("A[\"two\"] is false!");
+		}
+		if(A["two"] && a < A["seventeen"]) {
+			write_to_stdout("A[\"two\"] is true and a < A[\"seventeen\"!\n");
+		}
+	destruction
+		if(a < A["one"]) {
+			write_to_stdout(a, " is >= ", A["one"], "\n");
+		}
+    end activity type useScalar
+
+activity instance Foo of type useScalar id James_Bond_007
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-039T09:42:07.823;
+	parameters
+		(-12, "Hello");
+    end activity instance Foo

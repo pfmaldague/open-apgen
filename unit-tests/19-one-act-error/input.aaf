@@ -1,0 +1,36 @@
+apgen version "act-res-1.aaf"
+
+resource Scalar: consumable integer
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: integer default to 1;
+	profile
+		0;
+	usage
+		-x;
+    end resource Scalar
+
+activity type useScalar
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "scalars";
+	parameters
+		a: integer default to 4;
+		b: string default to "horrible";
+	modeling
+		use Scalar(a);
+    end activity type useScalar
+
+activity instance Foo of type useScalar id James_Bond_007
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-123T00:00:00;
+	parameters
+		(-12, 00:00:01);
+    end activity instance Foo

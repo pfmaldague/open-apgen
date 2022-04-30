@@ -1,0 +1,21 @@
+apgen version "europa"
+
+// function CalcMaxXBandHGADownlinkBitRate(Time)
+
+
+function F(a, b, c)
+    parameters
+	a: float default to 1.0;
+	b: float default to 2.0;
+	c: float default to 3.0; {
+    Rate: 		float default to 0.0;
+    Rate = a * (10.0^(2.0*log10(b/c)));
+			Rate =  GetXBandDownlinkBitRate(MaxRate);
+		}
+		else{
+			Rate = 0.0;
+		}
+		#write_to_stdout("CalcMaxXBandHGADownlinkBitRate: now = ",now," EarthRange = ",EarthRange," Rate = ",Rate,"\n");
+	}
+	return Rate;
+}

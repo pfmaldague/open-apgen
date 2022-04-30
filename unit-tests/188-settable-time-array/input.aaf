@@ -1,0 +1,91 @@
+apgen version "act-res-1.aaf"
+
+global array Exclaim = ["Aaah", "Hmmmm", "Oh No!"];
+
+resource Foo(Exclaim): settable time
+    begin
+	attributes
+		"Units" = "silver coins";
+		"Min Abs Delta" = 00:01:00;
+		// "Min Rel Delta" = 0.00000000001;
+	parameters
+		x: time default to 2020-001T00:20:00;
+	default
+	    when ["Aaah"]:
+		2020-002T02:00:00;
+	    when default:
+		2020-002T00:00:00;
+	usage
+		x + 00:40:00;
+    end resource Foo
+
+activity type setFoo
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "vectors";
+	parameters
+		a: time default to now;
+		c: string default to "Oh No!";
+	modeling
+
+		c = "Oh No!";
+		set Foo[c](now - 2 * (now - start));
+		// wait for 1:00:00;
+		write_to_stdout(now, " - ", "activity[c=", c, "] before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity[c=", c, "] after wait (10:00)...\n");
+		set Foo[c](now - 2 * (now - start));
+		write_to_stdout(now, " - ", "activity[c=", c, "] before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity[c=", c, "] after wait (10:00)...\n");
+		set Foo[c](now - 2 * (now - start));
+		write_to_stdout(now, " - ", "activity[c=", c, "] before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity[c=", c, "] after wait (10:00)...\n");
+		set Foo[c](now - 2 * (now - start));
+		write_to_stdout(now, " - ", "activity[c=", c, "] before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity[c=", c, "] after wait (10:00)...\n");
+		set Foo[c](now - 2 * (now - start));
+		write_to_stdout(now, " - ", "activity[c=", c, "] before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity[c=", c, "] after wait (10:00)...\n");
+		set Foo[c](now - 2 * (now - start));
+		write_to_stdout(now, " - ", "activity[c=", c, "] before wait (9:00)...\n");
+		wait for 9:00;
+		write_to_stdout(now, " - ", "activity[c=", c, "] after wait (9:00)...\n");
+		set Foo[c](now - 2 * (now - start));
+		
+		write_to_stdout(now, " - ", "activity[c=", c, "] before wait (1:00)...\n");
+		wait for 1:00;
+		write_to_stdout(now, " - ", "activity[c=", c, "] after wait (1:00)...\n");
+
+		c = "Hmmmm";
+		set Foo[c](now - 2 * (now - start));
+		wait for 1:00:00;
+		write_to_stdout(now, " - ", "activity[c=", c, "] after wait (1:00:00)...\n");
+		set Foo[c](now - 2 * (now - start));
+		wait for 1:00:00;
+		write_to_stdout(now, " - ", "activity[c=", c, "] after wait (1:00:00)...\n");
+		set Foo[c](now - 2 * (now - start));
+		wait for 1:00:00;
+		write_to_stdout(now, " - ", "activity[c=", c, "] after wait (1:00:00)...\n");
+		set Foo[c](now - 2 * (now - start));
+		wait for 1:00:00;
+		write_to_stdout(now, " - ", "activity[c=", c, "] after wait (1:00:00)...\n");
+		set Foo[c](now - 2 * (now - start));
+		wait for 1:00:00;
+		write_to_stdout(now, " - ", "activity[c=", c, "] after wait (1:00:00)...\n");
+		set Foo[c](now - 2 * (now - start));
+    end activity type setFoo
+
+activity instance F of type setFoo
+    begin
+	attributes
+	    "Start" = 2020-002T02:30:00;
+	parameters
+	    (2020-002T00:00:00, "Oh No!");
+    end activity instance F
+

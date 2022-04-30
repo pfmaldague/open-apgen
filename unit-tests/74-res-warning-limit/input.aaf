@@ -1,0 +1,53 @@
+apgen version "foo"
+
+resource consumedFloat: consumable float
+    begin
+	attributes
+	    "Error High" = 20.0;
+	    "Warning High" = 12.0;
+	    "Warning Low" = -8.0;
+	    "Error Low" = -16.0;
+	    "Interpolation" = true;
+	parameters
+	    x: float default to 0.0;
+        profile
+	    0;
+	usage
+	    consumedFloat.currentval() - x;
+    end resource consumedFloat
+
+activity type consume_modeling
+    begin
+	attributes
+	    "Duration" = 2T00:00:00;
+	    "Color" = "Spring Green";
+	    "Legend" = "Consumers";
+	parameters
+	    offset: float default to 0;
+	    amplitude: float default to 5.0;
+	modeling
+	    i: integer default to 0;
+
+	    while(i <= 300) {
+		hours: float default to (now - start) / 1:00:00;
+		use consumedFloat(offset + amplitude * sin(0.5 * PI * hours));
+		wait for span / 300;
+		i = i + 1; }
+    end activity type consume_modeling
+
+activity instance consume_modeling of type consume_modeling id consume_modeling
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 002T00:00:00;
+	    "Legend" = "Consumers";
+	    "Pattern" = 0;
+	    "Plan" = "apgen.apf";
+	    "Start" = 2015-252T20:46:57.675;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    0.0,
+	    25.0
+	    );
+    end activity instance consume_modeling

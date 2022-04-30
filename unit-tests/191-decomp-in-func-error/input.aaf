@@ -1,0 +1,55 @@
+apgen version "faster"
+
+activity type the_parent;
+
+nonexclusive_decomposition function decomp_once(the_start)
+    parameters
+	the_start: time default to 2000-001T00:00:00;
+    {
+	the_parent(0) at the_start;
+    }
+
+activity type the_child
+    begin
+	attributes
+		"Color" = "Purple";
+		// This is interesting but it fails during consolidation:
+		// "Duration" = p.span / 2;
+		"Duration" = 01:00:00;
+		"Legend" = "Children";
+	parameters
+		p: instance default to "generic";
+	creation
+		write_to_stdout("p: ", p, "\n");
+	modeling
+		span = p.span / 2;
+		decomp_once(start + 00:30:00);
+    end activity type the_child
+
+activity type the_parent
+    begin
+	attributes
+		"Color" = "Lavender";
+		"Duration" = 1:00:00;
+		"Legend" = "Parents";
+	parameters
+		C: integer default to 2 ? "Number of children";
+	nonexclusive_decomposition
+		i: integer default to 0;
+		T: time default to start;
+		while(i < C) {
+			write_to_stdout(id, ": creating child at ", T, "\n");
+			the_child(this) at T;
+			T = T + span;
+			i = i + 1;
+		}
+    end activity type the_parent
+
+activity instance Foo of type the_parent
+    begin
+	attributes
+		"Start" = 2028-163T01:02:03;
+		"Color" = "Yellow";
+	parameters
+		(3);
+    end activity instance Foo

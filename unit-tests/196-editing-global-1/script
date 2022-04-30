@@ -1,0 +1,13 @@
+APGEN script version "apgen-X.4.35-Custom - Tue Dec 17 14:14:48 PST 2019"
+# udef=(not found)
+# user=maldague
+# date=2019-351T22:34:12.000
+# hostname=eurcdevapgen2.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 196-editing-global-1/input.aaf
+OPENFILE input/build.scr
+EDITGLOBAL a = "240"
+EDITGLOBAL c = "\"I don't know...\""
+EDITGLOBAL h = "[\"A\" = 224, \"B\" = \"By all means!\"]"
+OPENFILE 196-editing-global-1/input2.aaf
+OPENFILE input/build.scr

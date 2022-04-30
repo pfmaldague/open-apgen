@@ -1,0 +1,22 @@
+apgen version "continue"
+
+activity type hurry
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 1:00:00;
+	parameters
+	    skipped: integer default to 4;
+	modeling
+	    i: integer default to 0;
+	    while(i < 10) {
+		if(i == skipped) {
+		    write_to_stdout("skipping ", i, "\n");
+		    i = i + 1;
+		    continue;
+		}
+		write_to_stdout("i = ", i, "\n");
+		i = i + 1;
+	    }
+	
+    end activity type hurry

@@ -1,0 +1,82 @@
+apgen version "apgen-10.0.0pre-oct-4-Unknown build"
+
+
+# udef=(not found)
+# user=maldague
+# date=2017-280T16:07:18.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=1
+# apgen_file=64-separate-apf/input.apf 2017-280T15:27:20.000
+
+activity instance Foo_d1 of type the_child id the_child
+    begin
+	abstracted into the_parent;
+	attributes
+	    "Color" = "Purple";
+	    "Description" = "the_child (id the_child)";
+	    "Duration" = 00:30:00;
+	    "Legend" = "Children";
+	    "Pattern" = 0;
+	    "Plan" = "64-separate-apf/input.apf";
+	    "Start" = 2028-163T01:02:03.000;
+	    "Status" = TRUE;
+	parameters
+	    (
+            "aha"
+            );
+    end activity instance Foo_d1
+
+activity instance Foo of type the_parent id the_parent
+    begin
+	decomposable into the_child, the_child_3, the_child_4;
+	attributes
+	    "Color" = "Yellow";
+	    "Description" = "Foo (id )";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Parents";
+	    "Pattern" = 0;
+	    "Plan" = "64-separate-apf/input.apf";
+	    "Start" = 2028-163T01:02:03.000;
+	    "Status" = TRUE;
+	parameters
+	    (
+            3
+            );
+    end activity instance Foo
+
+activity instance Foo_d2 of type the_child id the_child_3
+    begin
+	abstracted into the_parent;
+	attributes
+	    "Color" = "Purple";
+	    "Description" = "the_child (id the_child)";
+	    "Duration" = 00:30:00;
+	    "Legend" = "Children";
+	    "Pattern" = 0;
+	    "Plan" = "64-separate-apf/input.apf";
+	    "Start" = 2028-163T02:02:03.000;
+	    "Status" = TRUE;
+	parameters
+	    (
+            "hoo hoo"
+            );
+    end activity instance Foo_d2
+
+activity instance Foo_d3 of type the_child id the_child_4
+    begin
+	abstracted into the_parent;
+	attributes
+	    "Color" = "Purple";
+	    "Description" = "the_child (id the_child)";
+	    "Duration" = 00:30:00;
+	    "Legend" = "Children";
+	    "Pattern" = 0;
+	    "Plan" = "64-separate-apf/input.apf";
+	    "Start" = 2028-163T03:02:03.000;
+	    "Status" = TRUE;
+	parameters
+	    (
+            "Ayyyyyyyaah"
+            );
+    end activity instance Foo_d3
+

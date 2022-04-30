@@ -1,0 +1,447 @@
+apgen version "apgen-9.9.0O-rhel7_64-SEQ_34.4.0-develop-B373-R6baee3f"
+
+directive "Legend" = [ "Generic_Activities", 32 ];
+directive "Legend" = [ "Get_Windows", 32 ];
+directive "Legend" = [ "T1", 75 ];
+directive "Legend" = [ "T1a", 75 ];
+directive "Legend" = [ "T1b", 75 ];
+directive "Legend" = [ "T1c", 75 ];
+directive "Legend" = [ "T2", 75 ];
+directive "Legend" = [ "T3", 75 ];
+directive "Legend" = [ "T4", 75 ];
+directive "Legend" = [ "T5", 75 ];
+directive "Legend" = [ "T6", 75 ];
+directive "Legend" = [ "I1interp", 75 ];
+directive "Legend" = [ "I1no-interp", 75 ];
+directive "Legend" = [ "I2interp", 75 ];
+directive "Legend" = [ "I2no-interp", 75 ];
+directive "Legend" = [ "I3", 75 ];
+directive "Legend" = [ "I4", 75 ];
+directive "Legend" = [ "I5", 75 ];
+directive "Legend" = [ "I6", 75 ];
+directive "Application Size" = "2000 x 1500";
+
+activity instance generic of type generic
+    begin
+	attributes
+	    "Color" = "Dodger Blue";
+	    "Duration" = 00:01:40;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "apgen.apf";
+	    "Start" = 2015-002T00:00:00.000;
+	    "Status" = "scheduled";
+    end activity instance generic
+
+activity instance Create_NC_FLT of type Create_NC_FLT
+    begin
+	attributes
+	    "Color" = "Dodger Blue";
+	    "Duration" = 15T00:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "apgen.apf";
+	    "Start" = 2015-001T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    15T00:00:00, 00:10:00
+	    );
+    end activity instance Create_NC_FLT
+
+activity instance DUMMY_FLT_cyclic of type use_DUMMY_FLT_cyclic
+    begin
+	attributes
+	    "Color" = "Dodger Blue";
+	    "Duration" = 15T00:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "apgen.apf";
+	    "Start" = 2015-001T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    15T00:00:00, 00:01:00
+	    );
+    end activity instance DUMMY_FLT_cyclic
+
+activity instance UseC_INT of type UseC_INT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 06:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-002T16:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    20
+	    );
+    end activity instance UseC_INT
+
+activity instance UseC_INT of type UseC_INT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 06:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-004T16:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    20
+	    );
+    end activity instance UseC_INT
+
+activity instance UseC_INT of type UseC_INT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 06:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-006T16:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    20
+	    );
+    end activity instance UseC_INT
+
+activity instance UseC_INT of type UseC_INT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 06:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-008T16:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    20
+	    );
+    end activity instance UseC_INT
+
+activity instance UseC_INT of type UseC_INT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 06:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-010T16:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    20
+	    );
+    end activity instance UseC_INT
+
+activity instance UseNC_FLT of type UseNC_FLT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 06:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-004T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    0.5
+	    );
+    end activity instance UseNC_FLT
+
+activity instance UseNC_FLT of type UseNC_FLT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 06:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-005T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    -0.5
+	    );
+    end activity instance UseNC_FLT
+
+activity instance UseNC_FLT of type UseNC_FLT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 06:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-006T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    0.5
+	    );
+    end activity instance UseNC_FLT
+
+activity instance UseNC_FLT of type UseNC_FLT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 06:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-007T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    -0.5
+	    );
+    end activity instance UseNC_FLT
+
+activity instance UseNC_FLT of type UseNC_FLT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 06:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-008T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    0.5
+	    );
+    end activity instance UseNC_FLT
+
+activity instance UseNC_FLT of type UseNC_FLT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 06:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-009T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    -0.5
+	    );
+    end activity instance UseNC_FLT
+
+activity instance UseNC_INT of type UseNC_INT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 12:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-005T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    10
+	    );
+    end activity instance UseNC_INT
+
+activity instance UseNC_INT of type UseNC_INT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 12:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-006T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    10
+	    );
+    end activity instance UseNC_INT
+
+activity instance UseNC_INT of type UseNC_INT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 12:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-007T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    10
+	    );
+    end activity instance UseNC_INT
+
+activity instance UseNC_INT of type UseNC_INT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 12:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-008T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    10
+	    );
+    end activity instance UseNC_INT
+
+activity instance UseNC_INT of type UseNC_INT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 12:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-009T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    10
+	    );
+    end activity instance UseNC_INT
+
+activity instance UseNC_INT of type UseNC_INT
+    begin
+	attributes
+	    "Color" = "Cadet Blue";
+	    "Duration" = 12:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 45;
+	    "Plan" = "New";
+	    "Start" = 2015-010T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    10
+	    );
+    end activity instance UseNC_INT
+
+activity instance UseS_STR of type UseS_STR
+    begin
+        attributes
+            "Color" = "Cadet Blue";
+            "Duration" = 06:00:00;
+            "Legend" = "Generic_Activities";
+            "Pattern" = 45;
+            "Plan" = "New";
+            "Start" = 2015-004T16:00:00.000;
+            "Status" = "scheduled";
+        parameters
+            (
+            "OFF"
+            );
+    end activity instance UseS_STR
+
+activity instance UseS_STR of type UseS_STR
+    begin
+        attributes
+            "Color" = "Cadet Blue";
+            "Duration" = 06:00:00;
+            "Legend" = "Generic_Activities";
+            "Pattern" = 45;
+            "Plan" = "New";
+            "Start" = 2015-005T16:00:00.000;
+            "Status" = "scheduled";
+        parameters
+            (
+            "MID"
+            );
+    end activity instance UseS_STR
+
+activity instance UseS_STR of type UseS_STR
+    begin
+        attributes
+            "Color" = "Cadet Blue";
+            "Duration" = 06:00:00;
+            "Legend" = "Generic_Activities";
+            "Pattern" = 45;
+            "Plan" = "New";
+            "Start" = 2015-006T16:00:00.000;
+            "Status" = "scheduled";
+        parameters
+            (
+            "ON"
+            );
+    end activity instance UseS_STR
+
+activity instance UseS_STR of type UseS_STR
+    begin
+        attributes
+            "Color" = "Cadet Blue";
+            "Duration" = 06:00:00;
+            "Legend" = "Generic_Activities";
+            "Pattern" = 45;
+            "Plan" = "New";
+            "Start" = 2015-007T16:00:00.000;
+            "Status" = "scheduled";
+        parameters
+            (
+            "MID"
+            );
+    end activity instance UseS_STR
+
+activity instance UseS_STR of type UseS_STR
+    begin
+        attributes
+            "Color" = "Cadet Blue";
+            "Duration" = 06:00:00;
+            "Legend" = "Generic_Activities";
+            "Pattern" = 45;
+            "Plan" = "New";
+            "Start" = 2015-008T16:00:00.000;
+            "Status" = "scheduled";
+        parameters
+            (
+            "OFF"
+            );
+    end activity instance UseS_STR
+
+activity instance UseS_STR of type UseS_STR
+    begin
+        attributes
+            "Color" = "Cadet Blue";
+            "Duration" = 06:00:00;
+            "Legend" = "Generic_Activities";
+            "Pattern" = 45;
+            "Plan" = "New";
+            "Start" = 2015-009T16:00:00.000;
+            "Status" = "scheduled";
+        parameters
+            (
+            "MID"
+            );
+    end activity instance UseS_STR
+
+activity instance generic of type generic
+    begin
+	attributes
+	    "Color" = "Dodger Blue";
+	    "Duration" = 00:01:40;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "apgen.apf";
+	    "Start" = 2015-014T00:00:00.000;
+	    "Status" = "scheduled";
+    end activity instance generic
+

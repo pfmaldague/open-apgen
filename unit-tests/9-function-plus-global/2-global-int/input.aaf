@@ -1,0 +1,3 @@
+apgen version "faster"
+
+global integer A = 4 + 1;

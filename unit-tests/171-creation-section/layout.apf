@@ -1,0 +1,14 @@
+APGEN version "apgen-9.2.39-Unknown build"
+
+
+directive "Activity Legend Layout" = [
+    "",
+    [ "Generic_Activities", 32 ], 
+    [ "VIEW_PERIODS", 32 ], 
+    [ "Pictures", 32 ]
+    ];
+directive "Resource Legend Layout" = [
+    "",
+    [ "OKtoObserve", 100 ], 
+    [ "ObsInProgress", 100 ]
+    ];

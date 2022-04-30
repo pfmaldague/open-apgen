@@ -1,0 +1,4 @@
+apgen version "faster"
+
+global integer A = 4 + 1;
+global integer B = A - 7;

@@ -1,0 +1,16 @@
+APGEN script version "apgen-X.3.05-Custom - Thu Aug 8 10:02:35 PDT 2019"
+# udef=EHM udef library version 3.0.beta - build date:  Wed Aug 7 15:55:13 PDT 2019 
+# user=maldague
+# date=2019-220T23:12:29.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 183-settable-resources-2/input.aaf
+BUILD
+NEWACTDISPLAY
+NEWACTIVITY generic NAME generic ID generic TO 2019-221T00:00:00.000 LEGEND "Generic_Activities"
+NEWACTIVITY generic NAME generic ID generic TO 2019-221T21:00:00.000 LEGEND "Generic Activities"
+NEWACTIVITY setSettableVector NAME setSettableVector ID setSettableVector TO 2019-221T08:00:00.000 LEGEND "Generic Activities"
+NEWRESDISPLAY 0
+ADDRESOURCE SettableVector["three"]["BB"] A1R1
+REMODEL
+#QUIT 0

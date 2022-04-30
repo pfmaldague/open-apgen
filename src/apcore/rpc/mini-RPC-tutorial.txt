@@ -1,0 +1,301 @@
+
+The following is extracted from the URL below:
+
+	http://docs.oracle.com/cd/E19683-01/816-1435/6m7rrfn9k/index.html
+
+
+	Example Service Described in the RPC Language
+	=============================================
+
+	The following code example shows the specification of a simple ping program.
+
+	Example B–4 ping Service Using RPC Language
+
+	/*
+	 * Simple ping program
+	 */
+	program PING_PROG {
+	 		version PING_VERS_PINGBACK {
+	 			void		
+	 			PINGPROC_NULL(void) = 0;
+	 			/*
+			 * ping the caller, return the round-trip time
+			 * in milliseconds. Return a minus one (-1) if
+	 			 * operation times-out
+			 */
+			int
+	 			PINGPROC_PINGBACK(void) = 1;
+	 			/* void - above is an argument to the call */
+	 		} = 2;
+	/*
+	 * Original version
+	 */
+	 		version PING_VERS_ORIG {
+	 			void
+	 			PINGPROC_NULL(void) = 0;
+	 	} = 1;
+	} = 200000;	
+	const PING_VERS = 2; /* latest version */
+	The first version described is PING_VERS_PINGBACK with two procedures, PINGPROC_NULL
+	and PINGPROC_PINGBACK.
+
+	PINGPROC_NULL takes no arguments and returns no results, but it is useful for such
+	things as computing round-trip times from the client to the server and back again.
+	By convention, procedure 0 of any RPC program should have the same semantics, and
+	never require authentication.
+
+	The second procedure returns the amount of time in microseconds that the operation used.
+
+	The next version, PING_VERS_ORIG, is the original version of the protocol and does
+	not contain the PINGPROC_PINGBACK procedure. It is useful for compatibility with old
+	client programs.
+
+
+The next excerpt is taken from URL http://www.cs.nyu.edu/courses/spring00/V22.0480-002/class07.html:
+
+	Let's look at how a remote procedure allocates and frees memory.
+	 
+	Suppose you define a remote procedure that returns a linked list of data.
+	 
+	When called, the procedure uses the normal memory allocation routines ( malloc(),
+	calloc(), etc.) to populate the linked list.
+	 
+	When the procedure ends, the lower-level RPC routines translate the
+	list into XDR representation and send the data to the application on the
+	client machine.  However, the lower-level RPC routines do not free
+	this memory.
+	 
+	This is a problem because the program supplying the procedure
+	never exits.  As mentioned earlier, the program supplying
+	remote procedures runs continually on the server machine waiting
+	for RPC requests.
+	 
+	The next time someone calls a procedure, the previously-allocated
+	memory still exists.
+	 
+	Therefore, a procedure must deallocate previously-allocated
+	memory when it  begins .  But, since the previously-allocated
+	data in now in XDR format, the procedure must use XDR routines to
+	free the data.  We now present these XDR routines.
+	 
+	You must use the  xdr_free()
+	routine to free data your procedure allocates.
+	 
+	The  xdr_free()  routine takes a pointer to an XDR
+	function and a data pointer.
+	 
+	It frees the memory associated with the data pointer.
+	The function passed to  xdr_free()  is the XDR
+	routine corresponding to the data type.
+	 
+	The  rpcgen compiler always names these functions  xdr_any() ,
+	where any is the data type name.
+	 
+	 
+	Example:
+	 
+		struct link_list {
+		int data;
+	                struct link_list *nextp;
+	        	};
+	 
+	 
+	The  rpcgen  compiler creates a function named
+	 xdr_link_list()  that translates this data structure
+	into XDR format.
+	 
+	Now, suppose you allocate memory to hold the
+	list, and place the first memory location of the list in a variable
+	named  headp .
+	 
+	After the XDR routines translate the list into XDR format,
+	you can free the entire linked list with the following call:
+	 
+		xdr_free(xdr_linked_list, headp);
+	 
+	 
+	As mentioned earlier, the lower-level RPC routines
+	translate a procedure's results into
+	XDR representation after the procedure ends.
+	So, if your results contain allocated memory, you must not free
+	the memory until the next time an application on a client machine
+	calls the procedure.
+	Usually, you free previously-allocated memory at the beginning
+	of the procedure, and then allocate new data as needed.
+	 
+	 
+	const MAX_NAME_SIZE = 20;
+	struct personinfo {
+		string login_name;
+		struct personinfo *nextp;
+	};
+	enum errorcodes {
+		NO_MEMORY = 0,
+		CANT_GET_INFO = 1
+	};
+	union results switch (int status) {
+		case 0:
+			struct personinfo *personinfop;
+		default:
+			enum errorcodes reason;
+	};
+	program RUSERS_PROG {
+		version RUSERS_VERS {
+			results RUSERS(void) = 1;
+		} = 1;
+	} = 0x200010f4;
+	 
+	 
+	Server:
+	 
+	#include <stdio.h>
+	#include <rpc/rpc.h>
+	#include "rusers.h"
+	results *
+	 rusers_1 (filler)
+	int *filler;
+	{
+	   static results results;
+	   personinfo    *currp;
+	   personinfo   **currpp;
+	   FILE *fp;
+	   char buf[BUFSIZ];
+	   /*
+	    *  Free the space we allocated the previous time this
+	    *  procedure was called.
+	    */
+	    xdr_free (xdr_results, &results);
+	 
+	   /*
+	    *  Get the users currently logged on by calling
+	    *  the popen function
+	    */
+	   if ((fp = popen("who | cut -d' ' -f1", "r")) == NULL) {
+	         results.status  = 1;
+	         results.results_u.reason  = CANT_GET_INFO;
+	        return (&results);
+	   }
+	    
+	   currpp = & results.results_u.personinfop ;
+	   while (fgets(buf, BUFSIZ, fp) != NULL) {
+	      if ((currp = *currpp =
+	         (personinfo *)malloc(sizeof(personinfo))) == NULL){
+	            results.status  = 1;
+	            results.results_u.reason  = NO_MEMORY;
+	           return (&results);
+	      }
+	      if (strlen(buf) > MAX_NAME_SIZE) {
+	           buf[MAX_NAME_SIZE - 1] = ' ';
+	      } else {
+	           /*
+	            *  Get rid of new-line character
+	            */
+	           buf[strlen(buf) - 1] = ' ';
+	      }
+	      currp->login_name = (char *)malloc(strlen(buf));
+	      strcpy(currp->login_name, buf);
+	      currpp = &(currp->nextp);
+	   }
+	   *currpp = NULL;
+	    results.status  = 0;
+	   return &results;
+	}
+	 
+	 
+	 
+	Client:
+	 
+	#include <stdio.h>
+	#include <rpc/rpc.h>
+	#include "rusers.h"
+	main(argc, argv)
+	int argc;
+	char *argv[];
+	{
+	    CLIENT *cl;
+	    results *resultp;
+	    struct personinfo *currp;
+	    int filler;
+	    int i;
+	    int error = 0;
+	    if (argc < 2) {
+	       fprintf(stderr, "%s: usage: %s server [server...] n",
+	               argv[0], argv[0]);
+	       exit(1);
+	    }
+	    for (i = 1; argv[i]; i++) {
+	       printf("---------- %s ------------- n", argv[i]);
+	       cl =  clnt_create (argv[i], RUSERS_PROG, RUSERS_VERS,
+	                        "netpath");
+	       if (cl == NULL) {
+	             clnt_pcreateerror (argv[i]);
+	            error = 1;
+	            continue;
+	       }
+	       resultp =  rusers_1 (&filler, cl);
+	       if (resultp == NULL) {
+	             clnt_perror (cl, "rusers_1");
+	            error = 1;
+	            continue;
+	       }
+	 
+	       if ( resultp->status  != 0) {
+	            printf("ERROR! n");
+	            switch ( resultp->results_u.reason ) {
+	               case NO_MEMORY:
+	                 printf("Server ran out of memory n");
+	                 break;
+	               case CANT_GET_INFO:
+	                 printf("Server could not get info n");
+	                 break;
+	            }
+	            error = 1;
+	            continue;
+	       }
+	       currp =  resultp->results_u.personinfop ;
+	 
+	       while (currp) {
+	           printf("%.20s n", currp->login_name);
+	           currp = currp->nextp;
+	       }
+	       /*
+	        *  Free all data associated with this RPC
+	        */
+	        clnt_freeres (cl, xdr_results, resultp);
+	        clnt_destroy (cl);
+	    }
+	 
+	    exit(error);
+	}
+
+The next excerpt comes from the following URL:
+	http://web.cs.wpi.edu/~rek/DCS/D04/SunRPC.html
+
+	/*
+	 * Define two procedures
+	 *      bin_date_1() returns the binary date and time (no arguments)
+	 *      str_date_1() takes a binary time and returns a string
+	 *
+	 */
+ 
+	program DATE_PROG {
+	    version DATE_VERS {
+	        long BIN_DATE(void) = 1;    /* procedure number = 1 */
+	        string STR_DATE(long) = 2;  /* procedure number = 2 */
+	    } = 1;                          /* version number = 1 */
+	} = 0x31234567;                     /* program number = 0x31234567 */
+
+	Notes:
+
+	  - Start numbering proceedures at 1 (procedure 0 is always the ``null procedure''.
+
+	  - Program number is defined by the user. Use range 0x20000000 to 0x3fffffff.
+
+	  - Provide a prototype for each function. Sun RPC allows only a single parameter
+	    and a single result. Must use a structure for more parameters or return values
+	    (see XDRC++ example).
+
+	  - use clnt_create() to get handle to remote procedure.
+
+	  - do not have to use rpcgen. Can handcraft own routines.
+

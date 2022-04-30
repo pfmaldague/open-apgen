@@ -1,0 +1,23 @@
+APGEN script version "apgen"
+OPENFILE input/test.aaf
+OPENFILE input/test.apf
+
+NEWACTIVITY test_get_windows NAME test_get_windows ID test_get_windows TO 2015-001T00:00:00.000 LEGEND "Get Windows"
+
+EDITACTIVITY ID test_get_windows
+    < theDuration = "002T00:00:00" >
+REMODEL
+
+DETAILACTIVITY ID test_get_windows
+
+#NEWACTIVITY test_interpolate_windows NAME test_interpolate_windows ID test_interpolate_windows TO 2015-001T00:00:00.000 LEGEND "Get Windows"
+
+#EDITACTIVITY ID test_interpolate_windows
+#    < theDuration = "002T00:00:00" >
+#REMODEL
+
+#DETAILACTIVITY ID test_interpolate_windows
+
+SAVEFILE APF test.apf
+WRITETOL "test.tol" 2015-001T00:00:00  2015-015T00:00:00 "FORMAT DEFAULT"
+

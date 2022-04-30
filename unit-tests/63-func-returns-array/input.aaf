@@ -1,0 +1,40 @@
+apgen version "function returns an array"
+
+
+function returnsA(x)
+    parameters
+	x: integer default to 0;
+	{
+	A: array default to [];
+	if(x == 0) {
+		A[0] = "one";
+		A[1] = "two";
+		A[2] = "three";
+	} else {
+		A[0] = 1;
+		A[1] = 2;
+		A[2] = 3;
+	}
+	return A;
+}
+
+global array V = returnsA(0);
+
+function printV()
+	{
+	write_to_stdout("V: ", V, "\n");
+	return 0;
+	}
+
+global integer dummy1 = printV();
+
+global array W = returnsA(1);
+
+function printVandW()
+	{
+	write_to_stdout("V: ", V, "\n");
+	write_to_stdout("W: ", W, "\n");
+	return 0;
+	}
+
+global integer dummy2 = printVandW();

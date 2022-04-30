@@ -1,0 +1,3503 @@
+ActInstance {
+	void to_stream(aoString* aos, int ind) const override;
+	void	consolidate(int dent);
+m
+}
+ActType {
+	void to_stream(aoString* aos, int ind) const override;
+
+	//
+	// We need to preserve original copies of all the programs
+	// stored within an activity type, so we can consolidate new
+	// copies in the context of activity instances when necessary.
+	//
+	// The programs in question are:
+	//
+	//	program		ActType member/class				member/class where stored		
+	//	-------		--------------------				-------------------------
+	//	class vars	initial_act_type_section/ActTypeInitial		opt_type_class_variables/ActTypeClassVariables
+	//	attributes	initial_act_type_section/ActTypeInitial		opt_act_attributes_section/ActTypeAttributes
+	//	parameters	initial_act_type_section/ActTypeInitial		opt_act_type_param_section/Parameters
+	//	creation	body_of_activity_type_section/ActTypeBody	opt_creation_section/TypeCreationSection
+	//	modeling	body_of_activity_type_section/ActTypeBody	opt_res_usage_section/ModelingSection
+	//			NOTE: modeling section is also found in
+	//			opt_decomposition_section/ActTypeDecomp
+	//	decomposition	body_of_activity_type_def/ActTypeBody		opt_decomposition_section/ActTypeDecomp
+	//	destruction	body_of_activity_type_def/ActTypeBody		opt_destruction_section/TypeCreationSection
+	//									NOTE: not a typo
+	//
+	// In the "original..." members below, it is understood that each
+	// parsedExp holds a Program, Declarations.
+	// If the program does not exist, the parsedExp is empty.
+	//
+
+	parsedExp	original_class_vars;
+	parsedExp	original_attributes;
+	parsedExp	original_parameters;
+	parsedExp	original_creation;
+	parsedExp	original_modeling;
+	parsedExp	original_decomposition;
+	parsedExp	original_destruction;
+
+	stringtlist	defined_attributes;
+
+	void		consolidate(int dent);
+	void		handle_modeling_program(ModelingSection*, Behavior&, int dent);
+	void		add_a_wait_statement(parsedExp header, Program* theProgram);
+m
+ void	ActType::initExpression(
+		const Cstring& nodeData) {
+	theData = "ActType";
+	if(initial_act_type_section) {
+		ActTypeInitial* ati = dynamic_cast<ActTypeInitial*>(initial_act_type_section.object());
+		if(ati) {
+			if(ati->opt_type_class_variables) {
+				ActTypeClassVariables* atc = dynamic_cast<ActTypeClassVariables*>(ati->opt_type_class_variables.object());
+				if(atc) {
+					Program* pg = dynamic_cast<Program*>(atc->type_class_variables.object());
+					assert(pg);
+					original_class_vars.reference(pg->copy());
+				}
+			}
+			if(ati->opt_act_attributes_section) {
+				ActTypeAttributes* ata = dynamic_cast<ActTypeAttributes*>(ati->opt_act_attributes_section.object());
+				if(ata) {
+					Program* pg = dynamic_cast<Program*>(ata->declarative_program.object());
+					assert(pg);
+					original_attributes.reference(pg->copy());
+				}
+			}
+			if(ati->opt_act_type_param_section) {
+				Parameters* P = dynamic_cast<Parameters*>(ati->opt_act_type_param_section.object());
+				if(P) {
+					original_parameters.reference(P->copy());
+				}
+			}
+		}
+	}
+	if(body_of_activity_type_def) {
+		ActTypeBody* atb = dynamic_cast<ActTypeBody*>(body_of_activity_type_def.object());
+		if(atb) {
+			if(atb->opt_creation_section) {
+				TypeCreationSection* tc = dynamic_cast<TypeCreationSection*>(atb->opt_creation_section.object());
+				if(tc) {
+					Program* P = dynamic_cast<Program*>(tc->program.object());
+					assert(P);
+					original_creation.reference(P->copy());
+				}
+			}
+			if(atb->opt_res_usage_section) {
+				ModelingSection* mc = dynamic_cast<ModelingSection*>(atb->opt_res_usage_section.object());
+				if(mc) {
+					Program* P = dynamic_cast<Program*>(mc->program.object());
+					assert(P);
+					original_modeling.reference(P->copy());
+				}
+			}
+			if(atb->opt_decomposition_section) {
+				ActTypeDecomp* atd = dynamic_cast<ActTypeDecomp*>(atb->opt_decomposition_section.object());
+				if(atd) {
+					Program* P = dynamic_cast<Program*>(atd->program.object());
+					assert(P);
+					original_decomposition.reference(P->copy());
+					if(atd->opt_res_usage_section) {
+						ModelingSection* mc = dynamic_cast<ModelingSection*>(atd->opt_res_usage_section.object());
+						if(mc) {
+							Program* P = dynamic_cast<Program*>(mc->program.object());
+							assert(P);
+							original_modeling.reference(P->copy());
+						}
+					}
+				}
+			}
+			if(atb->opt_destruction_section) {
+				TypeCreationSection* dc = dynamic_cast<TypeCreationSection*>(atb->opt_destruction_section.object());
+				if(dc) {
+					Program* P = dynamic_cast<Program*>(dc->program.object());
+					assert(P);
+					original_destruction.reference(P->copy());
+				}
+			}
+		}
+	}
+ }
+e
+ ActType::ActType(const ActType& p)
+	: pE(origin_info(p.line, p.file)),
+		defined_attributes(p.defined_attributes) {
+	for(int i = 0; i < p.expressions.size(); i++) {
+		if(p.expressions[i]) {
+			expressions.push_back(parsedExp(p.expressions[i]->copy()));
+		} else {
+			expressions.push_back(parsedExp());
+		}
+	}
+	if(p.body_of_activity_type_def) {
+		body_of_activity_type_def.reference(p.body_of_activity_type_def->copy());
+	}
+	if(p.initial_act_type_section) {
+		initial_act_type_section.reference(p.initial_act_type_section->copy());
+	}
+	initExpression(p.getData());
+ }
+s
+#  void	ActType::recursively_apply(exp_analyzer& EA) {
+# 
+# 	decomp_finder* DF = dynamic_cast<decomp_finder*>(&EA);
+# 
+# 	EA.pre_analyze(this);
+# 
+# 	//
+# 	// Look for decomposition and modeling sections in the
+# 	// activity type definition. This includes resource usage
+# 	// and expansion sections.
+# 	//
+# 	ActTypeBody* body = dynamic_cast<ActTypeBody*>(
+# 		body_of_activity_type_def.object());
+# 
+# 	assert(body);
+# 	TypeCreationSection* creation = dynamic_cast<TypeCreationSection*>(
+# 		body->opt_creation_section.object());
+# 	if(creation) {
+# 		Program* creationP = dynamic_cast<Program*>(
+# 			creation->program.object());
+# 		assert(creationP);
+# 
+# 		//
+# 		// Does Program already have a recursively_apply method?
+# 		// Yes - it just goes through each statement in a loop
+# 		// sandwiched between calls to pre_analyze() and
+# 		// post_analyze().
+# 		//
+# 		creationP->recursively_apply(EA);
+# 	}
+# 
+# 	//
+# 	// repeat with decomp and modeling programs
+# 	//
+# 	ModelingSection* modeling = dynamic_cast<ModelingSection*>(
+# 		body->opt_res_usage_section.object());
+# 	if(modeling) {
+# 		Program* ModelingProgram = dynamic_cast<Program*>(
+# 			modeling->program.object());
+# 		assert(ModelingProgram);
+# 		ModelingProgram->recursively_apply(EA);
+# 	}
+# 	ActTypeDecomp* decomp = dynamic_cast<ActTypeDecomp*>(
+# 		body->opt_decomposition_section.object());
+# 	if(decomp) {
+# 		Program* decompP = dynamic_cast<Program*>(decomp->program.object());
+# 		assert(decompP);
+# 		decompP->recursively_apply(EA);
+# 
+# 		//
+# 		// Because of the way a type definition is parsed, the
+# 		// modeling section may be defined as a child of the
+# 		// decomposition section - depending on the order in
+# 		// which these sections were defined in the AAF
+# 		//
+# 		modeling = dynamic_cast<ModelingSection*>(
+# 			decomp->opt_res_usage_section.object());
+# 		if(modeling) {
+# 			Program* ModelingProgram = dynamic_cast<Program*>(
+# 					modeling->program.object());
+# 			assert(ModelingProgram);
+# 			ModelingProgram->recursively_apply(EA);
+# 		}
+# 	}
+# 
+# 	EA.post_analyze(this);
+# }
+#r
+}
+ActTypeDecl {
+	void	to_stream(aoString* aos, int ind) const override {
+		indent(aos, ind);
+		(*aos) << "activity type " << theData << ";\n";
+	}
+m
+ void	ActTypeDecl::initExpression(
+		const Cstring& nodeData) {
+	// nodeType = nt;
+	theData = nodeData;
+	// make sure we grab the function name
+	if(!aafReader::activity_types().find(nodeData)) {
+		aafReader::activity_types() << new emptySymbol(nodeData); 
+	}
+ }
+e
+}
+ActTypeInitial {
+  void	ActTypeInitial::initExpression(
+		const Cstring& nodeData) {
+	// nodeType = nt;
+	theData = "ActTypeInitial";
+	// need to stick the act type string into aafReader::activity_types()
+	aafReader::activity_types() << new emptySymbol(activity_type_header->getData()); 
+ }
+e
+}
+ActTypeAttributes {
+ void	ActTypeAttributes::initExpression(
+		const Cstring& nodeData) {
+	// nodeType = nt;
+	theData = "ActTypeAttributes";
+ }
+e
+}
+ActTypeClassVariables {
+	void	consolidate(int dent);
+m
+}
+AdditiveExp {
+	void	to_stream(aoString* aos, int ind) const override;
+	void	(*binaryFunc)(
+			const TypedValue&,
+			const TypedValue&,
+			TypedValue&);
+	static void	func_MINUS(const TypedValue&, const TypedValue&, TypedValue&);
+	static void	func_PLUS(const TypedValue&, const TypedValue&, TypedValue&);
+	apgen::DATA_TYPE get_result_type() const override;
+	void		eval_string(behaving_base* obj, Cstring& L) override {
+		Cstring s = Lhs->eval_string_val(obj);
+		TypedValue val;
+		Rhs->eval_expression(obj, val);
+		if(val.is_string()) {
+			s << val.get_string();
+		} else {
+			s << val.to_string();
+		}
+		L = s;
+	}
+	Cstring eval_string_val(
+			behaving_base* obj) override {
+		Cstring s(Lhs->eval_string_val(obj));
+		TypedValue val;
+		Rhs->eval_expression(obj, val);
+		if(val.is_string()) {
+			s << val.get_string();
+		} else {
+			s << val.to_string();
+		}
+		return s;
+	}
+
+	parsedExp Operator;
+	parsedExp Lhs;
+	parsedExp Rhs;
+m
+ void	AdditiveExp::initExpression(
+		const Cstring& nodeData) {
+	// nodeType = nt;
+	theData = nodeData;
+	if(tok_minus) {
+		Operator = tok_minus;
+		Lhs = maybe_a_sum;
+		Rhs = maybe_added_or_subtracted;
+		binaryFunc = func_MINUS;
+	} else if(tok_plus) {
+		Operator = tok_plus;
+		Lhs = maybe_a_sum;
+		Rhs = maybe_added_or_subtracted;
+		binaryFunc = func_PLUS;
+	}
+ }
+e
+ void	AdditiveExp::eval_expression(
+		behaving_base*	local_object,
+		TypedValue&	result
+		)  {
+	try {
+	    TypedValue val1, val2;
+	    Lhs->eval_expression(local_object, val1),
+	    Rhs->eval_expression(local_object, val2),
+	    binaryFunc(
+		val1,
+		val2,
+		result);
+	} catch(eval_error Err) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ":\n" << Err.msg;
+		throw(eval_error(err));
+	}
+
+	if(APcloptions::theCmdLineOptions().debug_execute) {
+		TypedValue	val, val2;
+		Lhs->eval_expression(local_object, val);
+		Rhs->eval_expression(local_object, val2);
+		Cstring tmp = val.to_string();
+		tmp << " " << theData << " "
+			<< val2.to_string()
+			<< " = " << result.to_string();
+		cerr << "AdditiveExp::eval - " << tmp << "\n";
+	}
+ }
+v
+ AdditiveExp::AdditiveExp(const AdditiveExp& p)
+	: pE(origin_info(p.line, p.file)) {
+	binaryFunc = p.binaryFunc;
+	tlist<alpha_void, Cnode0<alpha_void, pE*> >	newobjs(true);
+	pE*						obj;
+
+	for(int i = 0; i < p.expressions.size(); i++) {
+		if((obj = p.expressions[i].object())) {
+			expressions.push_back(parsedExp(
+				obj->smart_copy(newobjs)));
+		} else {
+			expressions.push_back(parsedExp());
+		}
+	}
+	if(p.maybe_a_sum) {
+		maybe_a_sum.reference(p.maybe_a_sum->smart_copy(newobjs));
+	}
+	if(p.maybe_added_or_subtracted) {
+		maybe_added_or_subtracted.reference(p.maybe_added_or_subtracted->smart_copy(newobjs));
+	}
+	if(p.tok_minus) {
+		tok_minus.reference(p.tok_minus->smart_copy(newobjs));
+	}
+	if(p.tok_plus) {
+		tok_plus.reference(p.tok_plus->smart_copy(newobjs));
+	}
+	if(p.Lhs) {
+		Lhs.reference(p.Lhs->smart_copy(newobjs));
+	}
+	if(p.Rhs) {
+		Rhs.reference(p.Rhs->smart_copy(newobjs));
+	}
+	if(p.Operator) {
+		Operator.reference(p.Operator->smart_copy(newobjs));
+	}
+ }
+s
+ AdditiveExp::AdditiveExp(bool, const AdditiveExp& p)
+	: pE(origin_info(p.line, p.file)),
+		maybe_a_sum(p.maybe_a_sum),
+		maybe_added_or_subtracted(p.maybe_added_or_subtracted),
+		tok_minus(p.tok_minus),
+		tok_plus(p.tok_plus),
+		Lhs(p.Lhs),
+		Rhs(p.Rhs),
+		Operator(p.Operator) {
+	binaryFunc = p.binaryFunc;
+	expressions = p.expressions;
+ }
+h
+ void	AdditiveExp::recursively_apply(exp_analyzer& EA) {
+	EA.pre_analyze(this);
+	if(Lhs) {
+		Lhs->recursively_apply(EA);
+	}
+	if(Rhs) {
+		Rhs->recursively_apply(EA);
+	}
+	EA.post_analyze(this);
+ }
+r
+}
+Array {
+	void		to_stream(aoString* aos, int ind) const override;
+	// map<Cstring, parsedExp>	dictionary;
+	vector<parsedExp> actual_values;
+	vector<parsedExp> actual_keys;
+	bool		is_list;
+	bool		is_struct;
+	apgen::DATA_TYPE get_result_type() const override {
+		return apgen::DATA_TYPE::ARRAY;
+	}
+	void	consolidate(int dent);
+	virtual void eval_array(
+			behaving_base* obj,
+			TypedValue& L) override {
+		eval_expression(obj, L);
+	}
+	virtual TypedValue eval_array_val(
+			behaving_base* obj) override {
+		TypedValue val;
+		eval_expression(obj, val);
+		return val;
+	}
+m
+ void	Array::eval_expression(
+		behaving_base*	loc,
+		TypedValue&	res)
+			 {
+	ListOVal* lov = new ListOVal;
+	ArrayElement* ae;
+	if(is_list) {
+		for(int i = 0; i < actual_values.size(); i++) {
+			pEsys::pE* pe = actual_values[i].object();
+			ae = new ArrayElement(i);
+			try {
+				TypedValue val;
+				pe->eval_expression(loc, val);
+				ae->SetVal(val);
+			} catch(eval_error Err) {
+				Cstring err;
+				err << "File " << file << ", line " << line << ": "
+					<< "error in evaluating "
+					<< i << "-th item in list:\n"
+					<< Err.msg;
+				throw(eval_error(err));
+			}
+			lov->add(ae);
+		}
+	} else if(is_struct) {
+		// cerr << "Array::eval_expression: is_list = false; " << actual_values.size()
+		// 	<< " value(s) found\n";
+		for(int i = 0; i < actual_values.size(); i++) {
+			pEsys::pE* the_item = actual_values[i].object();
+			pEsys::pE* the_key = actual_keys[i].object();
+			try {
+				TypedValue key_value;
+				the_key->eval_expression(loc, key_value);
+				ae = new ArrayElement(key_value.get_string());
+				TypedValue item_value;
+				the_item->eval_expression(loc, item_value);
+				ae->SetVal(item_value);
+				lov->add(ae);
+			} catch(eval_error Err) {
+				Cstring err;
+				err << "File " << file << ", line " << line << ": "
+					<< "error in evaluating "
+					<< i << "-th item in array:\n"
+					<< Err.msg;
+				throw(eval_error(err));
+			}
+		}
+	}
+	res = *lov;
+ }
+v
+ Array::Array(const Array& A)
+		: pE(origin_info(A.line, A.file)),
+		is_list(A.is_list),
+		is_struct(A.is_struct) {
+	theData = A.getData();
+	if(A.rest_of_list) {
+		rest_of_list.reference(A.rest_of_list.object());
+	}
+	tlist<alpha_void, Cnode0<alpha_void, pE*> >	newobjs(true);
+	for(int i = 0; i < A.actual_values.size(); i++) {
+		actual_values.push_back(parsedExp(A.actual_values[i]->smart_copy(newobjs)));
+	}
+	for(int i = 0; i < A.actual_keys.size(); i++) {
+		actual_keys.push_back(parsedExp(A.actual_keys[i]->smart_copy(newobjs)));
+	}
+ }
+s
+ Array::Array(bool, const Array& A)
+		: pE(origin_info(A.line, A.file)),
+		is_list(A.is_list),
+		is_struct(A.is_struct),
+		rest_of_list(A.rest_of_list),
+		actual_values(A.actual_values),
+		actual_keys(A.actual_keys) {
+	theData = A.getData();
+ }
+h
+}
+ArrayList {
+	void			to_stream(aoString* aos, int ind) const override;
+	virtual void		addExp(const parsedExp& pe) override;
+	void			consolidate(int dent,
+					const Cstring& the_resource);
+	void			consolidate_one_element(
+					int dent,
+					parsedExp& pe,
+					const Cstring& the_resource);
+	vector<TypedValue>	evaluated_elements;
+	TypedValue		val;
+m
+ ArrayList::ArrayList(const ArrayList& A)
+		: pE(origin_info(A.line, A.file)),
+		evaluated_elements(A.evaluated_elements) {
+	theData = A.getData();
+	if(A.one_array) {
+		one_array.reference(A.one_array.object());
+	}
+ }
+s
+ void	ArrayList::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+ }
+e
+}
+Assignment {
+ executableExp
+b
+ void	Assignment::initExpression(
+		const Cstring& nodeData) {
+	theData = "Assignment";
+ }
+e
+	void	to_stream(aoString* aos, int ind) const override;
+	bool	can_interrupt() const override {
+		// it would make more sense to query the r.h.s.
+		// return true;
+		return Expression && Expression->can_interrupt();
+	}
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL) override;
+	Cstring original_lhs;
+m
+ void	Assignment::eval_expression(
+		behaving_base*	loc,
+		TypedValue&	result)
+			 {
+	assert(false);
+ }
+v
+ void Assignment::recursively_apply(exp_analyzer& EA) {
+	EA.pre_analyze(this);
+	for(int i = 0; i < expressions.size(); i++) {
+		if(expressions[i]) {
+			expressions[i]->recursively_apply(EA);
+		}
+	}
+	if(ASCII_59) {
+		ASCII_59->recursively_apply(EA);
+	}
+	if(Expression) {
+		Expression->recursively_apply(EA);
+	}
+	if(Expression_2) {
+		Expression_2->recursively_apply(EA);
+	}
+	if(assignment_op) {
+		assignment_op->recursively_apply(EA);
+	}
+
+	decomp_finder* DF = dynamic_cast<decomp_finder*>(&EA);
+	if(!DF) {
+
+	    //
+	    // We don't want DF to parse the symbol in the lhs
+	    // as a 'read' item; it's already been flagged as
+	    // a 'set' item.
+	    //
+	    if(lhs_of_assign) {
+		lhs_of_assign->recursively_apply(EA);
+	    }
+	}
+	if(opt_descr) {
+		opt_descr->recursively_apply(EA);
+	}
+	if(opt_range) {
+		opt_range->recursively_apply(EA);
+	}
+	if(opt_units) {
+		opt_units->recursively_apply(EA);
+	}
+	if(tok_equal_sign) {
+		tok_equal_sign->recursively_apply(EA);
+	}
+	EA.post_analyze(this);
+ }
+r
+}
+AssignmentPrecomp {
+ void	AssignmentPrecomp::initExpression(
+		const Cstring& nodeData) {
+	theData = tok_stringval->getData();
+
+	//
+	// Get the latest temporary coefficient node
+	//
+	aafReader::state_series& coeff
+	    = aafReader::single_precomp_res::UnderConsolidation->payload;
+
+	Cstring theDataCopy(theData);
+	removeQuotes(theDataCopy);
+	CTime_base time_stamp(theDataCopy);
+	Cnode0<alpha_time, aafReader::state2>* state_node
+	    = new Cnode0<alpha_time, aafReader::state2>(time_stamp);
+
+	//
+	// Extract the position and velocity data
+	// from the right-hand side
+	//
+	OneNumber* on = dynamic_cast<OneNumber*>(one_number.object());
+	state_node->payload.s[0] = on->get_double();
+	on = dynamic_cast<OneNumber*>(one_number_5.object());
+	state_node->payload.s[1] = on->get_double();
+
+	//
+	// Add the state node to the series
+	//
+	coeff << state_node;
+
+	//
+	// We are done. This object may now be deleted.
+	//
+ }
+e
+ // not clear yet whether we need this:
+ void consolidate(vector<parsedExp>& args, int dent);
+
+ // in pE_system.C. The rationale is that this function does
+ // nothing; the work is done while parsing, there is no need
+ // to keep this parse tree around.
+ virtual void	addExp(
+				const parsedExp& pe) override;
+m
+}
+ByValueSymbol {
+	task*		my_task;
+	int		my_level;
+	int		my_index;
+	int		my_use_task_index;
+	int		my_index_in_use_task;
+
+	//
+	// NOTE: this class is not thread-safe
+	//
+
+	virtual TypedValue& get_val_ref(
+				behaving_base* loc) override;
+	void	consolidate(int dent);
+	void	to_stream(aoString* aos, int ind) const override {
+		indent(aos, ind);
+		(*aos) << tok_mult->getData() << tok_id->getData();
+	}
+m
+ void	ByValueSymbol::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	my_task = NULL;
+	my_level = 0;
+	my_index = 0;
+	my_use_task_index = 0;
+	my_index_in_use_task = 0;
+ }
+e
+ void	ByValueSymbol::eval_expression(
+		behaving_base*	loc,
+		TypedValue&	result
+		)  {
+	result = get_val_ref(loc);
+ }
+v
+ ByValueSymbol::ByValueSymbol(const ByValueSymbol& p)
+			: pE(origin_info(p.line, p.file)) {
+		initExpression(p.getData());
+		my_task = p.my_task;
+		my_level = p.my_level;
+		my_index = p.my_index;
+		my_use_task_index = p.my_use_task_index;
+		my_index_in_use_task = p.my_index_in_use_task;
+		if(p.tok_id) {
+			tok_id.reference(p.tok_id->copy());
+		}
+		if(p.tok_mult) {
+			tok_mult.reference(p.tok_mult->copy());
+		}
+		for(int i = 0; i < p.expressions.size(); i++) {
+			if(p.expressions[i]) {
+				expressions.push_back(parsedExp(p.expressions[i]->copy()));
+			} else {
+				expressions.push_back(parsedExp());
+			}
+		}
+
+		//
+		// Check, because the symbol may not have been consolidated:
+		//
+
+		if(my_task) {
+			task* use_task = my_task->Type.tasks[my_use_task_index];
+			assert(	my_index_in_use_task >= 0
+				&& my_index_in_use_task < use_task->get_varinfo().size());
+		}
+ }
+s
+ ByValueSymbol::ByValueSymbol(bool, const ByValueSymbol& p)
+			: pE(origin_info(p.line, p.file)) {
+		initExpression(p.getData());
+		my_task = p.my_task;
+		my_level = p.my_level;
+		my_index = p.my_index;
+		my_use_task_index = p.my_use_task_index;
+		my_index_in_use_task = p.my_index_in_use_task;
+		tok_id = p.tok_id;
+		tok_mult = p.tok_mult;
+		expressions = p.expressions;
+
+		//
+		// Check, because the symbol may not have been consolidated:
+		//
+
+		if(my_task) {
+			task* use_task = my_task->Type.tasks[my_use_task_index];
+			assert(	my_index_in_use_task >= 0
+				&& my_index_in_use_task < use_task->get_varinfo().size());
+		}
+ }
+h
+}
+ClassMember {
+	TypedValue*	eval_expression_special(
+					behaving_base* lhs_obj,
+					const Cstring&);
+
+		
+	// we store the task to check that it agrees with the object's
+	TypedValue*		my_value;
+	const task*		my_task;
+	apgen::DATA_TYPE	get_result_type() const override;
+
+	parsedExp		OptionalIndex;
+
+	void	to_stream(aoString* aos, int ind) const override {
+		(*aos) << ".";
+		symbol->to_stream(aos, 0);
+	}
+	virtual void	addExp(const parsedExp& pe) override;
+m
+ ClassMember::ClassMember(const ClassMember& p)
+	: pE(origin_info(p.line, p.file)) {
+	for(int i = 0; i < p.expressions.size(); i++) {
+		if(p.expressions[i]) {
+			expressions.push_back(parsedExp(p.expressions[i]->copy()));
+		} else {
+			expressions.push_back(parsedExp());
+		}
+	}
+	if(p.ASCII_46) {
+		ASCII_46.reference(p.ASCII_46->copy());
+	}
+	if(p.symbol) {
+		symbol.reference(p.symbol->copy());
+	}
+	if(p.OptionalIndex) {
+		OptionalIndex.reference(p.OptionalIndex->copy());
+	}
+	initExpression(p.getData());
+ }
+s
+ ClassMember::ClassMember(bool, const ClassMember& p)
+	: pE(origin_info(p.line, p.file)),
+		ASCII_46(p.ASCII_46),
+		symbol(p.symbol) {
+	expressions = p.expressions;
+	OptionalIndex = p.OptionalIndex;
+	initExpression(p.getData());
+ }
+h
+}
+Comparison {
+	void	to_stream(aoString* aos, int ind) const override;
+	void	(*binaryFunc)(
+			const TypedValue&,
+			const TypedValue&,
+			TypedValue&);
+	static void	func_GTRTHAN(const TypedValue&, const TypedValue&, TypedValue&);
+	static void	func_GTRTHANOREQ(const TypedValue&, const TypedValue&, TypedValue&);
+	static void	func_LESSTHAN(const TypedValue&, const TypedValue&, TypedValue&);
+	static void	func_LESSTHANOREQ(const TypedValue&, const TypedValue&, TypedValue&);
+	bool		eval_bool_val(behaving_base* obj) override {
+		TypedValue val;
+		eval_expression(obj, val);
+		return val.get_int();
+	}
+	apgen::DATA_TYPE get_result_type() const override {
+		return apgen::DATA_TYPE::BOOL_TYPE;
+	}
+	parsedExp Operator;
+m
+ void	Comparison::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	if(tok_gtrthan) {
+		Operator = tok_gtrthan;
+		binaryFunc = func_GTRTHAN;
+	} else if(tok_gtrthanoreq) {
+		Operator = tok_gtrthanoreq;
+		binaryFunc = func_GTRTHANOREQ;
+	} else if(tok_lessthan) {
+		Operator = tok_lessthan;
+		binaryFunc = func_LESSTHAN;
+	} else if(tok_lessthanoreq) {
+		Operator = tok_lessthanoreq;
+		binaryFunc = func_LESSTHANOREQ;
+	}
+ }
+e
+ void	Comparison::eval_expression(
+		behaving_base*	local_object,
+		TypedValue&	result
+		) {
+	TypedValue val1, val2;
+	try {
+	    maybe_compared->eval_expression(local_object, val1),
+	    maybe_compared_2->eval_expression(local_object, val2),
+	    binaryFunc(
+		val1,
+		val2,
+		result);
+	} catch(eval_error Err) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ":\n" << Err.msg;
+		throw(eval_error(err));
+	}
+
+	if(APcloptions::theCmdLineOptions().debug_execute) {
+		Cstring tmp = val1.to_string();
+		tmp << " " << theData << " " << val2.to_string()
+			<< " = " << result.to_string();
+		cerr << "Comparison::eval - " << tmp << "\n";
+	}
+ }
+v
+}
+Constant {
+	bool		is_timesystem_based;
+	CTime_base	timesystem_duration;
+	Cstring		timesystem_name;
+	TypedValue	val;
+	apgen::DATA_TYPE get_result_type() const override {
+		return val.get_type();
+	}
+m
+ void	Constant::eval_expression(
+		behaving_base*	loc,
+		TypedValue&	result) {
+	if(val.get_type() == apgen::DATA_TYPE::UNINITIALIZED) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ": constant value "
+			<< theData << " was never initialized";
+		throw(eval_error(err));
+	}
+	try {
+		result = val;
+	} catch(eval_error Err) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ":\n" << Err.msg;
+		throw(eval_error(err));
+	}
+ }
+v
+ void	Constant::initExpression(
+		const Cstring& nodeData) {
+	apgen::DATA_TYPE dt = apgen::DATA_TYPE::UNINITIALIZED;
+	is_timesystem_based = false;
+	timesystem_name.undefine();
+	timesystem_duration = CTime_base(0, 0, true);
+	if(tok_duration) {
+		theData = tok_duration->getData();
+		if(tok_stringval) {
+			is_timesystem_based = true;
+			timesystem_name = tok_stringval->getData();
+			removeQuotes(timesystem_name);
+			timesystem_duration = CTime_base(tok_duration->getData());
+			val.declared_type = apgen::DATA_TYPE::TIME;
+			// NOTE: value assignment will take place later in
+			// consolidation
+		} else {
+			val = CTime_base(theData);
+			dt = apgen::DATA_TYPE::DURATION;
+			val.declared_type = apgen::DATA_TYPE::DURATION;
+			assert(get_result_type() == apgen::DATA_TYPE::DURATION);
+		}
+		return;
+	} else if(tok_number) {
+		theData = tok_number->getData();
+		if(theData & ".") {
+			// fix format so the modeller can understand it...
+			if(!("." / theData).length())
+				theData = theData + "0";
+			if(!(theData / ".").length())
+				theData = Cstring("0") + theData;
+			val = atof(*theData);
+			dt = apgen::DATA_TYPE::FLOATING;
+			assert(get_result_type() == apgen::DATA_TYPE::FLOATING);
+		} else if(theData & "e") {
+
+			// add the following 2 lines because 'tokens' now
+			// accepts engineering-notation numbers w/o decimal point:
+			val = atof(*theData);
+			dt = apgen::DATA_TYPE::FLOATING;
+			assert(get_result_type() == apgen::DATA_TYPE::FLOATING);
+		} else if((theData & "E") || (theData & "d") || (theData & "D")) {
+			/* ... not to mention 'd' and 'D' ... PFM 2/19/99
+			 * ... NOTE: 'e' is standard apgen notation for engineering exponent, as
+			 *	enforced by process_number() in grammar_intfc.C. However, just in case,
+			 *	since 'atof' is not supposed to understand 'd' or 'D': */
+			char	*temp = theData();
+			char	*c = temp;
+
+			while(*c) {
+				if(*c == 'E' || *c == 'd' || *c == 'D')
+					*c = 'e';
+				c++;
+			}
+			val = atof(temp);
+			dt = apgen::DATA_TYPE::FLOATING;
+			assert(get_result_type() == apgen::DATA_TYPE::FLOATING);
+		} else {	// must be integer:
+			val = atol(*theData);
+			dt = apgen::DATA_TYPE::INTEGER;
+			assert(get_result_type() == apgen::DATA_TYPE::INTEGER);
+		}
+	} else if(tok_stringval) {
+		theData = tok_stringval->getData();
+		if(tok_stringval->lval == TOK_STRINGVAL) {
+			Cstring tmp(theData);
+			removeQuotes(tmp);
+			val = tmp;
+			dt = apgen::DATA_TYPE::STRING;
+			assert(get_result_type() == apgen::DATA_TYPE::STRING);
+		} else if(tok_stringval->lval == TOK_INSTANCE) {
+			val.declared_type = apgen::DATA_TYPE::INSTANCE;
+			dt = apgen::DATA_TYPE::INSTANCE;
+			assert(get_result_type() == apgen::DATA_TYPE::INSTANCE);
+		}
+	} else if(tok_time) {
+		theData = tok_time->getData();
+		val = CTime_base(theData);
+		dt = apgen::DATA_TYPE::TIME;
+		assert(get_result_type() == apgen::DATA_TYPE::TIME);
+	} else if(tok_true) {
+		theData = "true";
+		val = true;
+		dt = apgen::DATA_TYPE::BOOL_TYPE;
+		assert(get_result_type() == apgen::DATA_TYPE::BOOL_TYPE);
+	} else if(tok_false) {
+		theData = "false";
+		val = false;
+		dt = apgen::DATA_TYPE::BOOL_TYPE;
+		assert(get_result_type() == apgen::DATA_TYPE::BOOL_TYPE);
+	} else if(tok_pi) {
+		theData = tok_pi->getData();
+		val = M_PI;
+		dt = apgen::DATA_TYPE::FLOATING;
+		assert(get_result_type() == apgen::DATA_TYPE::FLOATING);
+	} else if(tok_rad) {
+		theData = tok_rad->getData();
+		val = 180.0 / M_PI;
+		dt = apgen::DATA_TYPE::FLOATING;
+		assert(get_result_type() == apgen::DATA_TYPE::FLOATING);
+	}
+	val.declared_type = dt;
+ }
+e
+ Constant::Constant(const Constant& p)
+	: pE(origin_info(p.line, p.file)) {
+	val.declared_type = p.val.declared_type;
+	val = p.val;
+	theData = p.getData();
+	is_timesystem_based = p.is_timesystem_based;
+	timesystem_duration = p.timesystem_duration;
+	timesystem_name = p.timesystem_name;
+	for(int i = 0; i < p.expressions.size(); i++) {
+		if(p.expressions[i]) {
+			expressions.push_back(parsedExp(p.expressions[i]->copy()));
+		} else {
+			expressions.push_back(parsedExp());
+		}
+	}
+	if(p.ASCII_58) {
+		ASCII_58.reference(p.ASCII_58->copy());
+	}
+	if(p.tok_duration) {
+		tok_duration.reference(p.tok_duration->copy());
+	}
+	if(p.tok_duration_2) {
+		tok_duration_2.reference(p.tok_duration_2->copy());
+	}
+	if(p.tok_false) {
+		tok_false.reference(p.tok_false->copy());
+	}
+	if(p.tok_number) {
+		tok_number.reference(p.tok_number->copy());
+	}
+	if(p.tok_pi) {
+		tok_pi.reference(p.tok_pi->copy());
+	}
+	if(p.tok_rad) {
+		tok_rad.reference(p.tok_rad->copy());
+	}
+	if(p.tok_stringval) {
+		tok_stringval.reference(p.tok_stringval->copy());
+	}
+	if(p.tok_time) {
+		tok_time.reference(p.tok_time->copy());
+	}
+	if(p.tok_true) {
+		tok_true.reference(p.tok_true->copy());
+	}
+ }
+s
+ Constant::Constant(bool, const Constant& p)
+	: pE(origin_info(p.line, p.file)) {
+	val.declared_type = p.val.declared_type;
+	val = p.val;
+	theData = p.getData();
+	is_timesystem_based = p.is_timesystem_based;
+	timesystem_duration = p.timesystem_duration;
+	timesystem_name = p.timesystem_name;
+	expressions = p.expressions;
+	ASCII_58 = p.ASCII_58;
+	tok_duration = p.tok_duration;
+	tok_duration_2 = p.tok_duration_2;
+	tok_false = p.tok_false;
+	tok_number = p.tok_number;
+	tok_pi = p.tok_pi;
+	tok_rad = p.tok_rad;
+	tok_stringval = p.tok_stringval;
+	tok_time = p.tok_time;
+	tok_true = p.tok_true;
+ }
+h
+}
+Continue {
+ executableExp
+b
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL) override;
+m
+}
+CustomAttributes {
+	void to_stream(aoString* aos, int ind) const override;
+	void consolidate(int dent);
+m
+}
+DataType {
+	void		consolidate(int dent);
+	TypedValue	val;
+	void		to_stream(aoString* aos, int ind) const override {
+		if(builtin_type) {
+			builtin_type->to_stream(aos, ind);
+		} else if(tok_dyn_type) {
+			tok_dyn_type->to_stream(aos, ind);
+		}
+	}
+m
+}
+DataTypeDefaultValue {
+	void to_stream(aoString* aos, int ind) const override;
+	TypedValue	val;
+m
+ void	DataTypeDefaultValue::eval_expression(
+			behaving_base*	loc,
+			TypedValue&	result) {
+	result = val;
+ }
+v
+}
+Declaration {
+ executableExp
+b
+ void	Declaration::initExpression(
+		const Cstring& nodeData) {
+	theData = "Declaration";
+ }
+e
+	void to_stream(aoString* aos, int ind) const override;
+	void consolidate(int dent);
+
+	//
+	// Holds type and declared_type:
+	//
+	TypedValue	val;
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL) override;
+m
+}
+Declarations {
+ void	Declarations::initExpression(
+		const Cstring& nodeData) {
+	theData = "Declarations";
+ }
+e
+	void to_stream(aoString* aos, int ind) const override {
+ 	if(declaration) {
+ 		declaration->to_stream(aos, ind);
+ 	}
+ 	for(int i = 0; i < expressions.size(); i++) {
+ 		if(expressions[i]) {
+ 			expressions[i]->to_stream(aos, ind);
+ 		}
+ 	}
+ }
+m
+}
+Decomp {
+ executableExp
+b
+	apgen::DECOMP_STATEMENT_TYPE statementType;
+	Behavior*		Type;
+	vector<parsedExp>	ActualArguments;
+	void			consolidate(
+					apgen::METHOD_TYPE mt,
+					int dent);
+	void			consolidate_temporal_spec(
+					apgen::METHOD_TYPE mt,
+					int dent);
+	// parsedExp		conditionalSpec;
+	virtual void		execute(
+					execution_context*	context,
+					execution_context::return_code&	Code,
+					pEsys::execStack*	stack_to_use = NULL) override;
+	vector<CTime_base>	decomp_times;
+	parsedExp		at_expression;
+	parsedExp		from_expression;
+	parsedExp		to_expression;
+	void			get_time_from_start(
+					behaving_base* obj);
+	void			get_time_from_now(
+					behaving_base* obj);
+	void			get_time_from_one_expression(
+					behaving_base* obj);
+	void			(Decomp::*eval_decomp_times)(
+					behaving_base*	obj);
+	void			execute_one_decomp(
+					pEsys::execStack*		stack_to_use,
+					behaving_base*		obj,
+					const CTime_base&		start_time,
+					execution_context::return_code&	Code);
+	bool			can_wait() const override {
+		return true;
+	}
+	void			to_stream(
+					aoString*	aos,
+					int		ind) const override;
+m
+ void	Decomp::initExpression(
+		const Cstring& nodeData) {
+	Type = NULL;
+	statementType = apgen::DECOMP_STATEMENT_TYPE::ACTIVITY_CONSTRUCTOR;
+ }
+e
+ Decomp::Decomp(const Decomp& p)
+	: executableExp(origin_info(p.line, p.file)) {
+	for(int i = 0; i < p.expressions.size(); i++) {
+		if(p.expressions[i]) {
+			expressions.push_back(parsedExp(p.expressions[i]->copy()));
+		} else {
+			expressions.push_back(parsedExp());
+		}
+	}
+	if(p.ASCII_40) {
+		ASCII_40.reference(p.ASCII_40->copy());
+	}
+	if(p.ASCII_41) {
+		ASCII_41.reference(p.ASCII_41->copy());
+	}
+	if(p.call_or_spawn_arguments) {
+		call_or_spawn_arguments.reference(p.call_or_spawn_arguments->copy());
+	}
+	if(p.call_or_spawn_arguments_1) {
+		call_or_spawn_arguments_1.reference(p.call_or_spawn_arguments_1->copy());
+	}
+	// if(p.cond_spec) {
+	// 	cond_spec.reference(p.cond_spec->copy());
+	// }
+	// if(p.cond_spec_3) {
+	// 	cond_spec_3.reference(p.cond_spec_3->copy());
+	// }
+	if(p.optional_expression_list) {
+		optional_expression_list.reference(p.optional_expression_list->copy());
+	}
+	if(p.temporalSpecification) {
+		temporalSpecification.reference(p.temporalSpecification->copy());
+	}
+	if(p.temporalSpecification_2) {
+		temporalSpecification_2.reference(p.temporalSpecification_2->copy());
+	}
+	if(p.tok_act_type) {
+		tok_act_type.reference(p.tok_act_type->copy());
+	}
+	if(p.tok_call) {
+		tok_call.reference(p.tok_call->copy());
+	}
+	if(p.tok_spawn) {
+		tok_spawn.reference(p.tok_spawn->copy());
+	}
+	initExpression( p.getData());
+	for(int k = 0; k < p.ActualArguments.size(); k++) {
+		ActualArguments.push_back(parsedExp(p.ActualArguments[k]->copy()));
+	}
+ }
+s
+}
+Directive {
+	void to_stream(aoString* aos, int ind) const override;
+	void	consolidate(int dent);
+	smart_ptr<executableExp>	assignment;
+m
+ void	Directive::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	if(one_declarative_assignment) {
+		executableExp* ee = dynamic_cast<executableExp*>(
+			one_declarative_assignment.object());
+		assert(ee);
+		assignment.reference(ee);
+	}
+ }
+e
+}
+EqualityTest {
+	void	to_stream(aoString* aos, int ind) const override;
+	void	(*binaryFunc)(
+			const TypedValue&,
+			const TypedValue&,
+			TypedValue&);
+	static void	func_equal(const TypedValue&, const TypedValue&, TypedValue&);
+	static void	func_NOTEQUAL(const TypedValue&, const TypedValue&, TypedValue&);
+	bool		eval_bool_val(behaving_base* obj) override {
+		TypedValue val;
+		eval_expression(obj, val);
+		return val.get_int();
+	}
+	apgen::DATA_TYPE get_result_type() const override {
+		return apgen::DATA_TYPE::BOOL_TYPE;
+	}
+	parsedExp	Operator;
+m
+ void	EqualityTest::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	if(tok_equal) {
+		Operator = tok_equal;
+		binaryFunc = func_equal;
+	} else if(tok_notequal) {
+		Operator = tok_notequal;
+		binaryFunc = func_NOTEQUAL;
+	}
+ }
+e
+ void	EqualityTest::eval_expression(
+		behaving_base*	local_object,
+		TypedValue&	result
+		) {
+	TypedValue val1, val2;
+	try {
+	    maybe_equal->eval_expression(local_object, val1);
+	    maybe_equal_2->eval_expression(local_object, val2);
+	    binaryFunc(
+		val1,
+		val2,
+		result);
+	} catch(eval_error Err) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ":\n" << Err.msg;
+		throw(eval_error(err));
+	}
+
+	if(APcloptions::theCmdLineOptions().debug_execute) {
+		Cstring tmp = val1.to_string();
+		tmp << " " << theData << " " << val2.to_string()
+			<< " = " << result.to_string();
+		cerr << "EqualityTest::eval - " << tmp << "\n";
+	}
+ }
+v
+}
+ExpressionList {
+	void to_stream(aoString* aos, int ind) const override;
+	void consolidate(vector<parsedExp>& args, int dent);
+m
+}
+ExpressionListPrecomp {
+ void	ExpressionListPrecomp::initExpression(
+		const Cstring& nodeData) {
+
+	//
+	// This list contains the two high-level arguments
+	// to time_series(). The first is a regular list,
+	// the second is a custom, high-efficiency array
+	// of keyword-value pairs.
+	//
+	theData = nodeData;
+ }
+e
+	// not clear yet whether we need this:
+	// void consolidate(vector<parsedExp>& args, int dent);
+
+	// in pE_system.C. The main purpose of this override
+	// is to prevent the accumulation of nodes in the
+	// expressions vector.
+	virtual void	addExp(
+				const parsedExp& pe) override;
+m
+}
+File {
+	void to_stream(aoString* aos, int ind) const override;
+	void write_to_stream(aoString* aos, int ind, const Cstring& option) const;
+m
+}
+FunctionCall {
+ executableExp
+b
+	bfuncnode*		func;		// for internal functions
+	task*			TaskInvoked;	// for AAF-defined functions
+	void			to_stream(aoString* aos, int ind) const override;
+	bool			can_interrupt() const override {
+		return true;
+	}
+	vector<parsedExp>	actual_arguments;
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL) override;
+	apgen::DATA_TYPE get_result_type() const override;
+	void consolidate(int dent);
+
+	void	eval_precomputed_expression(
+			behaving_base*	local_object,
+			TypedValue&	result);
+
+	void	eval_expression(
+			behaving_base*	local_object
+			) {
+		TypedValue val;
+		eval_expression(local_object, val);
+	}
+
+	//
+	// The function call might be qualified by indices and/or members
+	//
+	smart_ptr<MultidimIndices> indices;
+	smart_ptr<ClassMember>	   a_member;
+
+	//
+	// For those functions that are AAF scripts:
+	//
+	static void eval_script(
+			const Cstring&		script_name,
+			vector<TypedValue*>	actual_arguments,
+			TypedValue&	returnedval);
+m
+ FunctionCall::FunctionCall(const FunctionCall& fc)
+		: executableExp(origin_info(fc.line, fc.file)) {
+	for(int i = 0; i < fc.actual_arguments.size(); i++) {
+		if(fc.actual_arguments[i]) {
+			parsedExp pe(fc.actual_arguments[i]->copy());
+			actual_arguments.push_back(pe);
+		}
+	}
+	if(fc.tok_internal_func) {
+		tok_internal_func.reference(fc.tok_internal_func->copy());
+	}
+	if(fc.tok_local_function) {
+		tok_local_function.reference(fc.tok_local_function->copy());
+	}
+	if(fc.zero_or_more_args) {
+		zero_or_more_args.reference(fc.zero_or_more_args->copy());
+	}
+	func = fc.func;
+	TaskInvoked = fc.TaskInvoked;
+	theData = fc.theData;
+	for(int i = 0; i < fc.expressions.size(); i++) {
+		if(fc.expressions[i]) {
+			expressions.push_back(parsedExp(fc.expressions[i]->copy()));
+		} else {
+			expressions.push_back(parsedExp());
+		}
+	}
+	if(fc.indices) {
+		MultidimIndices* mi = dynamic_cast<MultidimIndices*>(fc.indices->copy());
+		indices.reference(mi);
+	}
+	if(fc.a_member) {
+		ClassMember* cm = dynamic_cast<ClassMember*>(fc.a_member->copy());
+		a_member.reference(cm);
+	}
+	if(fc.qualified_symbol) {
+		qualified_symbol.reference(fc.qualified_symbol->copy());
+	}
+ }
+s
+ FunctionCall::FunctionCall(bool, const FunctionCall& fc)
+		: executableExp(origin_info(fc.line, fc.file)) {
+	actual_arguments = fc.actual_arguments;
+	tok_internal_func = fc.tok_internal_func;
+	tok_local_function = fc.tok_local_function;
+	zero_or_more_args = fc.zero_or_more_args;
+	func = fc.func;
+	TaskInvoked = fc.TaskInvoked;
+	theData = fc.theData;
+	expressions = fc.expressions;
+	indices = fc.indices;
+	a_member = fc.a_member;
+	qualified_symbol = fc.qualified_symbol;
+ }
+h
+ void	FunctionCall::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	func = NULL;
+	TaskInvoked = NULL;
+ }
+e
+ void	FunctionCall::recursively_apply(exp_analyzer& EA) {
+	EA.pre_analyze(this);
+
+	//
+	// This is appropriate for FunctionCalls that have
+	// been consolidated:
+	//
+
+	for(int i = 0; i < actual_arguments.size(); i++) {
+		actual_arguments[i]->recursively_apply(EA);
+	}
+	if(TaskInvoked && TaskInvoked->prog) {
+	    // if(!EA.inhibit(TaskInvoked->prog.object())) {
+		TaskInvoked->prog->recursively_apply(EA);
+	    // }
+	}
+
+	//
+	// ... but in case they haven't been yet, we use
+	// this:
+	//
+
+	if(qualified_symbol) {
+		qualified_symbol->recursively_apply(EA);
+	}
+
+	decomp_finder* DF = dynamic_cast<decomp_finder*>(&EA);
+	if(!DF) {
+
+		//
+		// The name of the function is sometimes parsed as
+		// a symbol; this works for functions that are
+		// invoked before they are declared or defined.
+		// In that case, we do not want the symbol to
+		// be interpreted as a global by decomp_finder.
+		//
+		if(symbol) {
+			symbol->recursively_apply(EA);
+		}
+	}
+	if(zero_or_more_args) {
+		zero_or_more_args->recursively_apply(EA);
+	}
+
+	EA.post_analyze(this);
+ }
+r
+ void	FunctionCall::eval_expression(
+		behaving_base*	local_object,
+		TypedValue&	result
+		) {
+    TypedValue*	the_result = &result;
+    bool	post_processing_needed = indices || a_member;
+    TypedValue	val;
+
+    if(post_processing_needed) {
+	the_result = &val;
+    }
+    if(func) {
+	generic_function	gf = func->payload.Func;
+
+	// debug
+	func->payload.count++;
+
+	//
+	// Handle a special case first
+	//
+	if(gf == exp_make_constant) {
+	    pE* obj = actual_arguments[0].object();
+	    Symbol* sym = dynamic_cast<Symbol*>(obj);
+	    if(!sym) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ": "
+		    << "argument of function make_constant() is "
+		    << sym->getData()
+		    << "; expected a global array";
+		throw(eval_error(err));
+	    }
+	    TypedValue& symval = sym->get_val_ref(local_object);
+	    if(!symval.is_array()) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ": "
+		    << "argument of function make_constant is "
+		    << apgen::spell(symval.get_type())
+		    << "; expected a global array";
+		throw(eval_error(err));
+	    }
+	    ListOVal& symarray = symval.get_array();
+	    // symval.recursively_reset_modifiers();
+	    return;
+	}
+
+	//
+	// Now, return to the general case
+	//
+	slst<TypedValue>	args;
+	slst<TypedValue*>	arg_refs;
+
+	for(int k = 0; k < actual_arguments.size(); k++) {
+	    pE* obj = actual_arguments[k].object();
+	    try {
+
+		//
+		// we push the evaluated result onto the
+		// argument stack for the function's benefit
+		//
+		args.push_front(TypedValue());
+		TypedValue* val = &args.head->obj;
+
+		//
+		// debug
+		//
+		// TypedValue::interesting = true;
+
+		obj->eval_expression(local_object, *val);
+
+		//
+		// debug
+		//
+		// TypedValue::interesting = false;
+
+		arg_refs.push_front(val);
+	    } catch(eval_error Err) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ": "
+		    << "error in evaluating argument " << (k+1)
+		    << " of function "
+		    << getData() << ":\n" << Err.msg;
+		throw(eval_error(err));
+	    }
+	}
+	Cstring error;
+
+	//
+	// Check for 1st letter of "internal"
+	//
+	if((*func->payload.Origin)[0] == 'i') {
+
+	    //
+	    // Internal function
+	    //
+	    if(gf(	error,
+			the_result,
+			arg_refs) != apgen::RETURN_STATUS::SUCCESS) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ": "
+		    << "error executing function "
+		    << getData() << ": " << error;
+		throw(eval_error(err));
+	    }
+	} else {
+
+	    //
+	    // Origin is "user-defined".
+	    //
+	    // User-defined function; may not be thread-safe
+	    //
+	    static mutex 		mutx3;
+	    lock_guard<mutex>	lock(mutx3);
+	    if(gf(	error,
+			the_result,
+			arg_refs) != apgen::RETURN_STATUS::SUCCESS) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ": "
+		    << "error executing function "
+		    << getData() << ": " << error;
+		throw(eval_error(err));
+	    }
+	}
+    } else if(TaskInvoked && TaskInvoked->prog) {
+	// must execute a task
+	TypedValue returnedval;
+
+	// update the call count
+	TaskInvoked->called_once();
+
+	//
+	// We need to define an object that is suitable
+	// for executing the function, and install the evaluated
+	// results in the appropriate value locations
+	//
+	function_object* fo = NULL;
+	behaving_element fbe;
+	apgen::METHOD_TYPE method_type = TaskInvoked->prog->orig_section;
+	if(method_type != apgen::METHOD_TYPE::FUNCTION) {
+
+	    //
+	    // We want to prevent this. A method should
+	    // only be invoked via execute().
+	    //
+	    Cstring err;
+	    err << "File " << file << ", line " << line << ": "
+		<< "method " << getData()
+		<< " should only be executed, not evaluated.\n";
+	    throw(eval_error(err));
+	}
+
+	//
+	// We are dealing with an ordinary function call.
+	//
+	fbe.reference(fo = new function_object(
+				returnedval,
+				*TaskInvoked));
+
+	for(int k = 0; k < actual_arguments.size(); k++) {
+	    TypedValue val;
+	    pE* obj = actual_arguments[k].object();
+	    int pk = TaskInvoked->paramindex[k];
+	    obj->eval_expression(local_object, val);
+	    (*fo)[pk] = val;
+	}
+
+	execution_context* context;
+	smart_ptr<execution_context> EC;
+	execution_context::return_code Code = execution_context::REGULAR;
+	try {
+	    //
+	    // invoke Execute - NOTE: at some point, replace the constant
+	    // strategy by invoking a global that should be set
+	    // appropriately when evaluating resource profiles...
+	    //
+	    context = new execution_context(
+		    fbe,
+		    TaskInvoked->prog.object());
+	    EC.reference(context);
+	    context->ExCon(Code);
+	} catch(eval_error& Err) {
+
+	    Cstring err;
+	    err << "File " << file << ", line " << line << ", "
+	        << "in local function \"" << getData() << "\":\n"
+	        << Err.msg;
+	    throw (eval_error(err));
+	}
+	if(Code != execution_context::RETURNING) {
+ #	    define DONT_WORRY_ABOUT_IT_HERE_LET_THE_CALLER_DEAL_WITH_THIS
+ #	    ifndef DONT_WORRY_ABOUT_IT_HERE_LET_THE_CALLER_DEAL_WITH_THIS
+	    Cstring err;
+	    err << "File " << file << ", line " << line << ": ";
+	    err << " local function \"" << getData() << "\" is not "
+	    "returning anything; you should not use it in an assignment";
+	    throw (eval_error(err));
+ #	    endif /* DONT_WORRY_ABOUT_IT_HERE_LET_THE_CALLER_DEAL_WITH_THIS */
+	} else {
+	    *the_result = fo->theReturnedValue;
+	}
+    }
+
+    else {
+
+	//
+	// Must be a PrecomputedResource; evaluation is done via
+	// hard-coded cubic interpolation rather than a DSL-coded
+	// program.
+	//
+	eval_precomputed_expression(local_object, result);
+    }
+
+    if(post_processing_needed) {
+	pEsys::ClassMember* cm;
+	if(indices) {
+	    the_result = indices->apply_indices_to(the_result, local_object);
+	    if((cm = a_member.object())) {
+		behaving_base* instance_obj;
+
+		//
+		// dereference the instance pointer
+		//
+		if(	!the_result->is_instance()
+			|| !(instance_obj = the_result->get_object().object())) {
+		    Cstring err;
+		    err << "File " << file << ", line " << line << ": ";
+		    err << " local function \"" << getData() << "\" is not "
+			<< "returning a valid instance; cannot get member "
+			<< cm->symbol->getData();
+		    throw (eval_error(err));
+		}
+		the_result = cm->eval_expression_special(
+					instance_obj,
+					cm->symbol->getData());
+	    }
+	} else if((cm = a_member.object())) {
+	    behaving_base* instance_obj;
+
+	    //
+	    // dereference the instance pointer
+	    //
+	    if(	!the_result->is_instance()
+	    	|| !(instance_obj = the_result->get_object().object())) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ": ";
+		err << " local function \"" << getData() << "\" is not "
+		    << "returning a valid instance; cannot get member "
+		    << cm->symbol->getData();
+		throw (eval_error(err));
+	    }
+	    the_result = cm->eval_expression_special(
+					instance_obj,
+					cm->symbol->getData());
+	}
+	result = *the_result;
+    }
+ }
+v
+}
+FunctionDeclaration {
+ void	FunctionDeclaration::initExpression(
+		const Cstring& nodeData) {
+	//
+	// make sure that
+	//    1. we grab the function name, but
+	//    2. we allow multiple declarations
+	//    3. a duplicate definition is an error
+	//
+	if(!aafReader::functions().find(nodeData)) {
+		aafReader::functions() << new emptySymbol(nodeData);
+	}
+	theData = nodeData;
+ }
+e
+	void to_stream(aoString* aos, int ind) const override;
+	void		consolidate(int dent);
+m
+}
+FunctionDefinition {
+ void	FunctionDefinition::initExpression(
+		const Cstring& nodeData) {
+    FunctionIdentity* identity = dynamic_cast<FunctionIdentity*>(
+					start_function_def.object());
+    assert(identity);
+    bool is_model = identity->tok_model;
+    bool is_res = identity->tok_resource;
+    bool is_decomp = identity->tok_decomposition;
+
+    if(is_model || is_res || is_decomp) {
+
+	//
+	// we are defining a method
+	//
+	if(aafReader::methods().find(nodeData)) {
+	    Cstring err;
+	    err << "File " << file << ", line " << line << ": "
+		<< "duplicate definition of method '"
+		<< nodeData << "'.";
+	    throw(eval_error(err));
+	}
+	if(is_model) {
+	    aafReader::methods()
+		<< new Cnode0<alpha_string, apgen::METHOD_TYPE>(nodeData, apgen::METHOD_TYPE::MODELING);
+	} else if(is_res) {
+	    aafReader::methods()
+		<< new Cnode0<alpha_string, apgen::METHOD_TYPE>(nodeData, apgen::METHOD_TYPE::RESUSAGE);
+	} else if(is_decomp) {
+	    if(identity->tok_decomposition->getData() == "nonexclusive_decomposition") {
+		aafReader::methods()
+		    << new Cnode0<alpha_string,
+				apgen::METHOD_TYPE>(nodeData, apgen::METHOD_TYPE::NONEXCLDECOMP);
+	    } else if(identity->tok_decomposition->getData() == "decomposition") {
+		aafReader::methods()
+		    << new Cnode0<alpha_string,
+				apgen::METHOD_TYPE>(nodeData, apgen::METHOD_TYPE::DECOMPOSITION);
+	    } else if(identity->tok_decomposition->getData() == "concurrent_expansion"
+		      || identity->tok_decomposition->getData() == "expansion") {
+		aafReader::methods()
+		    << new Cnode0<alpha_string,
+				apgen::METHOD_TYPE>(nodeData, apgen::METHOD_TYPE::CONCUREXP);
+	    }
+	}
+    } else {
+
+	//
+	// we are defining a function
+	//
+
+	//
+	// make sure that
+	//    1. we grab the function name, but
+	//    2. we allow multiple declarations
+	//    3. a duplicate definition is an error
+	//
+	if(aafReader::defined_functions().find(nodeData)) {
+	    Cstring err;
+	    err << "File " << file << ", line " << line << ": "
+		<< "duplicate definition of function '"
+		<< nodeData << "'.";
+	    throw(eval_error(err));
+	}
+	aafReader::defined_functions() << new emptySymbol(nodeData);
+	if(!aafReader::functions().find(nodeData)) {
+	    aafReader::functions() << new emptySymbol(nodeData);
+	}
+    }
+    theData = nodeData;
+ }
+e
+	void to_stream(aoString* aos, int ind) const override;
+	void write_declaration(aoString* aos, int ind) const;
+	void		consolidate(int dent);
+	static void	generate_behavior_header(const task&);
+	static void	generate_behavior_body(const task&);
+m
+}
+GetInterpwins {
+ executableExp
+b
+	void		to_stream(aoString* aos, int ind) const override;
+	void		consolidate(int dent);
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL) override;
+	void		get_windows_of_opportunity(
+				pEsys::execStack*	stack_to_use);
+
+	//
+	// actual_arguments should only have one element, which is
+	// the scheduling condition.
+	//
+
+	vector<parsedExp>	actual_arguments;
+
+	//
+	// options should be a struct-syle Array
+	//
+
+	smart_ptr<Array>	Options;
+
+	//
+	// symbol in which the actual duration of the first
+	// window found should be stored (optional)
+	//
+
+	smart_ptr<Symbol>	ActualSymbol;
+
+	//
+	// SchedulingCondition should evaluate to a boolean:
+	//
+
+	parsedExp		SchedulingCondition;
+m
+}
+GetWindows {
+ executableExp
+b
+	void		to_stream(aoString* aos, int ind) const override;
+	void		consolidate(int dent);
+	bool		can_interrupt() const override {
+		return true;
+	}
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL) override;
+	void		get_windows_of_opportunity(
+				pEsys::execStack*	stack_to_use);
+
+	//
+	// actual_arguments should only have one element, which is
+	// the scheduling condition.
+	//
+	vector<parsedExp>	actual_arguments;
+
+	//
+	// options should be a struct-syle Array
+	//
+	smart_ptr<Array>	Options;
+
+	//
+	// symbol in which the actual duration of the first
+	// window found should be stored (optional)
+	//
+	smart_ptr<Symbol>	ActualSymbol;
+
+	//
+	// SchedulingCondition should evaluate to a boolean:
+	//
+	parsedExp		SchedulingCondition;
+
+	//
+	// List of names of resource containers which
+	// affect the scheduling condition:
+	//
+	stringtlist		TriggerNames;
+m
+ GetWindows::GetWindows(const GetWindows& p)
+	: executableExp(origin_info(p.line, p.file)) {
+	theData = p.getData();
+	for(int i = 0; i < p.expressions.size(); i++) {
+		if(p.expressions[i]) {
+			expressions.push_back(parsedExp(p.expressions[i]->copy()));
+		} else {
+			expressions.push_back(parsedExp());
+		}
+	}
+	if(p.Expression) {
+		Expression.reference(p.Expression->copy());
+	}
+	if(p.actual_arguments.size() && p.actual_arguments[0]) {
+		parsedExp pe(p.actual_arguments[0]->copy());
+		actual_arguments.push_back(pe);
+	}
+	if(p.Options) {
+		Array* a = dynamic_cast<Array*>(p.Options->copy());
+		assert(a);
+		Options.reference(a);
+	}
+	if(p.SchedulingCondition) {
+		SchedulingCondition.reference(p.SchedulingCondition->copy());
+	}
+	if(p.ActualSymbol) {
+		Symbol* s = dynamic_cast<Symbol*>(p.ActualSymbol->copy());
+		assert(s);
+		ActualSymbol.reference(s);
+	}
+ }
+s
+ GetWindows::GetWindows(bool, const GetWindows& p)
+	: executableExp(origin_info(p.line, p.file)) {
+	theData = p.getData();
+	for(int i = 0; i < p.expressions.size(); i++) {
+		if(p.expressions[i]) {
+			expressions.push_back(parsedExp(p.expressions[i]->shallow_copy()));
+		} else {
+			expressions.push_back(parsedExp());
+		}
+	}
+	if(p.Expression) {
+		Expression.reference(p.Expression->shallow_copy());
+	}
+	if(p.actual_arguments.size() && p.actual_arguments[0]) {
+		parsedExp pe(p.actual_arguments[0]->shallow_copy());
+		actual_arguments.push_back(pe);
+	}
+	if(p.Options) {
+		Array* a = dynamic_cast<Array*>(p.Options->shallow_copy());
+		assert(a);
+		Options.reference(a);
+	}
+	if(p.SchedulingCondition) {
+		SchedulingCondition.reference(p.SchedulingCondition->shallow_copy());
+	}
+	if(p.ActualSymbol) {
+		Symbol* s = dynamic_cast<Symbol*>(p.ActualSymbol->shallow_copy());
+		assert(s);
+		ActualSymbol.reference(s);
+	}
+ }
+h
+}
+Global {
+	Cstring		data_type;
+	parsedExp	rhs;
+	void		to_stream(aoString* aos, int ind) const override;
+	void		consolidate(int dent);
+m
+	data_type = any_data_type->getData();
+c(9)
+ void	Global::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	if(!aafReader::global_items().find(nodeData)) {
+		aafReader::global_items() << new symNode(nodeData, data_type);
+	}
+	theData = "Global";
+ }
+e
+}
+Hierarchy {
+	void to_stream(aoString* aos, int ind) const override {
+		indent(aos, ind);
+		(*aos) << tok_hierarchy_keyword->getData() << " into ";
+		id_list->to_stream(aos, 0);
+	}
+m
+}
+IdList {
+	void to_stream(aoString* aos, int ind) const override {
+		indent(aos, ind);
+		(*aos) << getData();
+		for(int i = 0; i < expressions.size(); i++) {
+			(*aos) << ", ";
+			expressions[i]->to_stream(aos, 0);
+		}
+	}
+	virtual void	addExp(
+				const parsedExp& pe) override {
+		if(pe && pe->getData() != ",") {
+			expressions.push_back(pe);
+		}
+	}
+m
+}
+If {
+ executableExp
+b
+	void to_stream(aoString* aos, int ind) const override;
+	bool	can_push() const override {
+		return true;
+	}
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use) override;
+	virtual void	execute_if(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use);
+	virtual void	execute_elseif(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use);
+	virtual void	execute_else(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use);
+	void		(If::*execute_method)(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use);
+	virtual void	addExp(
+				const parsedExp& pe) override;
+m
+ void	If::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	if(tok_if) {
+		if(tok_else) {
+			execute_method = &pEsys::If::execute_elseif;
+		} else {
+			execute_method = &pEsys::If::execute_if;
+		}
+	} else if(tok_else) {
+		execute_method = &pEsys::If::execute_else;
+	} else {
+		assert(false);
+	}
+ }
+e
+}
+InputFile {
+	void to_stream(aoString* aos, int ind) const override {
+		(*aos) << tok_apgen->getData() << " "
+			<< tok_version->getData() << " ";
+		Expression->to_stream(aos, 0);
+		(*aos) << "\n\n";
+		file_body->to_stream(aos, ind);
+	}
+
+	//
+	// to support -write and -declarations options:
+	//
+
+	void write_to_stream(
+			aoString* aos,
+			int ind,
+			const Cstring& option) const;
+	void write_to_stream_no_header(
+			aoString* aos,
+			int ind,
+			const Cstring& option) const;
+	Cstring		InputFileName;
+	void		delete_all_instances();
+m
+ void	InputFile::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	InputFileName = aafReader::current_file();
+ }
+e
+}
+LabeledProfiles {
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+LabeledProgram {
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+LabeledStates {
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+Logical {
+	void to_stream(aoString* aos, int ind) const override;
+	void	(*binaryFunc)(
+			parsedExp&,
+			parsedExp&,
+			behaving_base*,
+			TypedValue&);
+	static void	func_LAND(parsedExp&, parsedExp&, behaving_base*, TypedValue&);
+	static void	func_LOR(parsedExp&, parsedExp&, behaving_base*, TypedValue&);
+	bool		eval_bool_val(behaving_base* obj) override {
+		TypedValue val;
+		eval_expression(obj, val);
+		return val.get_int();
+	}
+	apgen::DATA_TYPE get_result_type() const override {
+		return apgen::DATA_TYPE::BOOL_TYPE;
+	}
+	parsedExp	Operator;
+	parsedExp	Lhs;
+	parsedExp	Rhs;
+m
+ void	Logical::initExpression(
+			const Cstring& nodeData) {
+	theData = nodeData;
+	if(tok_orop) {
+		Operator = tok_orop;
+		Lhs = Expression;
+		Rhs = maybe_ORed;
+		binaryFunc = func_LOR;
+	} else if(tok_andop) {
+		Operator = tok_andop;
+		Lhs = maybe_ORed;
+		Rhs = maybe_ANDed;
+		binaryFunc = func_LAND;
+	}
+ }
+e
+ void	Logical::eval_expression(
+		behaving_base*	local_object,
+		TypedValue&	result
+		) {
+	try {
+	    binaryFunc(
+		Lhs,
+		Rhs,
+		local_object,
+		result);
+	} catch(eval_error Err) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ":\n" << Err.msg;
+		throw(eval_error(err));
+	}
+
+	if(APcloptions::theCmdLineOptions().debug_execute) {
+		TypedValue val1, val2;
+		Lhs->eval_expression(local_object, val1);
+		Rhs->eval_expression(local_object, val2);
+		Cstring tmp = val1.to_string();
+		tmp << " " << theData << " " << val2.to_string()
+			<< " = " << result.to_string();
+		cerr << "FuncBinary::eval - " << tmp << "\n";
+	}
+ }
+v
+ Logical::Logical(const Logical& p)
+	: pE(origin_info(p.line, p.file)) {
+	theData = p.getData();
+	binaryFunc = p.binaryFunc;
+	tlist<alpha_void, Cnode0<alpha_void, pE*> > newobjs(true);
+	pE* obj;
+
+	for(int i = 0; i < p.expressions.size(); i++) {
+		if((obj = p.expressions[i].object())) {
+			expressions.push_back(parsedExp(obj->smart_copy(newobjs)));
+		} else {
+			expressions.push_back(parsedExp());
+		}
+	}
+	if(p.Expression) {
+		Expression.reference(p.Expression->smart_copy(newobjs));
+	}
+	if(p.maybe_ANDed) {
+		maybe_ANDed.reference(p.maybe_ANDed->smart_copy(newobjs));
+	}
+	if(p.maybe_ORed) {
+		maybe_ORed.reference(p.maybe_ORed->smart_copy(newobjs));
+	}
+	if(p.maybe_ORed_0) {
+		maybe_ORed_0.reference(p.maybe_ORed_0->smart_copy(newobjs));
+	}
+	if(p.tok_andop) {
+		tok_andop.reference(p.tok_andop->smart_copy(newobjs));
+	}
+	if(p.tok_orop) {
+		tok_orop.reference(p.tok_orop->smart_copy(newobjs));
+	}
+	if(p.Lhs) {
+		Lhs.reference(p.Lhs->smart_copy(newobjs));
+	}
+	if(p.Rhs) {
+		Rhs.reference(p.Rhs->smart_copy(newobjs));
+	}
+	if(p.Operator) {
+		Operator.reference(p.Operator->smart_copy(newobjs));
+	}
+ }
+s
+ Logical::Logical(bool, const Logical& p)
+	: pE(origin_info(p.line, p.file)) {
+	theData = p.getData();
+	binaryFunc = p.binaryFunc;
+	expressions = p.expressions;
+	Expression = p.Expression;
+	maybe_ANDed = p.maybe_ANDed;
+	maybe_ORed = p.maybe_ORed;
+	maybe_ORed_0 = p.maybe_ORed_0;
+	tok_andop = p.tok_andop;
+	tok_orop = p.tok_orop;
+	Lhs = p.Lhs;
+	Rhs = p.Rhs;
+	Operator = p.Operator;
+ }
+h
+ void	Logical::recursively_apply(exp_analyzer& EA) {
+	EA.pre_analyze(this);
+	if(Lhs) {
+		Lhs->recursively_apply(EA);
+	}
+	if(Rhs) {
+		Rhs->recursively_apply(EA);
+	}
+	EA.post_analyze(this);
+ }
+r
+}
+MethodCall {
+ executableExp
+b
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL) override;
+	void consolidate(int dent);
+m
+ MethodCall::MethodCall(const MethodCall& fc)
+		: executableExp(origin_info(fc.line, fc.file)) {
+	// bare minimum - this class will be consolidated
+	// with FunctionCall
+ }
+s
+ MethodCall::MethodCall(bool, const MethodCall& fc)
+		: executableExp(origin_info(fc.line, fc.file)) {
+	// bare minimum - this class will be consolidated
+	// with FunctionCall
+ }
+h
+}
+MethodDefinition {
+ void	MethodDefinition::initExpression(
+		const Cstring& nodeData) {
+	// make sure we grab the method name
+	if(!aafReader::methods().find(nodeData)) {
+		aafReader::methods() << new emptySymbol(nodeData);
+	}
+	theData = "Method Definition";
+ }
+e
+}
+ModelingSection {
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+MultidimIndices {
+	/* Assumption: lhsval points to an array of arrays A
+	 * for which the expression
+	 *
+	 * 		A[a][b]...[z]
+	 *
+	 * makes sense, where a, b, ..., z are the values of the n indices
+	 * stored in the expressions vector. Thus, the depth of A has to
+	 * agree with the size of expressions.
+	 */
+	virtual TypedValue* apply_indices_to(
+				TypedValue*	lhsval,
+				behaving_base* loc,
+				bool tolerant = false);
+	/* For fetching a resource from a resource container.
+	 * Assumption: the size N of the expressions vector
+	 * agrees with the dimension of the container array,
+	 * and the evaluated index expressions will be valid
+	 * strings in the lists of indices stored in the
+	 * container. */
+	int		evaluate_flat_index_for(
+				Behavior& T,
+				behaving_base* loc);
+	void to_stream(aoString* aos, int ind) const override;
+	vector<parsedExp>	actual_indices;
+m
+ void	MultidimIndices::initExpression(
+			const Cstring& nodeData) {
+	theData = "MultidimIndices";
+	expressions.push_back(single_index);
+	for(int i = 0; i < single_index->expressions.size(); i++) {
+		expressions.push_back(single_index->expressions[i]);
+	}
+	single_index->expressions.clear();
+	single_index.dereference();
+ }
+e
+ MultidimIndices::MultidimIndices(const MultidimIndices& md)
+		: pE(origin_info(md.line, md.file)) {
+	// nodeType = md.nodeType;
+	theData = md.theData;
+	for(int i = 0; i < md.expressions.size(); i++) {
+		expressions.push_back(
+			parsedExp(md.expressions[i]->copy()));
+	}
+	for(int i = 0; i < md.actual_indices.size(); i++) {
+		actual_indices.push_back(
+			parsedExp(md.actual_indices[i]->copy()));
+	}
+ }
+s
+ MultidimIndices::MultidimIndices(bool, const MultidimIndices& md)
+		: pE(origin_info(md.line, md.file)) {
+	// nodeType = md.nodeType;
+	theData = md.theData;
+	expressions = md.expressions;
+	actual_indices = md.actual_indices;
+ }
+h
+ // special recursive method
+ void MultidimIndices::recursively_apply(exp_analyzer& EA) {
+	EA.pre_analyze(this);
+	for(int i = 0; i < expressions.size(); i++) {
+		expressions[i]->recursively_apply(EA);
+	}
+	for(int i = 0; i < actual_indices.size(); i++) {
+		actual_indices[i]->recursively_apply(EA);
+	}
+	EA.post_analyze(this);
+ }
+r
+}
+MultiplicativeExp {
+	void	to_stream(aoString* aos, int ind) const override;
+	void	(*binaryFunc)(
+			const TypedValue&,
+			const TypedValue&,
+			TypedValue&);
+	static void	func_divide(const TypedValue&, const TypedValue&, TypedValue&);
+	static void	func_MOD(const TypedValue&, const TypedValue&, TypedValue&);
+	static void	func_MULT(const TypedValue&, const TypedValue&, TypedValue&);
+	apgen::DATA_TYPE get_result_type() const override;
+	parsedExp	Operator;
+m
+ void	MultiplicativeExp::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	if(tok_div) {
+		Operator = tok_div;
+		binaryFunc = func_divide;
+	} else if(tok_mult) {
+		Operator = tok_mult;
+		binaryFunc = func_MULT;
+	} else if(tok_mod) {
+		Operator = tok_mod;
+		binaryFunc = func_MOD;
+	}
+ }
+e
+ void	MultiplicativeExp::eval_expression(
+		behaving_base*	local_object,
+		TypedValue&	result
+		) {
+	TypedValue val1, val2;
+	try {
+	    maybe_a_product->eval_expression(local_object, val1);
+	    maybe_a_factor->eval_expression(local_object, val2);
+	    binaryFunc(
+		val1,
+		val2,
+		result);
+	} catch(eval_error Err) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ":\n" << Err.msg;
+		throw(eval_error(err));
+	}
+
+	if(APcloptions::theCmdLineOptions().debug_execute) {
+	    Cstring tmp = val1.to_string();
+	    tmp << " " << theData << " " << val2.to_string()
+			<< " = " << result.to_string();
+	    cerr << "MultiplicativeExp::eval - " << tmp << "\n";
+	}
+ }
+v
+}
+OneNumber {
+ double	get_double() {
+	double D = strtod(*tok_number->getData(), NULL);
+	if(tok_minus) {
+	    D = -D;
+	}
+	return D;
+ }
+m
+}
+Parameters {
+ void	Parameters::initExpression(
+		const Cstring& nodeData) {
+	theData = "Parameters";
+ }
+e
+	void to_stream(aoString* aos, int ind) const override;
+	void consolidate(int dent);
+m
+ void Parameters::recursively_apply(exp_analyzer& EA) {
+	EA.pre_analyze(this);
+	for(int i = 0; i < expressions.size(); i++) {
+		if(expressions[i]) {
+			expressions[i]->recursively_apply(EA);
+		}
+	}
+	decomp_finder* DF = dynamic_cast<decomp_finder*>(&EA);
+	if(!DF) {
+	    if(param_declarations) {
+		param_declarations->recursively_apply(EA);
+	    }
+	    if(tok_parameters) {
+		tok_parameters->recursively_apply(EA);
+	    }
+	    if(tok_parameters_0) {
+		tok_parameters_0->recursively_apply(EA);
+	    }
+	}
+	EA.post_analyze(this);
+ }
+r
+}
+Parentheses {
+ void	initExpression(
+		const Cstring& nodeData);
+e
+ void	Parentheses::eval_expression(
+			behaving_base*	loc,
+			TypedValue&	result)
+				{
+	Expression->eval_expression(loc, result);
+ }
+v
+	void	to_stream(aoString* aos, int ind) const override;
+	static void	func_PAREN(const TypedValue&, TypedValue&);
+	void	(*unaryFunc)(
+			const TypedValue&,
+			TypedValue&);
+	apgen::DATA_TYPE get_result_type() const override {
+		return Expression->get_result_type();
+	}
+	virtual long int	eval_int_val(
+				    behaving_base*	loc) override {
+		return Expression->eval_int_val(loc);
+	}
+	virtual double		eval_double_val(
+				    behaving_base*	loc) override {
+		return Expression->eval_double_val(loc);
+	}
+	virtual bool		eval_bool_val(
+				    behaving_base*	loc) override {
+		return Expression->eval_bool_val(loc);
+	}
+	virtual CTime_base	eval_time_val(
+				    behaving_base*	loc) override {
+		return Expression->eval_time_val(loc);
+	}
+	virtual CTime_base	eval_duration_val(
+				    behaving_base*	loc) override {
+		return Expression->eval_duration_val(loc);
+	}
+	virtual Cstring		eval_string_val(
+				    behaving_base*	loc) override {
+		return Expression->eval_string_val(loc);
+	}
+	virtual TypedValue	eval_array_val(
+				    behaving_base*	loc) override {
+		return Expression->eval_array_val(loc);
+	}
+
+			/* stores result(s) in the TypedValue
+			 * vector provided by the caller: */
+	virtual void	eval_expression(
+				behaving_base* loc,
+				vector<TypedValue>& result) override {
+		Expression->eval_expression(loc, result);
+	}
+			/* does not store any result; used for function calls
+			 * that do not return a value */
+	virtual void	update_expression(
+				behaving_base*	loc) override {
+		Expression->update_expression(loc);
+	}
+
+			/* for derived classes selected at
+			 * consolidation time: */
+	virtual void	eval_int(
+				behaving_base*	loc,
+				long int&		I) override {
+		Expression->eval_int(loc, I);
+	}
+	virtual void	eval_double(
+				behaving_base* obj,
+				double& L) override {
+		Expression->eval_double(obj, L);
+	}
+			// booleans are implemented as long ints:
+	virtual void	eval_bool(
+				behaving_base*	loc,
+				long int&		I) override {
+		Expression->eval_bool(loc, I);
+	}
+
+	virtual void	eval_time(
+				behaving_base*	loc,
+				CTime_base&		T) override {
+		Expression->eval_time(loc, T);
+	}
+
+	virtual void	eval_duration(
+				behaving_base*	loc,
+				CTime_base&		T) override {
+		Expression->eval_duration(loc, T);
+	}
+
+	virtual void	eval_string(
+				behaving_base*	loc,
+				Cstring&		S) override {
+		Expression->eval_string(loc, S);
+	}
+
+	virtual void	eval_array(
+				behaving_base*	loc,
+				TypedValue&	L) override {
+		Expression->eval_array(loc, L);
+	}
+m
+}
+PassiveCons {
+	void to_stream(aoString* aos, int ind) const override;
+	virtual void	consolidate(int dent);
+	virtual void	consolidate_round_two(Constraint*);
+
+	Cstring		constraintType;
+	Cstring		severity;
+	parsedExp	condition;
+	CTime_base	maximum_duration;
+	parsedExp	theMessage;
+
+	stringtlist	containers_used_in_condition;
+m
+}
+ProfileList {
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+Program {
+	void to_stream(aoString* aos, int ind) const override;
+	void to_AAF(aoString* aos, int ind) const;
+	void to_APF(aoString* aos, int ind) const;
+	bool			has_associative_resources() {
+		return false;
+	}
+	apgen::METHOD_TYPE	orig_section;
+	apgen::METHOD_TYPE	section_of_origin() {
+		return orig_section;
+	}
+	ProgStyle		get_style() const {
+		return compute_type(orig_section);
+	}
+	static ProgStyle	compute_type(
+					apgen::METHOD_TYPE m) {
+	    switch(m) {
+		case apgen::METHOD_TYPE::NONE:
+			return ASYNCHRONOUS_STYLE;
+		case apgen::METHOD_TYPE::FUNCTION:
+			return ASYNCHRONOUS_STYLE;
+		case apgen::METHOD_TYPE::ATTRIBUTES:
+			return ASYNCHRONOUS_STYLE;
+		case apgen::METHOD_TYPE::PARAMETERS:
+			return ASYNCHRONOUS_STYLE;
+		case apgen::METHOD_TYPE::PROFILE:
+			return ASYNCHRONOUS_STYLE;
+		case apgen::METHOD_TYPE::STATES:
+			return ASYNCHRONOUS_STYLE;
+		case apgen::METHOD_TYPE::USAGE:
+			return ASYNCHRONOUS_STYLE;
+		case apgen::METHOD_TYPE::RESUSAGE:
+			return ASYNCHRONOUS_STYLE;
+		case apgen::METHOD_TYPE::MODELING:
+			return SYNCHRONOUS_STYLE;
+		case apgen::METHOD_TYPE::DECOMPOSITION:
+			return ASYNCHRONOUS_STYLE;
+		case apgen::METHOD_TYPE::NONEXCLDECOMP:
+			return ASYNCHRONOUS_STYLE;
+		case apgen::METHOD_TYPE::CONCUREXP:
+			return SYNCHRONOUS_STYLE;
+		case apgen::METHOD_TYPE::CREATION:
+			return ASYNCHRONOUS_STYLE;
+		case apgen::METHOD_TYPE::DESTRUCTION:
+			return ASYNCHRONOUS_STYLE;
+		default:
+			return ASYNCHRONOUS_STYLE;
+	    }
+	}
+	vector<smart_ptr<executableExp> >	statements;
+	map<Cstring, Assignment*>		symbols;
+
+	//
+	// Thanks to this overloaded version of addExp, which is
+	// invoked by the syntax, Statement objects get added
+	// to the statements vector instead of going into the
+	// expressions vector, which is the default behavior.
+	//
+
+	virtual void	addExp(
+				const parsedExp& pe) override {
+		executableExp* ee = dynamic_cast<executableExp*>(pe.object());
+
+		//
+		// pe could be "attributes"
+		//
+
+		if(ee) {
+			statements.push_back(smart_ptr<executableExp>(ee));
+		}
+	}
+	apgen::DATA_TYPE ReturnType;
+	apgen::DATA_TYPE get_result_type() const override {
+		return ReturnType;
+	}
+m
+ void	Program::initExpression(
+		const Cstring& nodeData) {
+	theData = "Program";
+	executableExp* ee = NULL;
+	if(class_var_declaration) {
+		ee = dynamic_cast<executableExp*>(class_var_declaration.object());
+	} else if(one_declarative_assignment) {
+		ee = dynamic_cast<executableExp*>(one_declarative_assignment.object());
+	} else if(statement) {
+		ee = dynamic_cast<executableExp*>(statement.object());
+	}
+	statements.push_back(smart_ptr<executableExp>(ee));
+	orig_section = apgen::METHOD_TYPE::NONE;
+	ReturnType = apgen::DATA_TYPE::UNINITIALIZED;
+ }
+e
+ // special copy constructor
+ Program::Program(const Program& P)
+		: pE(origin_info(P.line, P.file)) {
+	theData = "Program";
+	ReturnType = P.ReturnType;
+	orig_section = P.orig_section;
+	for(int i = 0; i < P.statements.size(); i++) {
+		executableExp* ee = dynamic_cast<executableExp*>(P.statements[i]->copy());
+		statements.push_back(smart_ptr<executableExp>(ee));
+	}
+ }
+s
+ // special recursive method
+ void Program::recursively_apply(exp_analyzer& EA) {
+	EA.pre_analyze(this);
+	for(int i = 0; i < statements.size(); i++) {
+		statements[i]->recursively_apply(EA);
+	}
+	EA.post_analyze(this);
+ }
+r
+}
+Qualifications {
+ void	Qualifications::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	if(qualification) {
+		IndicesOrMembers.push_back(parsedExp(qualification.object()));
+		qualification.dereference();
+	} else if(member) {
+		IndicesOrMembers.push_back(parsedExp(member.object()));
+		member.dereference();
+	}
+ }
+e
+ Qualifications::Qualifications(const Qualifications& Q)
+		: pE(origin_info(Q.line, Q.file)) {
+	theData = Q.getData();
+	for(int i = 0; i < Q.IndicesOrMembers.size(); i++) {
+		IndicesOrMembers.push_back(parsedExp(Q.IndicesOrMembers[i]->copy()));
+	}
+ }
+s
+ Qualifications::Qualifications(bool, const Qualifications& Q)
+		: pE(origin_info(Q.line, Q.file)) {
+	theData = Q.getData();
+	IndicesOrMembers = Q.IndicesOrMembers;
+ }
+h
+	vector<parsedExp>	IndicesOrMembers;
+	void	to_stream(aoString* aos, int ind) const override {
+		for(int i = 0; i < IndicesOrMembers.size(); i++) {
+			IndicesOrMembers[i]->to_stream(aos, ind);
+		}
+	}
+	virtual void	addExp(const parsedExp& pe) override {
+		MultidimIndices* mi = dynamic_cast<MultidimIndices*>(pe.object());
+		ClassMember* cm = dynamic_cast<ClassMember*>(pe.object());
+		assert(mi || cm);
+		IndicesOrMembers.push_back(pe);
+
+		if(cm) {
+			for(int i = 0; i < cm->expressions.size(); i++) {
+				MultidimIndices* mi2
+					= dynamic_cast<MultidimIndices*>(cm->expressions[i].object());
+				assert(mi2);
+				IndicesOrMembers.push_back(cm->expressions[i]);
+			}
+			cm->expressions.clear();
+		}
+	}
+m
+}
+QualifiedSymbol {
+
+	int		my_level;
+	int		my_index;
+
+	//
+	// defaults to true, but should be set
+	// to false when evaluating expressions:
+	//
+	bool		tolerant_array_evaluation;
+
+	smart_ptr<MultidimIndices> indices;
+	smart_ptr<ClassMember>	   a_member;
+
+	//
+	// Requires that result of evaluation be well-defined;
+	// only computes the address of the TypedValue:
+	//
+	virtual TypedValue& get_val_ref(
+				behaving_base* loc) override;
+
+	void		to_stream(aoString* aos, int ind) const override;
+	apgen::DATA_TYPE get_result_type() const override;
+
+	//
+	// elements of this vector are either MultidimIndices or
+	// ClassMember instances:
+	//
+	parsedExp	expression_list;
+
+ //
+ // The purpose of this overloaded version of addExp is as follows:
+ //
+ //	Example: a qualified symbol of the form
+ //
+ //		glob_inst.x[a][b][c].w.z[h]
+ //
+ //	leads to a Symbol named glob_inst whose qualifications element
+ //	contains the following items:
+ //
+ //		item 0:	ClassMember	x
+ //		item 1: MultidimIndices	(a, b, c)
+ //		item 2: ClassMember	w
+ //		item 3: ClassMember	z
+ //		item 4: MultidimIndices	(h)
+ //
+ //	Note that x, w, z must be expressions that evaluate to strings;
+ //	each string must be the name of a member of the instance to which
+ //	it applies. For example, x must be the name of a member in global_inst,
+ //	amd w must be the name of a member in glob_inst.x[a][b][c]. Both
+ //	glob_inst and glob_inst.x[a][b][c] must evaluate to instances.
+ //
+ //	Similarly, a, b, c, h must be expressions that evaluate either to
+ //	valid numeric indices in a list or to valid strings in a struct.
+ //
+
+	virtual void	addExp(const parsedExp& pe) override {
+		Qualifications* q;
+		ExpressionList* el;
+		if(pe->getData() == "(") {
+			// empty argument list
+			expression_list = pe;
+		} else if((el = dynamic_cast<ExpressionList*>(pe.object()))) {
+			expression_list = pe;
+		} else if((q = dynamic_cast<Qualifications*>(pe.object()))) {
+			qualifications = pe;
+		} else {
+			assert(false);
+		}
+	}
+m
+ void	QualifiedSymbol::eval_expression(
+		behaving_base*	loc,
+		TypedValue&	result) {
+
+	//
+	// JIRA AP-1407, more info in error messages
+	//
+	tolerant_array_evaluation = false;
+	result = get_val_ref(loc);
+	tolerant_array_evaluation = true;
+
+	//
+	// JIRA AP-1150, Nonexistent array element error not reported
+	//
+	if(result.get_type() == apgen::DATA_TYPE::UNINITIALIZED) {
+		Cstring errs;
+		errs << "File " << file << ", line " << line
+		    << ": " << getData() << " does not have the requested element.";
+		throw(eval_error(errs));
+	}
+ }
+v
+ void	QualifiedSymbol::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	tolerant_array_evaluation = true;
+ }
+e
+ void QualifiedSymbol::recursively_apply(exp_analyzer& EA) {
+	EA.pre_analyze(this);
+	if(indices) {
+		indices->recursively_apply(EA);
+	}
+	if(a_member) {
+		a_member->recursively_apply(EA);
+	}
+	EA.post_analyze(this);
+ }
+r
+ QualifiedSymbol::QualifiedSymbol(const QualifiedSymbol &Q)
+		: pE(origin_info(Q.line, Q.file)) {
+	if(Q.symbol) {
+		symbol = Q.symbol->copy();
+		Symbol* s = dynamic_cast<Symbol*>(symbol.object());
+		my_level = s->my_level;
+		my_index = s->my_index;
+	} else {
+		my_level = 0;
+		my_index = 0;
+	}
+	if(Q.qualifications) {
+		qualifications = Q.qualifications->copy();
+	}
+	if(Q.expression_list) {
+		expression_list = Q.expression_list->copy();
+	}
+	theData = Q.getData();
+	tolerant_array_evaluation = true;
+	if(Q.indices) {
+		MultidimIndices* mi = dynamic_cast<MultidimIndices*>(Q.indices->copy());
+		indices.reference(mi);
+	}
+	if(Q.a_member) {
+		ClassMember* cm = dynamic_cast<ClassMember*>(Q.a_member->copy());
+		a_member.reference(cm);
+	}
+ }
+s
+ QualifiedSymbol::QualifiedSymbol(bool, const QualifiedSymbol &Q)
+		: pE(origin_info(Q.line, Q.file)) {
+	symbol = Q.symbol;
+	if(symbol) {
+		my_level = Q.my_level;
+		my_index = Q.my_index;
+	} else {
+		my_level = 0;
+		my_index = 0;
+	}
+	qualifications = Q.qualifications;
+	expression_list = Q.expression_list;
+	theData = Q.getData();
+	tolerant_array_evaluation = true;
+	indices = Q.indices;
+	a_member = Q.a_member;
+ }
+h
+  void	QualifiedSymbol::recursively_apply(exp_analyzer& EA) {
+	EA.pre_analyze(this);
+	if(indices) {
+		indices->recursively_apply(EA);
+	}
+ 	decomp_finder* DF = dynamic_cast<decomp_finder*>(&EA);
+	if(!DF) {
+
+		//
+		// a_member would be processed as a Symbol by DF
+		//
+		if(a_member) {
+			a_member->recursively_apply(EA);
+		}
+	}
+	EA.post_analyze(this);
+ }
+r
+}
+RaiseToPower {
+	void	to_stream(aoString* aos, int ind) const override;
+	void	(*binaryFunc)(
+			const TypedValue&,
+			const TypedValue&,
+			TypedValue&);
+	static void	func_exponent(const TypedValue&, const TypedValue&, TypedValue&);
+	apgen::DATA_TYPE get_result_type() const override;
+m
+ void	initExpression(
+		const Cstring& nodeData);
+e
+ void	RaiseToPower::eval_expression(
+		behaving_base*	local_object,
+		TypedValue&	result
+		) {
+	TypedValue val1, val2;
+	try {
+	    maybe_a_factor->eval_expression(local_object, val1);
+	    atom->eval_expression(local_object, val2);
+	    binaryFunc(
+		val1,
+		val2,
+		result);
+	} catch(eval_error Err) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ":\n" << Err.msg;
+		throw(eval_error(err));
+	}
+
+	if(APcloptions::theCmdLineOptions().debug_execute) {
+		Cstring tmp = val1.to_string();
+		tmp << " " << theData << " " << val2.to_string()
+			<< " = " << result.to_string();
+		cerr << "RaiseToPower::eval - " << tmp << "\n";
+	}
+ }
+v
+}
+RangeExpression {
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+ReverseRangeExpression {
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+Resource {
+	void to_stream(aoString* aos, int ind) const override;
+	void consolidate_declaration_phase(int dent);
+	void consolidate_implementation_phase(int dent);
+	void consolidate_one_list_of_states(ExpressionList&, tvslist&, int);
+	void consolidate_one_profile(
+		RCsource*,
+		ProfileList&,
+		tlist<alpha_time, Cnode0<alpha_time, parsedExp> >&,
+		int);
+m
+ void Resource::recursively_apply(exp_analyzer& EA) {
+    EA.pre_analyze(this);
+
+    decomp_finder* DF = dynamic_cast<decomp_finder*>(&EA);
+    if(DF) {
+	bool abstract;
+	Cstring name;
+	DF->handle_a_resource(this, abstract, name);
+	if(abstract) {
+		Behavior* ptr = Behavior::find_type("abstract resource",
+						    name);
+		assert(ptr);
+		const vector<task*>& tasks
+			= ptr->tasks;
+		for(int i = 0; i < tasks.size(); i++) {
+			if(tasks[i]->prog) {
+				tasks[i]->prog->recursively_apply(EA);
+			}
+		}
+	} else {
+		RCsource* container
+			= RCsource::resource_containers().find(name);
+		assert(container);
+		Rsource* first_resource =
+		    container->payload->Object->array_elements[0];
+		const vector<task*>& tasks = first_resource->Type.tasks;
+		for(int i = 0; i < tasks.size(); i++) {
+			if(tasks[i]->prog) {
+				tasks[i]->prog->recursively_apply(EA);
+			}
+		}
+	}
+    } else {
+        ResourceDef* rd = dynamic_cast<ResourceDef*>(resource_def.object());
+        ResourceInfo* ri = dynamic_cast<ResourceInfo*>(resource_prefix.object());
+	for(int i = 0; i < expressions.size(); i++) {
+		if(expressions[i]) {
+			expressions[i]->recursively_apply(EA);
+		}
+	}
+	rd->recursively_apply(EA);
+	ri->recursively_apply(EA);
+    }
+    EA.post_analyze(this);
+ }
+r
+}
+ResourceDef {
+
+	//
+	// Code for optional generation of adaptation-specific
+	// usage classes, which can be used as C++ wrappers
+	// and, ultimately, replacements for Usage statements:
+	//
+	static void	generate_abstract_usage_factory(const Cstring&);
+	static void	generate_abstract_usage_mini_factory(const Cstring&);
+	static void	generate_abstract_behavior_header(const Behavior&);
+	static void	generate_execute_method(const Behavior&);
+m
+}
+ResourceCurrentval {
+	RCsource*	Container;
+	Cstring		ContainerName;
+	bool		direct_access;
+
+			/* For nodes of type ENT_METH0 for which right is currentval().
+			 * Getting the resource pointed to by left used to be a simple
+			 * task, until resource arrays were introduced...  */
+	void		get_the_resource(
+				Rsource*&,
+				behaving_element& symbols);
+	void		to_stream(aoString* aos, int ind) const override;
+	apgen::DATA_TYPE get_result_type() const override;
+m
+ void	ResourceCurrentval::initExpression(
+		const Cstring& nodeData) {
+	theData = "ResourceCurrentval";
+ }
+e
+}
+ResourceInfo {
+	void to_stream(aoString* aos, int ind) const override;
+m
+ void	ResourceInfo::initExpression(
+		const Cstring& nodeData) {
+	theData = "nodeData";
+	aafReader::current_resource() = tok_id->getData();
+	if(!aafReader::resources().find(tok_id->getData())) {
+		aafReader::resources() << new emptySymbol(tok_id->getData());
+	}
+ }
+e
+}
+ResourceType {
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+Return {
+ executableExp
+b
+ void	Return::initExpression(
+		const Cstring& nodeData) {
+	theData = "Return";
+ }
+e
+	void to_stream(aoString* aos, int ind) const override;
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL) override;
+	apgen::DATA_TYPE get_result_type() const override {
+		return Expression->get_result_type();
+	}
+m
+}
+SinglePrecompResName {
+ void	SinglePrecompResName::initExpression(
+		const Cstring& nodeData) {
+    Cstring theDataCopy(nodeData);
+    removeQuotes(theDataCopy);
+    theData = theDataCopy;
+    aafReader::precomp_container*	container = aafReader::precomp_containers().last_node();
+    aafReader::single_precomp_res*	single_res = new aafReader::single_precomp_res(theData);
+
+    container->payload << single_res;
+    aafReader::single_precomp_res::UnderConsolidation = single_res;
+ }
+e
+}
+Symbol {
+
+	int		my_level;
+	int		my_index;
+
+	static bool	debug_symbol;
+
+	virtual TypedValue& get_val_ref(
+				behaving_base* loc) override;
+	void		to_stream(aoString* aos, int ind) const override;
+
+	//
+	// elements of this vector are either MultidimIndices or
+	// ClassMember instances:
+	//
+
+ //
+ // The purpose of this overloaded version of addExp is as follows:
+ //
+ //	Example: a qualified symbol of the form
+ //
+ //		glob_inst.x[a][b][c].w.z[h]
+ //
+ //	leads to a Symbol named glob_inst whose qualifications element
+ //	contains the following items:
+ //
+ //		item 0:	ClassMember	x
+ //		item 1: MultidimIndices	(a, b, c)
+ //		item 2: ClassMember	w
+ //		item 3: ClassMember	z
+ //		item 4: MultidimIndices	(h)
+ //
+ //	Note that x, w, z must be expressions that evaluate to strings;
+ //	each string must be the name of a member of the instance to which
+ //	it applies. For example, x must be the name of a member in global_inst,
+ //	amd w must be the name of a member in glob_inst.x[a][b][c]. Both
+ //	glob_inst and glob_inst.x[a][b][c] must evaluate to instances.
+ //
+ //	Similarly, a, b, c, h must be expressions that evaluate either to
+ //	valid numeric indices in a list or to valid strings in a struct.
+ //
+
+	virtual void	addExp(const parsedExp& pe) override {
+		assert(false);
+	}
+m
+ void	Symbol::eval_expression(
+		behaving_base*	loc,
+		TypedValue&	result)
+			{
+	result = get_val_ref(loc);
+
+	if(eval_error::thread_unsafe_error()) {
+		Cstring err;
+		err << "File " << file << ", line " << line << ": "
+			<< "referencing non-constant variable "
+			<< getData()
+			<< " from a thread that does not own it.\n";
+		symNode* sn = aafReader::assignments_to_global_arrays().find(
+			getData());
+		if(sn) {
+			err << "Assignments to this array were found at\n"
+				<< sn->payload << "\n";
+		}
+		throw(eval_error(err));
+	}
+ }
+v
+ void	Symbol::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+ }
+ bool Symbol::debug_symbol = false;
+e
+ Symbol::Symbol(const Symbol&S)
+		: pE(origin_info(S.line, S.file)) {
+	if(S.tok_finish) {
+		tok_finish = S.tok_finish->copy();
+	} else if(S.tok_id) {
+		tok_id = S.tok_id->copy();
+	} else if(S.tok_nodeid) {
+		tok_nodeid = S.tok_nodeid->copy();
+	} else if(S.tok_start) {
+		tok_start = S.tok_start->copy();
+	} else if(S.tok_type) {
+		tok_type = S.tok_type->copy();
+	}
+	// if(S.qualifications) {
+	// 	qualifications = S.qualifications->copy();
+	// }
+	// if(S.expression_list) {
+	// 	expression_list = S.expression_list->copy();
+	// }
+	// evaluator = S.evaluator;
+	theData = S.getData();
+ }
+s
+ Symbol::Symbol(bool, const Symbol&S)
+		: pE(origin_info(S.line, S.file)) {
+	tok_finish = S.tok_finish;
+	tok_id = S.tok_id;
+	tok_nodeid = S.tok_nodeid;
+	tok_start = S.tok_start;
+	tok_type = S.tok_type;
+	theData = S.getData();
+ }
+h
+}
+TemporalSpec {
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+TimeSeriesStart {
+ void	TimeSeriesStart::initExpression(
+		const Cstring& nodeData) {
+    theData = nodeData;
+
+    //
+    // This is our chance to create a new structure
+    // to hold the time series data for the pre-computed
+    // resource being parsed.
+    //
+
+    //
+    // The last item in the list of resources is the name
+    // of the resource currently being parsed, unless there
+    // is an error in the adaptation and the resource has
+    // already been defined
+    //
+    Cstring resname = aafReader::current_resource();
+
+    emptySymbol* res_node = aafReader::resources().find(resname);
+    if(res_node != aafReader::resources().last_node()
+       || aafReader::precomp_containers().find(resname)) {
+	Cstring err;
+	err << "File " << file << ", line " << line
+	    << ": resource " << resname << " has already been defined\n";
+	throw(eval_error(err));
+    }
+    aafReader::precomp_container* container = new aafReader::precomp_container(resname);
+    aafReader::precomp_containers() << container;
+ }
+e
+}
+Typedef {
+ void	Typedef::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	if(!aafReader::typedefs().find(nodeData)) {
+		aafReader::typedefs() << new emptySymbol(nodeData);
+	}
+ }
+e
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+UnaryMinus {
+	void to_stream(aoString* aos, int ind) const override;
+	static void	func_NEG(const TypedValue&, TypedValue&);
+	void		(*unaryFunc)(
+				const TypedValue&,
+				TypedValue&);
+	apgen::DATA_TYPE get_result_type() const override;
+m
+	void	initExpression(
+		const Cstring& nodeData);
+e
+ void	UnaryMinus::eval_expression(
+		behaving_base*	local_object,
+		TypedValue&	result
+		) {
+	TypedValue val1;
+	if(unaryFunc) {
+		try {
+		    TypedValue val;
+		    exp_modifiable_by_unary_minus->eval_expression(local_object, val);
+		    unaryFunc(
+			val,
+			result);
+		} catch(eval_error Err) {
+			Cstring err;
+			err << "File " << file << ", line " << line << ":\n" << Err.msg;
+			throw(eval_error(err));
+		}
+	} else {
+		exp_modifiable_by_unary_minus->eval_expression(local_object, result);
+	}
+ }
+v
+}
+Usage {
+ executableExp
+b
+	apgen::USAGE_TYPE	usageType;
+	RCsource*		theContainer;
+	Behavior*		abs_type; // the abstract resource used, if it exists
+	int			theTaskIndex;
+	int			consumptionIndex;
+	int			theStorageTaskIndex;
+	Cstring			theStorageTaskName;
+	smart_ptr<MultidimIndices> indices;
+	parsedExp		whenSpec;
+	vector<CTime_base>	usage_times;
+	vector<parsedExp>	actual_arguments;
+
+	RES_resource*	get_resource_used_by_this(
+					behaving_element& loc) const;
+	virtual void	refresh_args_and_call_usage_method(
+					usage_event&	  event);
+	void		to_stream(
+					aoString* aos,
+					int ind) const override;
+	bool		can_wait() const override {
+		return true;
+	}
+
+	//
+	// Actual consolidate methods will be defined in
+	// derived classes if the action keyword is
+	// anything other than set, and if the resource
+	// being used is abstract:
+	//
+	//	SetUsage
+	//	ResetUsage
+	//	SignalUsage
+	//	AbstractUsage
+	//
+	virtual void	consolidate(int dent);
+	virtual void	consolidate_temporal_spec(
+					int dent);
+
+	parsedExp	at_expression;
+	parsedExp	from_expression;
+	parsedExp	to_expression;
+	parsedExp	every_expression;
+
+	virtual void	get_time_from_now(
+				behaving_base* obj);
+	virtual void	get_time_from_start(
+				behaving_base* obj);
+	virtual void	get_time_from_start_and_finish(
+				behaving_base* obj);
+	virtual void	get_time_from_one_expression(
+				behaving_base* obj);
+	virtual void	get_time_from_two_expressions(
+				behaving_base* obj);
+	void		(Usage::*eval_usage_times)(
+				behaving_base*	obj);
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL) override;
+m
+ void	Usage::initExpression(
+		const Cstring& nodeData) {
+	theData = nodeData;
+	usageType = apgen::USAGE_TYPE::USE;
+	theContainer = NULL;
+	abs_type = NULL;
+	theTaskIndex = -1;
+	consumptionIndex = -1;
+	theStorageTaskIndex = -1;
+ }
+e
+ Usage::Usage(const Usage& p)
+	: executableExp(origin_info(p.line, p.file)),
+		theStorageTaskIndex(p.theStorageTaskIndex),
+		consumptionIndex(p.consumptionIndex),
+		theTaskIndex(p.theTaskIndex),
+		theContainer(p.theContainer),
+		abs_type(p.abs_type),
+		usageType(p.usageType)
+	{
+	theData = p.getData();
+
+	for(int i = 0; i < p.expressions.size(); i++) {
+		if(p.expressions[i]) {
+			expressions.push_back(parsedExp(p.expressions[i]->copy()));
+		} else {
+			expressions.push_back(parsedExp());
+		}
+	}
+	// if(p.temporalSpec) {
+	// 	temporalSpec.reference(p.temporalSpec->copy());
+	// }
+	if(p.whenSpec) {
+		whenSpec.reference(p.whenSpec->copy());
+	}
+	if(p.resource_usage_with_arguments) {
+		resource_usage_with_arguments.reference(p.resource_usage_with_arguments->copy());
+	}
+	if(p.temporalSpecification) {
+		temporalSpecification.reference(p.temporalSpecification->copy());
+	}
+	// if(p.cond_spec) {
+	// 	cond_spec.reference(p.cond_spec->copy());
+	// }
+	if(p.indices) {
+		MultidimIndices* mi = dynamic_cast<MultidimIndices*>(p.indices->copy());
+		indices.reference(mi);
+	}
+	for(int k = 0; k < p.actual_arguments.size(); k++) {
+		actual_arguments.push_back(parsedExp(p.actual_arguments[k]->copy()));
+	}
+ }
+s
+}
+VarDescription {
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+VarRange {
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+VarUnits {
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+WaitFor {
+ executableExp
+b
+	void to_stream(aoString* aos, int ind) const override;
+	bool		can_wait() const override {
+		return true;
+	}
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL) override;
+	void		consolidate(int dent);
+m
+}
+WaitUntil {
+ executableExp
+b
+	void to_stream(aoString* aos, int ind) const override;
+	bool		can_wait() const override {
+		return true;
+	}
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL) override;
+	virtual bool	reenter(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL);
+	void		consolidate(int dent);
+m
+}
+WaitUntilRegexp {
+ executableExp
+b
+	void to_stream(aoString* aos, int ind) const override;
+	bool		can_wait() const override {
+		return true;
+	}
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL) override;
+	virtual bool	reenter(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL);
+	void		consolidate(int dent);
+m
+}
+When {
+	void to_stream(aoString* aos, int ind) const override;
+m
+}
+While {
+ executableExp
+b
+ void	While::initExpression(
+		const Cstring& nodeData) {
+	theData = "While";
+ }
+e
+	void to_stream(aoString* aos, int ind) const override;
+	virtual void	execute(
+				execution_context*	context,
+				execution_context::return_code&	Code,
+				pEsys::execStack*	stack_to_use = NULL) override;
+m
+}

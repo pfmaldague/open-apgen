@@ -1,0 +1,12 @@
+apgen version "generic"
+
+epoch funtime = 2010-100T10:10:10.100;
+
+activity instance Foo of type generic id James_9
+    begin
+	attributes
+		"Duration" = 01:00:00.001;
+		"Start" = funtime;
+		"Legend" = "Generic";
+		"SASF" = "Group";	// This should be an array
+    end activity instance Foo

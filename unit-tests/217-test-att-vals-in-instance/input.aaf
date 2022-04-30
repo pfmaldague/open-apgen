@@ -1,0 +1,85 @@
+apgen version "legend"
+
+activity type NewLegendInModeling
+    begin
+	attributes
+	    "Legend" = "Original Legend";
+	    "Duration" = x;
+	    "Subsystem" = "number 1";
+	parameters
+	    x: duration default to 1:00:00;
+	modeling
+	    legend = "New Legend";
+    end activity type NewLegendInModeling
+
+activity instance NewLegendInModeling_1 of type NewLegendInModeling ID NewLegendInModeling_1
+    begin
+	attributes
+	    "Start" = 2021-100T10:00:00;
+	parameters
+	    (2:00:00);
+    end activity instance NewLegendInModeling_1
+
+activity type LegendInTypeOnly
+    begin
+	attributes
+	    "Legend" = "Only in type";
+	    "Duration" = 1:30:00;
+	    "Subsystem" = "number 2";
+	parameters
+	    y: string default to "a";
+    end activity type LegendInTypeOnly
+
+activity instance LegendInTypeOnly_1 of type LegendInTypeOnly id LegendInTypeOnly_1
+    begin
+	attributes
+	    "Start" = 2021-100T17:00:00;
+	parameters
+	    ("Hello");
+    end activity instance LegendInTypeOnly_1
+
+activity type ChildLegendInTypeOnly
+    begin
+	attributes
+	    "Legend" = "Only in type";
+	    "Duration" = 1:30:00;
+	    "Subsystem" = "number 2";
+	parameters
+	    y: string default to "a";
+	    parent_ptr: instance default to "generic";
+	creation
+	    parent_ptr.child_1 = this;
+    end activity type ChildLegendInTypeOnly
+
+activity type SpawnedChildLegendInTypeOnly
+    begin
+	attributes
+	    "Legend" = "Only in type";
+	    "Duration" = 1:30:00;
+	    "Subsystem" = "number 2";
+	parameters
+	    y: string default to "a";
+    end activity type SpawnedChildLegendInTypeOnly
+
+activity type ParentAct
+    begin
+	child_1: instance default to "generic";
+	child_2: instance default to "generic";
+	attributes
+	    "Duration" = 2:00:00;
+	    "Color" = "Spring Green";
+	    "Legend" = "parents";
+	nonexclusive_decomposition
+	    ChildLegendInTypeOnly(
+			"act 1",
+			this) at start + 1:00:00;
+	    spawn("SpawnedChildLegendInTypeOnly", ["act 2"], child_2) at start + 3:00:00;
+	    child_1.name = "Given name 1";
+	    child_2.name = "Given name 2";
+    end activity type ParentAct
+
+activity instance ParentAct of type ParentAct id ParentAct
+    begin
+	attributes
+	    "Start" = 2021-100T20:00:00;
+    end activity instance ParentAct

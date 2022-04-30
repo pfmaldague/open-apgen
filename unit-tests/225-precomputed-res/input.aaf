@@ -1,0 +1,34 @@
+apgen version "Geometry Subsystem AAF"
+
+activity type define_geom_res
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 1:00:00;
+	    "Color" = "Purple";
+	parameters
+	    target: integer default to -159;
+	    frame: string default to "J2000";
+	    abcorr: string default to "NONE";
+	    observer: integer default to 10;
+	modeling
+	    while(now < finish) {
+		set SC_State["X"]() immediately;
+		set SC_State["Y"]() immediately;
+		set SC_State["Z"]() immediately;
+	        write_to_stdout(now, " - SC_State = ",
+			SC_State["X"].currentval(), ", ",
+			SC_State["Y"].currentval(), ", ",
+			SC_State["Z"].currentval(), "\n"); 
+		wait for 3:00:00;
+	    }
+    end activity type define_geom_res
+
+activity instance foo of type define_geom_res
+    begin
+	attributes
+	    "Duration" = 50T00:00:00;
+	    "Start" = 2030-302T15:00:00;
+	parameters
+	    (-159, "J2000", "NONE", 5);
+    end activity instance foo

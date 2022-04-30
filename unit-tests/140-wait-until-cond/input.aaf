@@ -1,0 +1,77 @@
+apgen version ["nifty" = true]
+
+resource R: nonconsumable duration
+    begin
+	attributes
+		"Subsystem" = "system";
+		"Units" = "N/A";
+	parameters
+		x: duration default to 0:0:0;
+	profile
+		0:0:0;
+	usage
+		-x;
+    end resource R
+
+resource G: nonconsumable integer
+    begin
+	attributes
+		"Subsystem" = "system";
+		"Units" = "N/A";
+	parameters
+		x: integer default to 0;
+	profile
+		0;
+	usage
+		-x;
+    end resource G
+
+activity type useR
+    begin
+	attributes
+		"Color" = "Purple";
+		"Legend" = "R users";
+		"Duration" = 1:00:00;
+	parameters
+		x: duration default to 2:00:00;
+	modeling
+		i: integer default to 0;
+		use R(x) from now to now + 00:30:00;
+		while(i < 10) {
+			wait for 1:00:00;
+			use R(x) from now to now + 00:30:00;
+			i = i + 1;
+		}
+    end activity type useR
+
+activity type waitForR
+    begin
+	attributes
+		"Color" = "Yellow";
+		"Legend" = "R watchers";
+		"Duration" = 10:00:00;
+	modeling
+		i: integer default to 0;
+		while(i < 6) {
+			write_to_stdout(now, " - waiting for R to rise\n");
+			wait until R.currentval() > 00:00:30;
+			write_to_stdout(now, " - got it\n");
+			use G(1) from now to now + 20:00;
+			wait for 20:00;
+			i = i + 1;
+		}
+    end activity type waitForR
+
+activity instance Foo of type useR
+    begin
+	attributes
+		"Start" = 2020-020T20:00:00;
+	parameters
+		(00:45:00);
+    end activity instance Foo
+
+activity instance Bar of type waitForR
+    begin
+	attributes
+		"Start" = 2020-020T22:00:00;
+    end activity instance Bar

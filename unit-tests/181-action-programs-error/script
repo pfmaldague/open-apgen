@@ -1,0 +1,23 @@
+APGEN script version "apgen-X.3.15-Custom - Tue Aug 20 10:02:25 PDT 2019"
+OPENFILE 181-action-programs/input.aaf
+NEWACTDISPLAY
+NEWRESDISPLAY 0
+NEWACTIVITY generic NAME generic ID generic TO 2019-232T18:00:00.000 LEGEND "Generic_Activities"
+NEWHORIZON A1 FROM 2019-232T14:44:52.000 TO 2019-234T13:37:22.000
+NEWACTIVITY generic NAME generic ID generic TO 2019-234T12:00:00.000 LEGEND "Generic Activities"
+NEWACTIVITY setStateVector NAME setStateVector ID setStateVector TO 2019-233T00:00:00.000 LEGEND "Generic Activities"
+NEWACTIVITY setStateVector NAME setStateVector ID setStateVector TO 2019-233T07:00:00.000 LEGEND "vectors"
+NEWACTIVITY setStateVector NAME setStateVector ID setStateVector TO 2019-233T22:00:00.000 LEGEND "vectors"
+NEWACTIVITY useStateScalar NAME useStateScalar ID useStateScalar TO 2019-233T10:00:00.000 LEGEND "vectors"
+NEWACTIVITY useStateScalar NAME useStateScalar ID useStateScalar TO 2019-233T20:00:00.000 LEGEND "scalars"
+ADDRESOURCE StateScalar A1R1
+ADDRESOURCE StateVector["one"]["AA"] A1R1
+ADDRESOURCE StateVector["one"]["BB"] A1R1
+ADDRESOURCE StateVector["one"]["CC"] A1R1
+ADDRESOURCE StateVector["three"]["AA"] A1R1
+ADDRESOURCE StateVector["three"]["BB"] A1R1
+ADDRESOURCE StateVector["three"]["CC"] A1R1
+ADDRESOURCE StateVector["two"]["AA"] A1R1
+ADDRESOURCE StateVector["two"]["BB"] A1R1
+ADDRESOURCE StateVector["two"]["CC"] A1R1
+REMODEL

@@ -1,0 +1,10 @@
+APGEN script version "apgen-10.0.0pre-nov-05-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2017-311T19:02:20.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 86-multiple-decl/input.aaf
+OPENFILE 86-multiple-decl/one-decl.aaf
+NEWACTDISPLAY
+#QUIT 0

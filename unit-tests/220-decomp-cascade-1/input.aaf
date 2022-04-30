@@ -1,0 +1,106 @@
+apgen version "cascade of activities"
+
+activity type LevelOne;
+activity type LevelTwo;
+activity type LevelThree;
+
+resource Foo: settable float
+    begin
+	parameters
+	    x: float default to 0.0;
+	default
+	    0.0;
+	usage
+	    x;
+    end resource Foo
+
+activity type TopLevel
+    begin
+	attributes
+		"Color" = "Lavender";
+		"Duration" = 1:00:00;
+		"Legend" = "Parents";
+	creation
+	    write_to_stdout(now, " - ", id, ".create()\n");
+	expansion
+		wait for 00:30:00;
+		write_to_stdout(now, " - ", id, " creating LevelOne activity 1\n");
+		LevelOne(00:30:00);
+		// write_to_stdout(now, " - ", id, " creating LevelOne activity 2\n");
+		// LevelOne(00:30:00);
+		// write_to_stdout(now, " - ", id, " creating LevelOne activity 3\n");
+		// LevelOne(00:30:00);
+	destruction
+	    write_to_stdout(now, " - ", id, ".destroy()\n");
+    end activity type TopLevel
+
+
+activity type LevelOne
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Legend" = "Children";
+		"Duration" = D;
+	parameters
+		D: duration default to 1:00:00;
+	creation
+	    write_to_stdout("    ", now, " - ", id, ".create()\n");
+	nonexclusive_decomposition
+	    write_to_stdout("    ", now, " - ", id, ".decompose()\n");
+	    LevelTwo(1:00:00);
+	    // LevelTwo(1:00:00);
+	    // LevelTwo(1:00:00);
+	modeling
+	    write_to_stdout("    ", now, " - ", id, ".model()\n");
+	    set Foo(1.0);
+	destruction
+	    write_to_stdout("    ", now, " - ", id, ".destroy()\n");
+    end activity type LevelOne
+
+activity type LevelTwo
+    begin
+	attributes
+		"Color" = "Hot Pink";
+		"Legend" = "Children";
+		"Duration" = D;
+	parameters
+		D: duration default to 1:00:00;
+	creation
+	    write_to_stdout("        ", now, " - ", id, ".create()\n");
+	nonexclusive_decomposition
+	    write_to_stdout("        ", now, " - ", id, ".decompose()\n");
+	    LevelThree(1:30:00);
+	    // LevelThree(1:30:00);
+	    // LevelThree(1:30:00);
+	modeling
+	    write_to_stdout("        ", now, " - ", id, ".model()\n");
+	    set Foo(0.5);
+	destruction
+	    write_to_stdout("        ", now, " - ", id, ".destroy()\n");
+    end activity type LevelTwo
+
+activity type LevelThree
+    begin
+	attributes
+		"Color" = "Purple";
+		"Legend" = "Children";
+		"Duration" = D;
+	parameters
+		D: duration default to 1:00:00;
+	creation
+	    write_to_stdout("            ", now, " - ", id, ".create()\n");
+	nonexclusive_decomposition
+	    write_to_stdout("            ", now, " - ", id, ".decompose()\n");
+	modeling
+	    write_to_stdout("            ", now, " - ", id, ".model()\n");
+	    set Foo(0.25);
+	destruction
+	    write_to_stdout("            ", now, " - ", id, ".destroy()\n");
+    end activity type LevelThree
+
+activity instance P of type TopLevel
+    begin
+	attributes
+		"Color" = "Orange Red";
+		"Legend" = "Parents";
+    end activity instance P

@@ -1,0 +1,98 @@
+apgen version "digging into abstract resources"
+
+global array A = ["one", "two"];
+
+resource R(A): nonconsumable float
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: float default to 0.0;
+	profile
+		0.0;
+	usage
+		-x;
+    end resource R
+
+resource S: abstract
+    begin
+	parameters
+		s: string default to "one";
+		a: float default to 0.0;
+		D: duration default to 1:00:00;
+	modeling
+		use R[s](a) from now to now + D/2;
+		wait for D;
+		use R[s](-a/2) from now to now + D/2;
+    end resource S 
+
+activity type act
+    begin
+	attributes
+		"Color" = "Lavender";
+		"Legend" = "Lavenders";
+		"Subsystem" = "Poetic";
+		"Duration" = 2:00:00;
+	parameters
+		s: string default to "one";
+		a: float default to 0.0;
+		D: duration default to 1:00:00;
+	resource usage
+		use S(s, a, D) at start;
+		use S(s, -a, D) at finish;
+    end activity type act
+
+activity type anti_act
+    begin
+	attributes
+		"Color" = "Lavender";
+		"Legend" = "Lavenders";
+		"Subsystem" = "Poetic";
+		"Duration" = 2:00:00;
+	parameters
+		s: string default to "one";
+		a: float default to 0.0;
+		D: duration default to 1:00:00;
+	resource usage
+		if(s == "one") {
+			use S("two", a, D) at start;
+			use S("two", -a, D) at finish;
+		} else if(s == "two") {
+			use S("one", -a, D) at start;
+			use S("one", a, D) at finish;
+		}
+    end activity type anti_act
+
+activity instance G1 of type generic
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Start" = 2018-209T22:00:00;
+		"Duration" = 00:20:00;
+		"Legend" = "Time Marks";
+    end activity instance G1
+
+activity instance Foo of type act
+    begin
+	attributes
+		"Start" = 2018-210T00:03:00.331;
+	parameters
+		("two", -0.45, 00:55:00);
+    end activity instance Foo
+
+activity instance Bar of type anti_act
+    begin
+	attributes
+		"Start" = 2018-210T03:43:00.331;
+	parameters
+		("two", -0.45, 00:55:00);
+    end activity instance Bar
+
+activity instance G2 of type generic
+    begin
+	attributes
+		"Color" = "Orange Red";
+		"Start" = 2018-210T08:00:00;
+		"Duration" = 00:20:00;
+		"Legend" = "Time Marks";
+    end activity instance G2

@@ -1,0 +1,138 @@
+apgen version "E7.11"
+
+
+resource OneTimeLoad: associative
+    begin
+	attributes
+	    "Units" = "Wombats";
+	profile
+		// works:
+		// 15.;
+		0.0;
+    end resource OneTimeLoad
+
+resource Load: associative
+    begin
+	attributes
+	    "Units" = "Wombats";
+	profile
+		// works:
+		// 15.;
+		0.0;
+    end resource Load
+
+resource LoadThroughProfile: nonconsumable float
+    begin
+	attributes
+		"Units" = "Wombats";
+	profile
+		// amin(Load.currentval(), 20.);
+		0.0;
+	usage
+		1.;
+    end resource LoadThroughProfile
+
+resource Energy: integrates Load
+    begin
+	attributes
+	    "Maximum" = 60;
+	    "Minimum" = 20;
+	    "Units" = "Wombat-Hour";
+	    "Multiplier" = 1.0/3600.0;	// converts from seconds to hours
+	profile
+		// does not seem to make any difference:
+		0.;
+    end resource Energy
+
+activity type zero_out_load
+    begin
+    attributes
+        "Legend" = "Level 2";
+        "Duration" = time_interval;
+        "Color" = "Spring Green";
+    parameters
+	time_interval: duration default to 00:01:00;
+    creation
+	now = start;
+	currentEnergy: float default to Energy.currentval();
+
+	write_to_stdout("zero_out_load (creation): currentEnergy = ", currentEnergy, "\n");
+        use Load(-currentEnergy * 3600.0 / time_interval) 
+            from start 
+            to finish ;
+end activity type zero_out_load
+
+activity type nonexcl_level_1
+    begin
+    attributes
+        "Legend" = "Level 1";
+        "Duration" = 4:00:00;
+        "Color" = "Purple";
+    parameters
+        I1: local integer default to 4;
+        I2: local integer default to 5;
+    creation
+        use Load(6.0 * I1) 
+            from start 
+            to finish ;
+    nonexclusive_decomposition
+        nonexcl_level_2(I1,I2) 
+            at start - 2:00:00 ;
+        nonexcl_level_2(I1,I2) 
+            at start + 2:00:00 ;
+end activity type nonexcl_level_1
+
+activity type nonexcl_level_3
+    begin
+    attributes
+        "Legend" = "Level 3";
+        "Duration" = 2:00:00;
+        "Color" = "Spring Green";
+    parameters
+        I31: local integer default to 8;
+        I32: local integer default to 9;
+    creation
+        use Load(I31 * 2.0) 
+            from start 
+            to finish ;
+    nonexclusive_decomposition
+        nonexcl_level_4(I32,I31) 
+            at start - 30:00 ;
+        nonexcl_level_4(I32,I31) 
+            at start + 30:00 ;
+end activity type nonexcl_level_3
+
+activity type nonexcl_level_4
+    begin
+    attributes
+        "Legend" = "Level 4";
+        "Duration" = 1:00:00;
+        "Color" = "Sky Blue";
+    parameters
+        I41: local integer default to 10;
+        I42: local integer default to 11;
+    creation
+        use Load(1.0 * I41) 
+            from start 
+            to finish ;
+end activity type nonexcl_level_4
+
+activity type nonexcl_level_2
+    begin
+    attributes
+        "Legend" = "Level 2";
+        "Duration" = 4:00:00;
+        "Color" = "Orange Red";
+    parameters
+        I21: local integer default to 6;
+        I22: local integer default to 7;
+    creation
+        use Load(3.0 * I21) 
+            from start 
+            to finish ;
+    nonexclusive_decomposition
+        nonexcl_level_3(I21,I22) 
+            at start - 1:00:00 ;
+        nonexcl_level_3(I21,I22) 
+            at start + 1:00:00 ;
+end activity type nonexcl_level_2

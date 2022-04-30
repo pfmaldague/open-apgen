@@ -1,0 +1,9 @@
+APGEN script version "apgen-X-pre-nov-09-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2017-314T16:14:13.000
+# hostname=LMC-052973
+# n_apgen_files=0
+OPENFILE 92-use-res-when-only-decl/input.aaf
+OPENFILE 92-use-res-when-only-decl/one-res.aaf
+#QUIT 0

@@ -1,0 +1,7 @@
+APGEN script version "apgen-X.3.beta-Custom - Tue Jul 23 07:40:31 PDT 2019"
+OPENFILE 179-max-dur-constraint/input.aaf
+OPENFILE 179-max-dur-constraint/input.apf
+BUILD
+NEWACTDISPLAY
+WRITETOL XML apgen-tol.xml 1998-160T00:18:56.842 1998-161T01:03:47.369 FILTER  "DEFAULT" SCHEMA  "DEFAULT" ALL_ACTS_VISIBLE
+#QUIT 0

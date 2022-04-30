@@ -1,0 +1,126 @@
+apgen version "scheduling tutorial"
+
+
+# First, a few resources that will be useful to define scheduling conditions
+
+resource pointing: state string
+    begin
+	attributes
+	    "Subsystem" = "Scheduling";
+	parameters
+	    x: string default to "right";
+	states
+	    "wrong", "right";
+	profile
+	    "wrong";
+	usage
+	    x;
+    end resource pointing
+
+# define "infinitely far"
+constant integer infinity = 100000;
+
+resource range_to_target: settable integer
+    begin
+	attributes
+	    "Subsystem" = "Scheduling";
+	parameters
+	    y: integer default to 0;
+	default
+	    infinity;
+	usage
+	    y;
+    end resource range_to_target
+
+# Next, activities that can be used to define resource values
+
+activity type set_pointing
+    begin
+	attributes
+	    "Subsystem" = "Modeling";
+	    "Duration" = D;
+	    "Color" = "Lavender";
+	parameters
+	    D: duration default to 2:00:00;
+	    interval: duration default to 10:00;
+	modeling
+	    while(now < finish) {
+		set pointing("right") immediately;
+		wait for interval;
+		set pointing("wrong") immediately;
+		wait for interval;
+	    }	
+    end activity type set_pointing
+
+activity type set_range_to_target
+    begin
+	attributes
+	    "Subsystem" = "Modeling";
+	    "Duration" = D;
+	    "Color" = "Lavender";
+	parameters
+	    D: duration default to 1T00:00:00;
+	    interval: duration default to 15:00:00;
+	resource usage
+	    T: time default to start;
+	    midpoint: time default to start + span / 2;
+	    deltaT: duration default to span / 20;
+	    min_range: integer default to 1000;
+	    current_range: integer default to infinity;
+
+	    # approach
+	    while(T < midpoint) {
+		current_range = min_range + (infinity - min_range) * ((midpoint - T) / span);
+		set range_to_target(*current_range) at T;
+		T = T + interval;
+	    }
+
+	    # egress
+	    while(T < finish) {
+		current_range = min_range + (infinity - min_range) * ((T - midpoint) / span);
+		set range_to_target(*current_range) at T;
+		T = T + interval;
+	    }
+    end activity type set_range_to_target
+
+# Instantiate a couple of generic activities to mark the boundaries of the plan
+activity instance Start of type generic
+    begin
+	attributes
+	    "Subsystem" = "Generic";
+	    "Start" = 2022-98T12:00:00;
+	    "Duration" = 1:00:00;
+	    "Color" = "Spring Green";
+    end activity instance Start
+
+activity instance End of type generic
+    begin
+	attributes
+	    "Subsystem" = "Generic";
+	    "Start" = 2022-102T12:00:00;
+	    "Duration" = 1:00:00;
+	    "Color" = "Orange Red";
+    end activity instance End
+
+# Now instantiate both resource-setting activities here, so resources are initialized properly
+activity instance set_pointing of type set_pointing
+    begin
+	attributes
+	    "Start" = 2022-100T00:00:00;
+	parameters
+	    (
+	    1T00:00:00,		# D
+	    2:00:00		# interval
+	    );
+    end activity instance set_pointing
+
+activity instance set_range of type set_range_to_target
+    begin
+	attributes
+	    "Start" = 2022-099T00:00:00;
+	parameters
+	    (
+	    3T00:00:00,		# D
+	    00:30:00 		# interval
+	    );
+    end activity instance set_range

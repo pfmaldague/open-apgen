@@ -1,0 +1,33 @@
+apgen version "arrays"
+
+global array Antennas = ["One", "Iceland", "Belgium", "Japan"];
+global array Times = [2020-199T23:59:59.999, 2020-200T01:00:00];
+
+resource Info(Antennas): consumable integer
+    begin
+	parameters
+		x: integer default to 0;
+	profile
+		0;
+	usage
+		-x;
+    end resource Info
+
+activity type crash
+    begin
+	modeling
+	    i: integer default to 0;
+	    j: integer default to 1;
+	    s: string default to "Belgium";
+	    t: time default to start;
+	    i = Info[s].value(Times[j]);
+    end activity type crash
+
+activity instance foo of type crash
+    begin
+	attributes
+	    "Start" = 2020-200T20:00:00;
+	    "Duration" = 01:00:00;
+	parameters
+		();
+    end activity instance foo

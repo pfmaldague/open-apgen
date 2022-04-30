@@ -1,0 +1,122 @@
+apgen version "simple stuff"
+
+resource non_cons_A: nonconsumable integer
+    begin
+	attributes
+		"Units" = "km";
+	parameters
+		i: integer default to 0;
+		j: integer default to 1;
+		k: integer default to 2;
+	profile
+		0;
+	usage
+		-i-j-k;
+    end resource non_cons_A
+
+resource state_B: state string
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		a: string default to "";
+	states
+		"A", "B", "C", "D", "E";
+	profile
+		"A";
+	usage
+		a;
+    end resource state_B
+
+activity type use_A_default
+    begin
+	attributes
+		"Color" = "Spring Green";
+	parameters
+		u: integer default to 2;
+		v: integer default to 2;
+		w: integer default to 2;
+	resource usage
+		use non_cons_A(u,v,w);
+    end activity type use_A_default
+
+activity type use_A_from_to
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 0:30:0;
+	parameters
+		u: integer default to 2;
+		v: integer default to 2;
+		w: integer default to 2;
+		S: duration default to 0:4:0;
+		E: duration default to 0:25:0;
+	resource usage
+		use non_cons_A(u,v,w) from start + S to finish + E;
+    end activity type use_A_from_to
+
+activity type set_B
+    begin
+	attributes
+		"Legend" = "B types";
+		"Duration" = 1:00:00;
+		"Color" = "Yellow";
+	parameters
+		x: string default to "B";
+	modeling
+		set state_B(x) at start + span / 2;
+    end activity type set_B
+
+activity type reset_B
+    begin
+	attributes
+		"Legend" = "B types";
+		"Duration" = 1:00:00;
+		"Color" = "Sky Blue";
+	modeling
+		reset state_B() at start + span / 2;
+    end activity type reset_B
+
+activity type use_B
+    begin
+	attributes
+		"Legend" = "B types";
+		"Duration" = 1:00:00;
+		"Color" = "Orange Red";
+	parameters
+		x: string default to "B";
+	modeling
+		use state_B(x);
+    end activity type use_B
+
+activity instance Adefault of type use_A_default id A0
+    begin
+	attributes
+		"Start" = 2020-011T01:00:00;
+	parameters
+		(10, 11, 12);
+    end activity instance Adefault
+
+activity instance Bset of type set_B ID B0
+    begin
+	attributes
+		"Start" = 2020-011T08:00:00;
+	parameters
+		("E");
+    end activity instance Bset
+
+activity instance Breset of type reset_B ID B1
+    begin
+	attributes
+		"Start" = 2020-011T10:00:00;
+	parameters
+		();
+    end activity instance Breset
+
+activity instance Buse of type use_B ID B9
+    begin
+	attributes
+		"Start" = 2020-011T10:15:00;
+	parameters
+		("C");
+    end activity instance Buse

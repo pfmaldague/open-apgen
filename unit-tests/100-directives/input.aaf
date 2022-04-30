@@ -1,0 +1,9 @@
+apgen version "foo"
+
+global integer a = 0;
+directive a = 234;
+directive "a" = "Hoo boy...!";
+#
+# Will generate an error:
+#
+directive 72;

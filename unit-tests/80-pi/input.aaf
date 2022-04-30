@@ -1,0 +1,15 @@
+apgen version "pi"
+
+activity type check_pi
+    begin
+	attributes
+		"Duration" = 1:00:00;
+	modeling
+		write_to_stdout("sin(PI): ", sin(PI), "\n");
+    end activity type check_pi
+
+activity instance Check of type check_pi
+    begin
+	attributes
+		"Start" = 2020-002T00:00:00;
+    end activity instance Check

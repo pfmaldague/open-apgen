@@ -1,0 +1,28 @@
+apgen version "abstract resource with parameter referenced in modeling section"
+
+resource foo: abstract {
+	parameters
+		x: float default to 0.0;
+}
+
+resource foo: abstract
+    begin
+	parameters
+		x: float default to 0.0;
+	modeling
+		a: string default to to_string(x);
+    end resource foo
+
+activity type UseFooRightAway
+    begin
+	attributes
+	    "Duration" = 1:00:01;
+	modeling
+	    use foo(4.0) immediately;
+    end activity type UseFooRightAway
+
+activity instance Oops of type UseFooRightAway
+    begin
+	attributes
+	    "Start" = 2020-001T12:30:00;
+    end activity instance Oops

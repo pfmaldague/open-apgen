@@ -1,0 +1,11 @@
+apgen version "bad"
+
+resource BadState: state float
+    begin
+	states
+		0.0, 1.0;
+	profile
+		0.0;
+	usage
+		1.0;
+    end resource BadState

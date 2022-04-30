@@ -1,0 +1,12 @@
+APGEN version "apgen-X-pre-sept-13-Unknown build"
+
+
+directive "Activity Legend Layout" = [
+    "",
+    [ "R users", 32 ], 
+    [ "R watchers", 32 ]
+    ];
+directive "Resource Legend Layout" = [
+    "",
+    [ "R", 100 ]
+    ];

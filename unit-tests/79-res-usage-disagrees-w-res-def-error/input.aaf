@@ -1,0 +1,24 @@
+apgen version "disagreement in signature"
+
+resource R: consumable time
+    begin
+	attributes
+		"Subsystem" = "Times";
+	parameters
+		T: duration default to 0:0:0;
+		x: float default to 1.0;
+	profile
+		2020-001T00:00:00;
+	usage
+		-T * x;
+    end resource R
+
+activity type A
+    begin
+	attributes
+		"Duration" = 1:00:00;
+	modeling
+		use R(	span
+			// , 4.5
+			);
+    end activity type A

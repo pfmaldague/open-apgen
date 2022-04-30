@@ -1,0 +1,22 @@
+apgen version "faster"
+
+function write_duration(x)
+    parameters
+	x: duration default to 0:0:0;
+    {
+    write_to_stdout("duration = ", x, "\n");
+    return x;
+    }
+
+function write_duration_return_integer(x)
+    parameters
+	x: duration default to 0:0:0;
+    {
+    write_to_stdout("duration = ", x, "\n");
+    return 1;
+    }
+
+global duration A = 4:00:00 + 0:0:0.01;
+global duration B = A - 00:07:00;
+global duration C = write_duration(B);
+global integer k = write_duration_return_integer(A);

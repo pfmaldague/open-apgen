@@ -1,0 +1,3 @@
+apgen version "foo"
+
+global boolean B = print_globals("after");

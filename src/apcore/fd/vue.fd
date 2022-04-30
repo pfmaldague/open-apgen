@@ -1,0 +1,90 @@
+VIEW_ALLOC
+# to read view period files into apgen
+
+file:					< time UniversalTime "UTIME" >
+					< global integer year "" >
+					< global duration HMS "" >
+					< global string BaseTime "" >
+					< global integer number_of_stations "" >
+                                        < array DSS_number "" >
+                                        < array DSS_id "" >
+					< global string DSSID "" >
+					< real HourAngle "" >
+					< real Declination "" >
+					< duration RTLT "" >
+					< global string ScriptContents "Used to create the script that will do the conversion" >
+					< ScriptContents = "CATALOG PROGRAM write_start_mark\n" >
+					< ScriptContents = ScriptContents ++ "CATALOG TRIGGER vue_events\n" >
+					< ScriptContents = ScriptContents ++ "CATALOG PROGRAM vue_post_and_pre_fix\n" >
+					< ScriptContents = ScriptContents ++ "CATALOG STATE vue_instance\n" >
+					< ScriptContents = ScriptContents ++ "CATALOG PROGRAM write_vue_aaf\n" >
+					< ScriptContents = ScriptContents ++ "CATALOG PROGRAM write_vue_apf\n" >
+					< ScriptContents = ScriptContents ++ "CATALOG PROGRAM write_stop_mark\n" >
+					< ScriptContents = ScriptContents ++ "FILE EXIT NOSAVE\n" >
+	header
+	record*
+	end
+
+header: "CCSD" any* '\n' line*
+	"DATA_SET_ID" "\s"+ "=" "\s"+ "DSN_VIEWPERIODS;"
+	any*
+	"CCSD" any* "\n"		< number_of_stations = 0 >
+	end
+
+line: any* '\n' end
+
+record:					< start RawRecord >
+					< start year >
+	"??"				< end year >
+					< if year \> 71 then >
+					<    year = year + 1900 >
+					< else >
+					<    year = year + 2000 >
+					< endif >
+	'\s'				< start day >
+	"???"				< end day >
+					< BaseTime = year >
+					< BaseTime = BaseTime ++ "-" ++ day ++ "T00:00:00" >
+	'/'				< start HMS >
+	"??:??:??"			< end HMS >
+					< UniversalTime = BaseTime + HMS >
+	"\s"				< start kind_of_record >
+	"$16 ?"				< end kind_of_record >
+					< if kind_of_record & "$<RISE" >
+					<    RecordType = "RISE" >
+					< else if kind_of_record & "$<SET" >
+					<    RecordType = "SET" >
+					< else if kind_of_record & "$<MIN\sELEVATION" >
+					<    RecordType = "MIN_ELEVATION" >
+					< else if kind_of_record & "$<MAX\sELEVATION" >
+					<    RecordType = "MAX_ELEVATION" >
+					< else >
+					<    RecordType = "UNINTERESTING" >
+					< endif >
+	"\s"				< start SpacecraftID >
+	"???"				< end SpacecraftID >
+	'\s'				< start DSS_station >
+	"??"				< end DSS_station >
+					< DSSID = "DSS_" ++ DSS_station >
+					< if DSS_number( DSSID ) \> 0 >
+					< else >
+					<     number_of_stations = number_of_stations + 1 >
+                                        <     DSS_number( DSSID ) = DSS_station >
+                                        <     DSS_id( DSSID ) = DSSID >
+					< endif >
+	"\s"				< start PassNumber >
+	"????"				< end PassNumber >
+	"\s"+				< start Azimuth >
+	"$cr09 $or ." any*		< end Azimuth >
+	"\s"+				< start Elevation >
+	"$cr09 $or ." any*		< end Elevation >
+	"\s"+				< start HourAngle >
+	"$cr09 $or ." any*		< end HourAngle >
+	"\s"+				< start Declination >
+	"$cr09 $or ." any*		< end Declination >
+	"\s"				< start RTLT >
+	"??:??:??.?"			< end RTLT >
+					< end RawRecord >
+	any*
+	'\n'
+	end

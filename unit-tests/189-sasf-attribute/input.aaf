@@ -1,0 +1,331 @@
+apgen version "E5"
+
+activity type N1
+  begin
+    attributes
+      "SASF" = ["file" = "output1", "type" = "note"];
+      "Legend" = "N1's Legend";
+  end activity type N1
+
+activity type A1
+  begin
+    attributes
+      "SASF" = ["file" = "output1", "type" = "request"];
+      "Legend" = "A1's Legend";
+  end activity type A1
+
+activity type A3;
+
+activity type A2
+  begin
+    attributes
+      "Color" = "Cadet Blue";
+      "Pattern" = 45;
+      "Duration" = 1:00:00;
+      "Legend" = "A2's Legend";
+      "SASF" = [ "file" = "output2", "type" = "request"];
+    parameters
+      P1: local integer default to 0;
+    decomposition
+      A3();
+  end activity type A2
+
+
+activity type A3
+  begin
+    attributes
+      "Color" = "Aquamarine";
+      "Pattern" = 25;
+      "Duration" = 6:00:00;
+      "Legend" = "A3's Legend";
+      "SASF" = ["type" = "activity", "file" = "output4"];
+  end activity type A3
+
+activity type A5;
+activity type A6;
+activity type A7;
+
+activity type A4
+  begin
+    attributes
+      "Color" = "Aquamarine";
+      "Pattern" = 25;
+      "Duration" = Q4;
+      "Legend" = "A4's Legend";
+      "SASF" = [ "type" = "request", "file" = "output1"];
+    parameters
+      Q1: local integer default to 1;
+      Q2: local float default to 6.0;
+      Q3: local string default to "MID";
+      Q4: local duration default to 1:00:00;
+      Q5: local time default to start;
+    decomposition
+      A3() at start;
+      A5(Q1+Q2) at start + 2:00:00;
+      A6(rnd(Q2), 6*Q1+Q1, "ON", Q4/2, Q5-00:00:10) at start - 2:00:00;
+  end activity type A4
+
+activity type A5
+  begin
+    attributes
+      "Color" = "Cadet Blue";
+      "Pattern" = 45;
+      "Duration" = from_seconds(2*R1);
+      "Legend" = "A5's Legend";
+    parameters
+      R1: local float default to 10000.0;
+    decomposition
+      A3() at start + 1:00:00;
+      A7(3) at start + 2:00:00;
+      A7(15) at start + 3:00:00;
+  end activity type A5
+
+
+activity type A7
+  begin
+    attributes
+      "Color" = "Cadet Blue";
+      "Pattern" = 45;
+      "Duration" = 1:00:00;
+      "Legend" = "A7's Legend";
+      "SASF" = [ "type" = "command", "file" = "output1"];
+    parameters
+      P1: local integer default to 0;
+  end activity type A7
+
+activity type A6
+  begin
+    attributes
+      "Color" = "Aquamarine";
+      "Pattern" = 25;
+      "Duration" = 6:00:00/QP2;
+      "Legend" = "A6's Legend";
+    parameters
+      QP1: local integer default to 0;
+      QP2: local float default to 6.0;
+      QP3: local string default to "MID";
+      QP4: local duration default to 00:00:00;
+      QP5: local time default to start;
+    decomposition
+      A3() at start;
+      A7(QP1) at start + 2:00:00;
+      A7(45) at start - 2:00:00;
+      N1() at start ;
+  end activity type A6
+
+
+activity type A9;
+
+activity type A8
+  begin
+    attributes
+      "Color" = "Aquamarine";
+      "Pattern" = 25;
+      "Legend" = "Legend for A8";
+      "Duration" = 6:00:00/FQ1;
+    parameters
+      a1: array default to [];
+      IQ1: local integer default to 1;
+      FQ1: local float default to 2.0;
+      SQ1: local string default to "MID-3";
+      DQ1: local duration default to 00:00:00;
+      TQ1: local time default to start;
+      IQ2: local integer default to 4;
+      FQ2: local float default to 5.0;
+      SQ2: local string default to "MID-6";
+      DQ2: local duration default to 00:00:00;
+      TQ2: local time default to start;
+      IQ3: local integer default to 7;
+      FQ3: local float default to 8.0;
+      SQ3: local string default to "MID-9";
+      DQ3: local duration default to 00:00:00;
+      TQ3: local time default to start;
+      IQ4: local integer default to 10;
+      FQ4: local float default to 11.0;
+      SQ4: local string default to "MID-12";
+      DQ4: local duration default to 00:00:00;
+      TQ4: local time default to start;
+      IQ5: local integer default to 13;
+      FQ5: local float default to 14.0;
+      SQ5: local string default to "MID-15";
+      DQ5: local duration default to 00:00:00;
+      TQ5: local time default to start;
+      IQ6: local integer default to 16;
+      FQ6: local float default to 17.0;
+      SQ6: local string default to "MID-18";
+      DQ6: local duration default to 00:00:00;
+      TQ6: local time default to start;
+      IQ7: local integer default to 19;
+      FQ7: local float default to 20.0;
+      SQ7: local string default to "MID-21";
+      DQ7: local duration default to 00:00:00;
+      TQ7: local time default to start;
+      IQ8: local integer default to 22;
+      FQ8: local float default to 23.0;
+      SQ8: local string default to "MID-24";
+      DQ8: local duration default to 00:00:00;
+      TQ8: local time default to start;
+      IQ9: local integer default to 25;
+      FQ9: local float default to 26.0;
+      SQ9: local string default to "MID-27";
+      DQ9: local duration default to 00:00:00;
+      TQ9: local time default to start;
+      IQ10: local integer default to 28;
+      FQ10: local float default to 29.0;
+      SQ10: local string default to "MID-30";
+      DQ10: local duration default to 00:00:00;
+      TQ10: local time default to start;
+      IQ11: local integer default to 31;
+      FQ11: local float default to 32.0;
+      SQ11: local string default to "MID-33";
+      DQ11: local duration default to 00:00:00;
+      TQ11: local time default to start;
+      IQ12: local integer default to 34;
+      FQ12: local float default to 35.0;
+      SQ12: local string default to "MID-36";
+      DQ12: local duration default to 00:00:00;
+      TQ12: local time default to start;
+      IQ13: local integer default to 37;
+      FQ13: local float default to 38.0;
+      SQ13: local string default to "MID-39";
+      DQ13: local duration default to 00:00:00;
+      TQ13: local time default to start;
+      IQ14: local integer default to 40;
+      FQ14: local float default to 41.0;
+      SQ14: local string default to "MID-42";
+      DQ14: local duration default to 00:00:00;
+      TQ14: local time default to start;
+      IQ15: local integer default to 43;
+      FQ15: local float default to 44.0;
+      SQ15: local string default to "MID-45";
+      DQ15: local duration default to 00:00:00;
+      TQ15: local time default to start;
+      IQ16: local integer default to 46;
+      FQ16: local float default to 47.0;
+      SQ16: local string default to "MID";
+      DQ16: local duration default to 00:00:00;
+      TQ16: local time default to start;
+      IQ17: local integer default to 49;
+      FQ17: local float default to 50.0;
+      SQ17: local string default to "MID";
+      DQ17: local duration default to 00:00:00;
+      TQ17: local time default to start;
+      IQ18: local integer default to 49;
+      FQ18: local float default to 50.0;
+      SQ18: local string default to "MID";
+      DQ18: local duration default to 00:00:00;
+      TQ18: local time default to start;
+      IQ19: local integer default to 49;
+      FQ19: local float default to 50.0;
+      SQ19: local string default to "MID";
+      DQ19: local duration default to 00:00:00;
+      TQ19: local time default to start;
+      IQ20: local integer default to 49;
+      FQ20: local float default to 50.0;
+      SQ20: local string default to "MID";
+      DQ20: local duration default to 00:00:00;
+      TQ20: local time default to start;
+    decomposition
+      a2: local array default to [2, 22, 222, 2222];
+      a3: local array default to [0.3, 3.3, 3.33, 0.3333];
+      a4: local array default to [00:04:00, 00:00:44, 4:00:00];
+      a5: local array default to ["5", "5", "55", "555"];
+      A7(68) at finish;
+      A5(IQ7+FQ8) at start + 2:00:00;
+      A9(
+          a1,
+          a2,
+          IQ3,
+          a3,
+          IQ5,
+          a4,
+          IQ7,
+          a5,
+          IQ9,
+          IQ10
+        );
+  end activity type A8
+
+activity type A9
+  begin
+    attributes
+      "Color" = "Aquamarine";
+      "Pattern" = 25;
+      "Legend" = "Legend for A9";
+      "Duration" = 6:00:00/R3;
+      "SASF" = [ "file" = "output3", "processor" = "\"PRI\"", "key" = "\"key_A5\"", "type" = "activity"];
+    parameters
+      R1: array default to [];
+      R2: array default to [];
+      R3: local integer default to 7;
+      R4: array default to [];
+      R5: local integer default to 13;
+      R6: array default to [];
+      R7: local integer default to 19;
+      R8: array default to [];
+      R9: local integer default to 25;
+      R10: local integer default to 28;
+  end activity type A9
+
+activity type A14;
+
+activity type A13
+  begin
+    attributes
+      "Color" = "Aquamarine";
+      "Pattern" = 25;
+      "Duration" = 12:00:00;
+      "Legend" = "A13's Legend";
+    parameters
+      QP1: local integer default to 0;
+      QP2: local float default to 6.0;
+      QP3: local string default to "MID";
+    decomposition
+      A3() at finish - 2:0:0;
+      A3() at finish - 1:00:00;
+      A14(45.0, ["111", "two", "3"], 33333) at finish ;
+  end activity type A13
+
+activity type A14
+  begin
+    attributes
+      "Color" = "Aquamarine";
+      "Pattern" = 25;
+      "Duration" = 6:00:00;
+      "Legend" = "A14's Legend";
+      "SASF" = [ "file" = "output3", "processor" = "\"PRI\"", "key" = "\"key_A5\"", "type" = "activity"];
+    parameters
+      QP1: local float default to 6.0;
+      QP2: array default to [];
+      QP3: local float default to 6.0;
+  end activity type A14
+
+activity type A20
+  begin
+    attributes
+      "Legend" = "A20's Legend";
+      "SASF" = [ "file" = "output3", "processor" = "\"PRI\"", "key" = "\"key_A5\"", "type" = "request"];
+  end activity type A20
+
+activity type A21
+  begin
+    attributes
+      "Color" = "Cadet Blue";
+      "Pattern" = 45;
+      "Duration" = 1:00:00;
+      "Legend" = "A21's Legend";
+    parameters
+      P1: local integer default to 0;
+    decomposition
+      A4(1, 2.2, "three", 4:44:44, start);
+  end activity type A21
+
+activity type A22
+  begin
+    attributes
+      "Color" = "Aquamarine";
+      "Pattern" = 25;
+      "Duration" = 6:00:00;
+      "Legend" = "A22's Legend";
+  end activity type A22
+

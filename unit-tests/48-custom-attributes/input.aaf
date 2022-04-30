@@ -1,0 +1,47 @@
+apgen version "custom attributes"
+
+attributes
+directive attribute elongation: string default to "";
+directive attribute attitude: string default to "";
+directive attribute hopefulness: integer default to 1;
+end attributes
+
+resource StateScalar: state integer
+    begin
+	attributes
+		"Units" = "N/A";
+		"hopefulness" = 100;
+	parameters
+		x: integer default to 1;
+	states
+		0, 1, 2, 3, 4;
+	profile
+		0;
+	usage
+		x;
+    end resource StateScalar
+
+activity type useStateScalar
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "scalars";
+		"attitude" = "mean person";
+	parameters
+		a: integer default to 4;
+	modeling
+		use StateScalar(a) from start to finish;
+    end activity type useStateScalar
+
+
+activity instance Foo of type useStateScalar id James_Bond_007
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-039T09:42:07.823;
+		"attitude" = "gentle";
+	parameters
+		(1);
+    end activity instance Foo

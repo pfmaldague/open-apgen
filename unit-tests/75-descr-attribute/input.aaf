@@ -1,0 +1,64 @@
+apgen version "every from to"
+
+
+resource ssr: consumable float
+    begin
+        attributes
+            "Units" = "Gbits";
+            "Minimum" = 0;
+            "Maximum" = 2;
+        parameters
+            amount: float default to 0;
+        profile
+            0.0;
+        usage
+            -amount;
+    end resource ssr
+
+activity type record
+    begin
+	attributes
+	    "Color" = "Orange";
+            "Pattern" = 25;
+            "Duration" = 01:00:00;
+            "Legend" = "PLAY_BACK";
+            "Description" = "Playing Back Observation Data";
+	parameters
+	    data_volume: float default to 1.0;
+	modeling
+	    d: duration default to span/10;
+	    use ssr(data_volume/10) every d from start to finish;
+    end activity type playback
+
+activity instance S of type generic id generic_101
+    begin
+	attributes
+		"Start" = 2018-010T01:00:00;
+		"Duration" = 00:20:00;
+		"Color" = "Spring Green";
+    end activity instance S
+
+activity instance Foo of type record id not_generic_10
+    begin
+	attributes
+		"Start" = 2018-010T03:00:00;
+	parameters
+		(1.2);
+    end activity instance Foo
+
+activity instance Foo2 of type record id foo_1
+    begin
+	attributes
+		"Start" = 2018-010T06:00:00;
+		"Description" = "Overridden";
+	parameters
+		(1.0);
+    end activity instance Foo2
+
+activity instance E of type generic id end_0
+    begin
+	attributes
+		"Start" = 2018-010T13:00:00;
+		"Duration" = 00:20:00;
+		"Color" = "Orange Red";
+    end activity instance E

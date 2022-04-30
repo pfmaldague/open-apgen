@@ -1,0 +1,438 @@
+apgen version "apgen-9.9.4Interpval-Unknown build"
+
+
+directive "Legend" = [ "Schedulers", 32 ];
+directive "Legend" = [ "___SUDA_Constraint", 32 ];
+directive "Legend" = [ "___SUDA_Behavior", 32 ];
+directive "Legend" = [ "Europa", 32 ];
+directive "Legend" = [ "___SUDA_Cmd", 32 ];
+
+activity instance ScheduleSUDASurvey of type ScheduleSUDASurvey id ScheduleSUDASurvey_1
+    begin
+	decomposed into SetSUDASurveyOpportunity, SetSUDASurveyOpportunity_537, 
+		SetSUDASurveyOpportunity_538, SetSUDASurveyOpportunity_539, SetSUDASurveyOpportunity_540, 
+		SUDA_Survey, SUDA_NanograinSurvey, SUDA_Survey_544, SUDA_NanograinSurvey_546;
+	attributes
+	    "Color" = "Dodger Blue";
+	    "Duration" = 025T05:35:24.001;
+	    "Legend" = "Schedulers";
+	    "Pattern" = 3;
+	    "Plan" = "New";
+	    "Start" = 2026-197T22:08:03.816;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    825.0,
+	    968.0
+	    );
+    end activity instance ScheduleSUDASurvey
+
+activity instance SUDA_Survey of type SUDA_Survey id SUDA_Survey
+    begin
+	decomposable into DisplayActivity, SetSUDAMode, SetSUDAMode_548, SetSUDAMode_549, 
+		SetSUDAMode_550;
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Survey";
+	    "Duration" = 15:20:00;
+	    "Legend" = "___SUDA_Behavior";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-200T23:49:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "Serendipitous",
+	    15:00:00,
+	    00:00:00,
+	    00:00:00,
+	    "Science",
+	    10000000.0
+	    );
+    end activity instance SUDA_Survey
+
+activity instance SUDA_Survey of type DisplayActivity id DisplayActivity
+    begin
+	abstracted into SUDA_Survey;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Europa generic activity";
+	    "Duration" = 15:20:00;
+	    "Legend" = "___SUDA_Behavior";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-200T23:49:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "Europa";
+    end activity instance SUDA_Survey
+
+activity instance SetSUDAMode_BOOT of type SetSUDAMode id SetSUDAMode
+    begin
+	abstracted into SUDA_Survey;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-200T23:49:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "BOOT",
+	    "Science"
+	    );
+    end activity instance SetSUDAMode_BOOT
+
+activity instance SetSUDAMode_IDLE of type SetSUDAMode id SetSUDAMode_548
+    begin
+	abstracted into SUDA_Survey;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-200T23:59:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "IDLE",
+	    "Science"
+	    );
+    end activity instance SetSUDAMode_IDLE
+
+activity instance SetSUDAMode_SURVEY of type SetSUDAMode id SetSUDAMode_549
+    begin
+	abstracted into SUDA_Survey;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-201T00:09:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "SURVEY",
+	    "Science"
+	    );
+    end activity instance SetSUDAMode_SURVEY
+
+activity instance SetSUDAMode_SURVIVAL of type SetSUDAMode id SetSUDAMode_550
+    begin
+	abstracted into SUDA_Survey;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-201T15:09:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "SURVIVAL",
+	    "Science"
+	    );
+    end activity instance SetSUDAMode_SURVIVAL
+
+
+attributes
+directive attribute SenderType: array default to [] ;
+directive attribute SenderClass: array default to [] ;
+directive attribute SenderDSS: array default to [] ;
+directive attribute SenderAntenna: array default to [] ;
+directive attribute EventTime: array default to [] ;
+directive attribute Category: string default to "SCI" ? "Does this activity accomplish science, or engineering?" ;
+directive attribute APID_Bucket: string default to "Science" range ["Science", "Calibration", "OpticalNavigation", "N/A"] ? "General category of downlink priority:  Science or Calibration." ;
+directive attribute DPT_Rank: integer default to 0 ? "Desired priority for retention in flash memory overnight of this activity's data.  Lower numbers mean further from the chopping block." $ "none" ;
+end attributes
+
+activity instance ScheduleMaspexEuropaTorus of type ScheduleMaspexEuropaTorus id ScheduleMaspexEuropaTorus_1
+    begin
+	attributes
+	    "Color" = "Dodger Blue";
+	    "Duration" = 025T05:35:24.001;
+	    "Legend" = "Schedulers";
+	    "Pattern" = 3;
+	    "Plan" = "New";
+	    "Start" = 2026-197T22:08:03.816;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    9.0,
+	    1.0,
+	    23:55:00
+	    );
+    end activity instance ScheduleMaspexEuropaTorus
+
+activity instance SetSUDASurveyOpportunity_NanograinParticle of type SetSUDASurveyOpportunity id SetSUDASurveyOpportunity
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Set SUDA Survey Opportunity";
+	    "Duration" = 00:29:25.136;
+	    "Legend" = "___SUDA_Constraint";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-197T23:06:59.768;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "NanograinParticle",
+	    TRUE,
+	    00:29:25.136,
+	    00:29:25.136
+	    );
+    end activity instance SetSUDASurveyOpportunity_NanograinParticle
+
+activity instance SetSUDASurveyOpportunity_NanograinParticle of type SetSUDASurveyOpportunity id SetSUDASurveyOpportunity_537
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Set SUDA Survey Opportunity";
+	    "Duration" = 01:00:00;
+	    "Legend" = "___SUDA_Constraint";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-198T01:02:35.650;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "NanograinParticle",
+	    TRUE,
+	    01:00:00,
+	    01:29:25.136
+	    );
+    end activity instance SetSUDASurveyOpportunity_NanograinParticle
+
+
+activity instance SetSUDASurveyOpportunity_NanograinParticle of type SetSUDASurveyOpportunity id SetSUDASurveyOpportunity_538
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Set SUDA Survey Opportunity";
+	    "Duration" = 15:00:00;
+	    "Legend" = "___SUDA_Constraint";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-201T00:09:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "NanograinParticle",
+	    FALSE,
+	    15:00:00,
+	    16:29:25.136
+	    );
+    end activity instance SetSUDASurveyOpportunity_NanograinParticle
+
+
+
+
+
+activity instance SUDA_NanograinSurvey of type SUDA_NanograinSurvey id SUDA_NanograinSurvey
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Exogenic Nanograin Particle";
+	    "Duration" = 15:00:00;
+	    "Legend" = "___SUDA_Behavior";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-201T00:09:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    15:00:00,
+	    FALSE
+	    );
+    end activity instance SUDA_NanograinSurvey
+
+activity instance SetSUDASurveyOpportunity_NanograinParticle of type SetSUDASurveyOpportunity id SetSUDASurveyOpportunity_539
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Set SUDA Survey Opportunity";
+	    "Duration" = 14:49:00.372;
+	    "Legend" = "___SUDA_Constraint";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-202T02:09:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "NanograinParticle",
+	    TRUE,
+	    14:49:00.372,
+	    001T07:18:25.508
+	    );
+    end activity instance SetSUDASurveyOpportunity_NanograinParticle
+
+activity instance SUDA_Survey of type SUDA_Survey id SUDA_Survey_544
+    begin
+	decomposable into DisplayActivity_545, SetSUDAMode_552, SetSUDAMode_553, 
+		SetSUDAMode_554;
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Survey";
+	    "Duration" = 23:20:00;
+	    "Legend" = "___SUDA_Behavior";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-213T05:11:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "Serendipitous",
+	    23:00:00,
+	    00:00:00,
+	    00:00:00,
+	    "Science",
+	    10000000.0
+	    );
+    end activity instance SUDA_Survey
+
+activity instance SUDA_Survey of type DisplayActivity id DisplayActivity_545
+    begin
+	abstracted into SUDA_Survey_544;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Europa generic activity";
+	    "Duration" = 23:20:00;
+	    "Legend" = "___SUDA_Behavior";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-213T05:11:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "Europa";
+    end activity instance SUDA_Survey
+
+activity instance SetSUDAMode_IDLE of type SetSUDAMode id SetSUDAMode_552
+    begin
+	abstracted into SUDA_Survey_544;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-213T05:21:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "IDLE",
+	    "Science"
+	    );
+    end activity instance SetSUDAMode_IDLE
+
+activity instance SetSUDASurveyOpportunity_NanograinParticle of type SetSUDASurveyOpportunity id SetSUDASurveyOpportunity_540
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Set SUDA Survey Opportunity";
+	    "Duration" = 23:00:00;
+	    "Legend" = "___SUDA_Constraint";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-213T05:31:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "NanograinParticle",
+	    FALSE,
+	    23:00:00,
+	    002T06:18:25.508
+	    );
+    end activity instance SetSUDASurveyOpportunity_NanograinParticle
+
+activity instance SetSUDAMode_SURVEY of type SetSUDAMode id SetSUDAMode_553
+    begin
+	abstracted into SUDA_Survey_544;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-213T05:31:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "SURVEY",
+	    "Science"
+	    );
+    end activity instance SetSUDAMode_SURVEY
+
+activity instance SUDA_NanograinSurvey of type SUDA_NanograinSurvey id SUDA_NanograinSurvey_546
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Exogenic Nanograin Particle";
+	    "Duration" = 23:00:00;
+	    "Legend" = "___SUDA_Behavior";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-213T05:31:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    23:00:00,
+	    FALSE
+	    );
+    end activity instance SUDA_NanograinSurvey
+
+activity instance SetSUDAMode_SURVIVAL of type SetSUDAMode id SetSUDAMode_554
+    begin
+	abstracted into SUDA_Survey_544;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-214T04:31:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    "SURVIVAL",
+	    "Science"
+	    );
+    end activity instance SetSUDAMode_SURVIVAL
+

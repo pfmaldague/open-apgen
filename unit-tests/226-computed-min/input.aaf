@@ -1,0 +1,50 @@
+apgen version "example for Hui Ying Wen"
+
+function some_function(a)
+parameters
+    a: string default to "foo";
+{
+    if(a == "foo") {
+        return 100;
+    } else if(a == "bar") {
+	return 200;
+    }
+    return -1;
+}
+
+resource MY_RESOURCE(["a", "b", "c"], ["foo", "bar"]): settable float
+    begin
+	attributes
+	    "Minimum" = some_function(indices[1]);
+	parameters
+	    x: float default to 0.0;
+	default
+	    0.0;
+	usage
+	    x;
+    end resource MY_RESOURCE
+
+activity type A
+    begin
+	attributes
+	    "Duration" = 1:00:00;
+	    "Color" = "Spring Green";
+	parameters
+	    x: float default to 50;
+	modeling
+	    set MY_RESOURCE["a"]["foo"](x);
+	    set MY_RESOURCE["a"]["bar"](x);
+	    wait for 1:00:00;
+	    set MY_RESOURCE["a"]["foo"](2 * x);
+	    set MY_RESOURCE["a"]["bar"](2 * x);
+	    wait for 1:00:00;
+	    set MY_RESOURCE["a"]["foo"](3 * x);
+	    set MY_RESOURCE["a"]["bar"](3 * x);
+	    wait for 1:00:00;
+	    set MY_RESOURCE["a"]["foo"](4 * x);
+	    set MY_RESOURCE["a"]["bar"](4 * x);
+	    wait for 1:00:00;
+	    set MY_RESOURCE["a"]["foo"](5 * x);
+	    set MY_RESOURCE["a"]["bar"](5 * x);
+    end activity type A
+

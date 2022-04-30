@@ -1,0 +1,4 @@
+APGEN script version "apgen-10.0.0pre-oct-4-Unknown build"
+OPENFILE 65-apf-w-children/input.aaf
+OPENFILE 65-apf-w-children/input.apf
+SAVEFILE APF output-from-65.apf

@@ -1,0 +1,5 @@
+APGEN script version "apgen-X.8.4-Custom - Wed Apr 14 07:36:50 PDT 2021"
+OPENFILE 219-scheduling-a-cascade-of-activities/input.aaf
+BUILD
+NEWACTDISPLAY
+SCHEDULEACTIVITY ALL

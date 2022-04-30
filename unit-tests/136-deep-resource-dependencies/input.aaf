@@ -1,0 +1,160 @@
+apgen version "great depth"
+
+
+resource A: consumable integer
+    begin
+	parameters
+		x: integer default to 0;
+	profile
+		0;
+	usage
+		-x;
+    end resource A
+
+function A_dot_curval_in_return() {
+	return A.currentval();
+}
+
+resource B: consumable integer
+    begin
+	parameters
+		x: integer default to 0;
+	profile
+		A_dot_curval_in_return();
+	usage
+		-x;
+    end resource B
+
+global array many_ints = [4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 6, 15, 16, 17, 18, 19, 20, 7, 8, 9, 10, 11, 12, 13, 14];
+
+function B_dot_curval_in_array_index() {
+	y: integer default to 0;
+	y = many_ints[B.currentval()];
+	return y;
+}
+
+resource C: consumable integer
+    begin
+	parameters
+		x: integer default to 0;
+	profile
+		B_dot_curval_in_array_index();
+	usage
+		-x;
+    end resource C
+
+function C_dot_curval_in_if() {
+	if(C.currentval() < 11) {
+		return 4;
+	} else {
+		return 2;
+	}
+}
+
+resource D: consumable integer
+    begin
+	parameters
+		x: integer default to 0;
+	profile
+		C_dot_curval_in_if();
+	usage
+		-x;
+    end resource D
+
+resource E: consumable float
+    begin
+	parameters
+		x: float default to 0.0;
+	profile
+		cos(A.currentval());
+	usage
+		-x;
+    end resource E
+
+activity type useA
+    begin
+	attributes
+		"Duration" = 1:00:00;
+		"Color" = "Spring Green";
+		"Legend" = "A users";
+	parameters
+		x: integer default to 1;
+	modeling
+		use A(x);
+    end activity type useA
+
+activity type useB
+    begin
+	attributes
+		"Duration" = 1:00:00;
+		"Color" = "Spring Green";
+		"Legend" = "B users";
+	parameters
+		x: integer default to 1;
+	modeling
+		use B(x);
+    end activity type useB
+
+activity type useC
+    begin
+	attributes
+		"Duration" = 1:00:00;
+		"Color" = "Spring Green";
+		"Legend" = "C users";
+	parameters
+		x: integer default to 1;
+	modeling
+		use C(x);
+    end activity type useC
+
+activity type useD
+    begin
+	attributes
+		"Duration" = 1:00:00;
+		"Color" = "Spring Green";
+		"Legend" = "D users";
+	parameters
+		x: integer default to 1;
+	modeling
+		use D(x);
+    end activity type useD
+
+activity instance AAA of type useA ID AAA
+    begin
+	attributes
+		"Start" = 2020-001T01:00:00;
+	parameters
+		(2);
+    end activity instance AAA
+
+activity instance BBB of type useB ID BBB
+    begin
+	attributes
+		"Start" = 2020-001T03:00:00;
+	parameters
+		(1);
+    end activity instance BBB
+
+activity instance CCC of type useC ID CCC
+    begin
+	attributes
+		"Start" = 2020-001T05:00:00;
+	parameters
+		(2);
+    end activity instance CCC
+
+activity instance DDD of type useD ID DDD
+    begin
+	attributes
+		"Start" = 2020-001T07:00:00;
+	parameters
+		(2);
+    end activity instance DDD
+
+activity instance RRR of type useA ID RRR
+    begin
+	attributes
+		"Start" = 2020-001T09:00:00;
+	parameters
+		(3);
+    end activity instance RRR

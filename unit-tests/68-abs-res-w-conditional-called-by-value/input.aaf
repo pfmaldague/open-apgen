@@ -1,0 +1,68 @@
+apgen version "abstract by value usage"
+
+resource R: consumable integer
+    begin
+	attributes
+		"Subsystem" = "Rs";
+	parameters
+		x: integer default to 0;
+	profile
+		0;
+	usage
+		-x;
+    end resource R
+
+resource A: abstract
+    begin
+	attributes
+		"Subsystem" = "As";
+	parameters
+		y: integer default to 1;
+	modeling
+		if(y == 0) {
+			use R(y + 23) at start;
+		} else if(y == 1) {
+			use R(y + 2) at start;
+		} else {
+			use R(2 * y) at start + 00:20:00;
+		}
+    end resource A
+
+activity type T
+    begin
+	attributes
+	    "Legend" = "A users";
+	    "Duration" = 1:00:00;
+	    "Color" = "Yellow";
+	    "Subsystem" = "Rs";
+	modeling
+	    k: integer default to 0;
+	    while(k < 3) {
+	    	use A(*k) at start + k * 00:20:00;
+		k = k + 1;
+	    }
+    end activity type T
+
+activity instance S of type generic
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Legend" = "generics";
+	    "Start" = 2028-001T01:00:00;
+	    "Duration" = 00:30:00;
+    end activity instance S
+
+activity instance curious of type T
+    begin
+	attributes
+	    "Start" = 2028-001T08:00:00;
+    end activity instance curious
+
+activity instance E of type generic
+    begin
+	attributes
+	    "Color" = "Orange Red";
+	    "Legend" = "generics";
+	    "Start" = 2028-002T01:00:00;
+	    "Duration" = 00:30:00;
+    end activity instance E

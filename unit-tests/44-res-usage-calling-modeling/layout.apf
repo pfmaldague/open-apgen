@@ -1,0 +1,15 @@
+APGEN version "apgen-10.0.0pre-Unknown build"
+
+
+directive "Activity Legend Layout" = [
+    "",
+    [ "Generic_Activities", 32 ], 
+    [ "New Activities", 32 ], 
+    [ "Time Marks", 32 ], 
+    [ "Lavenders", 32 ]
+    ];
+directive "Resource Legend Layout" = [
+    "",
+    [ "R[\"one\"]", 100 ], 
+    [ "R[\"two\"]", 100 ]
+    ];

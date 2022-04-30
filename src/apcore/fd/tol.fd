@@ -1,0 +1,226 @@
+TOL
+# format descriptor for TOL files, with wrapping of description field
+
+	match( "\"" , "\"" , "\\" , "[", "]", "" )
+
+file:								< time UniversalTime "UTIME" >
+								< global integer linelength "" >
+								< global integer wordlength "" >
+								< global string word "" >
+								< string WrappedDescription "" >
+								< array name_of_instance "" >
+								< array hidden_resource_positions "positions indexed by res. name" >
+								< string resource_name "" >
+								< global integer resource_position "" >
+	header record* end
+
+header:								< start HeaderText >
+	"apgen TOL format" any* '\n'
+	hidden_resource_unit*
+#	apgen_file_unit*	#not parsed yet, so ignore
+	any* "\$\$EOH\n"					< end HeaderText >
+	end
+
+hidden_resource_unit:
+	"n_hidden_resources" "\s$or\t"* '=' "\s$or\t"*
+#	following is n_hidden_resources, but it is unused:
+	"$cr09"+
+	"\s$or\t"* '\n'						< resource_position = 0 >
+	hidden_resource_record*
+	end
+
+hidden_resource_record:
+	"hidden_resource" '=' 					< start resource_name >
+	any*							< end resource_name >
+	'\n'							< resource_position = resource_position + 1 >
+								< hidden_resource_positions(resource_name) = resource_position >
+	end
+
+record:								< start RawRecord >
+
+# make sure to include header to raw format can be edited with this format descriptor:
+
+								< if CurrentRecord = 1 >
+								<    RawRecord = HeaderText >
+								< endif >
+        time_stamp						< start RecordType >
+	any*							< end RecordType >
+	','							< start RecordBody >
+	any*
+	";"							< end RawRecord >
+								< end RecordBody >
+	"\n"
+								< if RecordType = "ACT_START" >
+								<     parse( RecordBody , "act_start" ) >
+								< else if RecordType = "ACT_END" >
+								<     AttributeName = "" >
+								<     AttributeValue = "" >
+								<     Visibility = "" >
+								<     ParameterName = "" >
+								<     ParameterValue = "" >
+								<     Type = "activity end" >
+								<     WrappedDescription = "" >
+								<     parse( RecordBody , "act_end" ) >
+								< else if RecordType = "RES" >
+								<     Type = "resource" >
+								<     AttributeName = "" >
+								<     AttributeValue = "" >
+								<     Visibility = "" >
+								<     ParameterName = "" >
+								<     WrappedDescription = "" >
+
+#	NOTE: ParameterValue is used to store the value of the resource
+
+								<     parse( RecordBody , "resource" ) >
+								< else if RecordType = "TRANSIENT" >
+								<     Type = "transient" >
+								<     AttributeName = "" >
+								<     AttributeValue = "" >
+								<     Visibility = "" >
+								<     ParameterName = "" >
+								<     WrappedDescription = "" >
+
+#	NOTE: ParameterValue is used to store the value of the resource
+
+								<     parse( RecordBody , "resource" ) >
+								< endif >
+	end
+
+time_stamp:							< start UniversalTime >
+	"$4 $cr 0 9 - "  
+        " $3 $cr 0 9 T $2 $cr 0 9 : $2 $cr                                                           
+	0 9 : $2 $cr 0 9 "
+        ". $3 $cr 0 9 "				                < end UniversalTime >
+	','
+	end
+	end
+
+wrapped_comment:					< start word >
+							< start WrappedDescription >
+							< linelength = 0 >
+	any*						< end word >
+							< end WrappedDescription >
+							< parse( word , "word_w_length" ) >
+	blank_plus_word*
+	end
+
+blank_plus_word:
+	'\s'						< linelength = linelength + 1 >
+							< start word >
+	any*						< end word >
+							< parse( word , "word_w_length" ) >
+#							adjust the number to the right if necessary:
+							< if linelength \> 45 >
+							<    WrappedDescription = WrappedDescription ++ "\n" >
+							<    linelength = wordlength >
+							< else >
+							<    WrappedDescription = WrappedDescription ++ "\s" >
+							< endif >
+							< WrappedDescription = WrappedDescription ++ word >
+	end
+	end
+
+word_w_length:						< wordlength = 0 >
+	one_char*
+	end
+
+one_char: "?"						< wordlength = wordlength + 1 >
+							< linelength = linelength + 1 >
+	end
+	end
+
+act_start:							< start Name >
+	any*							< end Name >
+	",d,"							< start Duration >
+	any*							< end Duration >
+	",\""							< start Visibility >
+	any*							< end Visibility >
+	"\",type="						< start Type >
+	any*							< end Type >
+	",node_id="						< start UniqueID >
+	any*							< end UniqueID >
+								< name_of_instance( UniqueID ) = Name >
+	",legend=\""						< start Legend >
+	any*							< end Legend >
+	"\",description="					< WrappedDescription = "" >
+	"\""							< start Comment >
+	any*							< end Comment >
+								< parse( Comment , "wrapped_comment" ) >
+	"\",attributes=("
+	attribute*
+	"),parameters=("
+	[parameter] more_parameters*
+	");"
+        end
+
+attribute: "\""							< start AttributeName >
+	any*							< end AttributeName >
+	"\"="							< start AttributeValue >
+	if( "\"" )
+		any* "\""
+        else if( "[" )
+                any*
+                "]" whitespace*
+	else if( "$craz $or $crAZ $or _" )
+		"$craz $or $crAZ $or _ $or $cr09 "*
+	else
+# SEQ_REVIEW BUG: + instead of * leads to errors in the next line:
+		"$cr09 $or . $or e $or E $or T $or : $or - $or +"*
+	endif							< end AttributeValue >
+	[","]
+	end
+
+whitespace: " \s $or \t $or \n " end
+
+parameter: 							< start ParameterName >
+	"$craz $or $crAZ $or $cr09 $or _"+			< end ParameterName >
+	"=" whitespace*						< start ParameterValue >
+	if( "\"" ) 
+		any* "\""
+
+# previously:
+# 		"$cr09 $or . $or e $or E $or T $or : $or - $or +"*
+# modified to allow array parameters:
+	else if( "[" )
+		any*
+		"]" whitespace*
+	else
+ 		"$cr09 $or . $or e $or E $or T $or : $or - $or +"*
+
+	endif							< end ParameterValue >
+	end
+
+more_parameters:
+	"," 							< start ParameterName >
+	"$craz $or $crAZ $or $cr09 $or _"+			< end ParameterName >
+	"=" whitespace*						< start ParameterValue >
+	if( "\"" )
+		any* "\""
+
+# previously:
+# 		"$cr09 $or . $or e $or E $or T $or : $or - $or +"*
+# modified to allow array parameters:
+	else if( "[" )
+		any*
+		"]" whitespace*
+	else
+		"$cr09 $or . $or e $or E $or T $or : $or - $or +"*
+	endif							< end ParameterValue >
+	end
+	end
+
+resource:							< start Name >
+	any*							< end Name >
+	'='							< start ParameterValue >
+	any*
+								< end ParameterValue >
+	';'
+	end
+	end
+
+act_end:							< start id >
+	any*							< end id >
+	';'
+								< Name = name_of_instance( id ) >
+	end
+	end

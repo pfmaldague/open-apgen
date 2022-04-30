@@ -1,0 +1,11 @@
+APGEN version "apgen-X.7.4-Custom - Sat Jan 9 13:15:31 PST 2021"
+
+
+directive "Activity Legend Layout" = [
+    "",
+    [ "S", 32 ]
+    ];
+directive "Resource Legend Layout" = [
+    "",
+    [ "S", 100 ]
+    ];

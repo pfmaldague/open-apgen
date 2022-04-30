@@ -1,0 +1,14 @@
+APGEN script version "apgen-10.0.0pre-nov-05-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2017-314T00:01:21.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 218-get-windows-zero-duration/input.aaf
+OPENFILE 218-get-windows-zero-duration/input.apf
+OPENFILE 218-get-windows-zero-duration/layout.apf
+NEWACTDISPLAY
+NEWRESDISPLAY 0
+NEWHORIZON A1 FROM 2018-310T00:00:00.000 TO 2018-316T10:00:00.000
+SCHEDULEACTIVITY ID decompose_via_windows
+#QUIT 0

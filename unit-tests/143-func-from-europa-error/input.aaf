@@ -1,0 +1,102 @@
+apgen version "europa"
+
+global time some_time = 2020-020T29:77:44;
+local array AntennaType = ["DSS-12" = "34M_HEF",
+                            "DSS-14" = "70M",
+                            "DSS-15" = "34M_HEF",
+                            "DSS-16" = "26M",
+                            "DSS-24" = "34M_BWG",
+                            "DSS-25" = "34M_BWG",
+                            "DSS-26" = "34M_SBW",
+                            "DSS-27" = "34M_BWG",
+                            "DSS-34" = "34M_SBW",
+                            "DSS-35" = "34M_SBW",
+                            "DSS-36" = "34M_BWG",
+                            "DSS-42" = "34M_HEF",
+                            "DSS-43" = "70M",
+                            "DSS-45" = "34M_HEF",
+                            "DSS-46" = "26M",
+                            "DSS-48" = "64M_JAXA",
+                            "DSS-54" = "34M_BWG",
+                            "DSS-55" = "34M_SBW",
+                            "DSS-61" = "34M_HEF",
+                            "DSS-62" = "34M_HEF",
+                            "DSS-63" = "70M",
+                            "DSS-65" = "34M_HEF",
+                            "DSS-66" = "26M",
+                            "DSS-38" = "34M_JAXA",
+                            "DSS-73"  = "15M_ESA",
+                            "DSS-74" = "35M_ESA",
+                            "DSS-75" = "15M_ESA",
+		            "DSS-83" = "35M_ESA",
+		            "DSS-84" = "35M_ESA",
+		            "DSS-85" = "13M_SSC",
+			    "Mauna Kea"     = "Optical",
+			    "Cerro Paranal" = "Optical",
+			    "Cerro Tololo"  = "Optical",
+			    "La Palma"      = "Optical",
+			    "Mount John"    = "Optical",
+			    "Greenbank"     = "Non-DSN",
+			    "VLA"           = "Non-DSN",
+			    "OCTL"          = "Optical",
+			    "ASFS"       = "11M",
+			    "AS3S"       = "11M",
+			    "MC1S"       = "10M",
+			    "DXAS"       = "10M",
+			    "SG1S"       = "11M",
+			    "KLMS"       = "11M",
+			    "SG3S"       = "13.6M",
+			    "TR2S"       = "7.3M",
+			    "WAPS"       = "11M"
+
+];
+
+function time timeFromEncounterCa(time t, string encounterName);
+
+
+function timeFromEncounterCa( t, encounterName )
+   parameters
+    t: time default to 2000-001T00:00:00 ;
+    encounterName: string default to "";
+{
+    if (encounterName == "NA") {
+
+        return 0.0;
+    }
+    else {
+        tca: time default to some_time;
+        return to_seconds(t - tca) / 3600.0;
+    }
+}
+
+function ComputeMaxTrackingRate(DSS,Axis)
+    parameters
+	DSS: string default to "";
+	Axis: string default to "";
+{
+	if ( AntennaType[DSS] == "34M_HEF" || AntennaType[DSS] == "34M_BWG" || AntennaType[DSS] == "70M" ){
+
+		return 2.0;
+	}
+	else{
+		return 1.0;
+	}
+
+}
+
+resource ElevationRate: consumable float
+    begin
+        attributes
+            "Units" = "Degrees/Second";
+	    "Interpolation" = true;
+	    "Subsystem" = "Ground";
+	    "Error High" = ComputeMaxTrackingRate(id,"El");
+        parameters
+            elevation_rate: float default to 0.0;
+        profile
+            0.0;
+        usage
+             currentval()-elevation_rate;
+    end resource ElevationRate
+
+

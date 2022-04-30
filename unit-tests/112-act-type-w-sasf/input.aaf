@@ -1,0 +1,60 @@
+apgen version "usage"
+
+global array A = ["one" = 23, "two" = 24];
+directive A["one"] = 50;
+
+resource StateScalar: state integer
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: integer default to 1;
+	states
+		0, 1, 2, 3, 4;
+	profile
+		0;
+	usage
+		x;
+    end resource StateScalar
+
+activity type useStateScalar
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "scalars";
+		"SASF" = [1,2,3];
+	parameters
+		a: integer default to 4;
+	modeling
+		use StateScalar(a) from start to finish;
+    end activity type useStateScalar
+
+activity type testStateScalar
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 00:30:00.000;
+		"Legend" = "testers";
+	modeling
+		measured: integer default to StateScalar.currentval();
+		write_to_stdout(get_id_of(this), ": measured = ", measured, "\n");
+    end activity type testStateScalar
+
+
+activity instance Foo of type useStateScalar id James_Bond_007
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-039T09:40:00.000;
+	parameters
+		(1);
+    end activity instance Foo
+
+activity instance Bar of type testStateScalar id James_Bond_007
+    begin
+	attributes
+		"Duration" = 00:30:00.000;
+		"Start" = 2020-039T09:42:00.000;
+    end activity instance Bar

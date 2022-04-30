@@ -1,0 +1,42 @@
+#!/bin/sh
+function cleanup
+{
+echo "recursively deleting $1"
+# find "." -name $1 "-exec" "rm -rf" "{}" ";" >&/dev/null
+find "." -name $1 -exec rm -rf {} +
+}
+
+function cleanupdir
+{
+echo "recursively deleting $1"
+find "." -name $1 "-exec" "rm" "-rf" "{}" ";" >&/dev/null
+}
+#
+# remove all autotool files that may be specific to another machine
+cleanupdir autom4te.cache
+cleanup compile
+cleanup config.cache
+cleanup config.status
+cleanup config.sub
+cleanup config.h.in
+cleanup config.guess
+cleanup config.sub
+cleanup stamp-h.in
+cleanup Makefile.in
+cleanup Makefile
+cleanup configure
+cleanup aclocal.m4
+cleanup libtool
+cleanup ltmain.sh
+cleanup ltconfig
+cleanup depcomp
+cleanup install-sh
+cleanup mkinstalldirs
+cleanup ylwrap
+cleanup missing
+
+#
+# This does not work because the cleanup function does not
+# delete directories whose name starts with a period
+#
+# cleanup .deps

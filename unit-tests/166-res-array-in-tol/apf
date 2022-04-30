@@ -1,0 +1,23 @@
+apgen version "act-res-1.aaf"
+
+activity instance Bar of type setStateVector id James_Bond_008
+    begin
+	attributes
+		"Start" = 2020-002T02:02:02.020;
+		"Duration" = 1:00:02;
+		"Color" = "Purple";
+		"Legend" = "bars";
+	parameters
+		(6, "two", "CC");
+    end activity instance Bar
+
+activity instance Bar of type setStateVector id James_Bond_009
+    begin
+	attributes
+		"Start" = 2020-002T04:02:02.020;
+		"Duration" = 1:00:02;
+		"Color" = "Purple";
+		"Legend" = "bars";
+	parameters
+		(2, "one", "CC");
+    end activity instance Bar

@@ -1,0 +1,54 @@
+apgen version "get_id_of"
+
+resource R: consumable integer
+    begin
+	attributes
+	    "Subsystem" = "Geom";
+	    "Units" = "fm";
+	parameters
+	    x: integer default to 0;
+	profile
+	    0.;
+	usage
+	    -x;
+    end resource R
+
+resource A1: abstract
+    begin
+	parameters
+	    x: integer default to 0;
+	modeling
+	    write_to_stdout("A1's parent: ", parent, " parent's ID: ", get_id_of(parent), "\n");
+	    use R(x);
+    end resource A1
+
+resource A2: abstract
+    begin
+	parameters
+	    y: integer default to 0;
+	modeling
+	    write_to_stdout("A2's parent: ", parent, " parent's ID: ", parent.id, "\n");
+	    use A1(y);
+    end resource A2
+
+activity type A
+    begin
+	attributes
+	    "Duration" = 1:00:00;
+	parameters
+	    a: integer default to 1;
+	modeling
+	    use A1(a);
+	    wait for span;
+	    use A2(a);
+    end activity type A
+
+activity instance A of type A
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Start" = 2021-100T00:00:00;
+	parameters
+	    (12);
+    end activity instance A
+

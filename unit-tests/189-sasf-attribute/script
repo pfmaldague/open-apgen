@@ -1,0 +1,10 @@
+APGEN script version "apgen-X.4.01-Custom - Mon Aug 26 11:49:44 PDT 2019"
+# udef=EHM udef library version 3.0.beta - build date:  Thu 22 Aug 2019 04:08:36 PM PDT 
+# user=maldague
+# date=2019-238T21:13:37.000
+# hostname=scriabin
+# n_apgen_files=0
+OPENFILE 189-sasf-attribute/input.aaf
+OPENFILE 189-sasf-attribute/input.apf
+BUILD
+NEWACTDISPLAY

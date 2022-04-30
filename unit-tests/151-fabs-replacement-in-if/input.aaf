@@ -1,0 +1,8 @@
+apgen version "Ooof"
+
+function fancy_if()
+   {
+   if (fabs(DeviceLoad["Ka_Band_Amplifier_Tube_and_Electron_Gun"].value(start+span/2.0) > 0.00001 )) {
+      write_to_stdout("OK\n");
+   }
+   }

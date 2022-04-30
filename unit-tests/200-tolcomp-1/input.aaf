@@ -1,0 +1,141 @@
+apgen version "tolcomp"
+
+function Linear(x, s)
+parameters
+    x: time default to 2000-001T00:00:00;
+    s: time default to 2000-001T00:00:00;
+    {
+    return (x - s) / 1T00:00:00;
+    }
+
+# period = 1 day
+function Cos_1_day(x, s)
+parameters
+    x: time default to 2000-001T00:00:00;
+    s: time default to 2000-001T00:00:00;
+    {
+    return cos(pi * 2.0 * ((x - s) / 1T00:00:00));
+    }
+
+# period = 1.001 day
+function Cos_1_point_001_day(x, s)
+parameters
+    x: time default to 2000-001T00:00:00;
+    s: time default to 2000-001T00:00:00;
+    {
+    return cos(pi * 2.0 * ((x - s) / 1T00:00:00) / 1.001);
+    }
+
+resource system_state: state string
+    begin
+	parameters
+	    s: string default to "periodic";
+	states
+	    "periodic_1",
+	    "periodic_2",
+	    "constant",
+	    "linear";
+	profile
+	    "periodic_1";
+	usage
+	    s;
+    end resource system_state
+
+resource periodic: settable float
+    begin
+	attributes
+	    "Interpolation" = true;
+	parameters
+	    x: float default to 0.0;
+	    s: float default to 1.0;
+	default
+	    0.0;
+	usage
+	    x * s;
+    end resource periodic
+
+activity type periodic_usage
+    begin
+	attributes
+	    "Legend" = "Periodic";
+	    "Color" = "Purple";
+	    "Duration" = dur;
+	parameters
+	    dur: duration default to 10T00:00:00;
+	    style: string default to "periodic_1";
+	    deltaT: duration default to 1:00:00;
+	    scale: float default to 1.000;
+	modeling
+	    t: time default to start;
+	    val: float default to 0.0;
+
+	    // start in a clear state
+	    set periodic(0.0, scale) immediately;
+	    if(style == "constant") {
+		val = 1.0;
+	    }
+	    while(t <= finish) {
+	        if(style == "periodic_1") {
+		    val = Cos_1_day(t, start);
+		    set periodic(val, scale) immediately;
+	        } else if(style == "periodic_2") {
+		    val = Cos_1_point_001_day(t, start);
+		    set periodic(val, scale) immediately;
+	        } else if(style == "linear") {
+		    val = Linear(t, start);
+		    set periodic(val, scale) immediately;
+	        } else if(style == "constant") {
+
+		    // square wave pattern
+		    set periodic(val, scale) immediately;
+		    val = -val;
+		    set periodic(val, scale) immediately;
+		}
+		if(t < finish) {
+		    wait for deltaT;
+		}
+		t = t + deltaT;
+	    }
+
+	    // finish in a clean state
+	    set periodic(0.0, scale) immediately;
+    end activity type periodic_usage
+
+activity instance a_0 of type periodic_usage id a_0
+    begin
+	attributes
+	    "Start" = 2020-001T00:00:00;
+	parameters
+	    (
+	    3T00:00:00,   // dur: duration default to 10T00:00:00;
+	    "periodic_1", // style: string default to "periodic_1";
+	    1:00:00,      // deltaT: duration default to 1:00:00;
+	    1.000         // scale: float default to 1.000;
+	    );
+    end activity instance a_0
+
+activity instance a_1 of type periodic_usage id a_1
+    begin
+	attributes
+	    "Start" = 2020-005T00:00:00;
+	parameters
+	    (
+	    3T00:00:00,   // dur: duration default to 10T00:00:00;
+	    "linear",     // style: string default to "periodic_1";
+	    1:00:00,      // deltaT: duration default to 1:00:00;
+	    1.000         // scale: float default to 1.000;
+	    );
+    end activity instance a_1
+
+activity instance a_2 of type periodic_usage id a_2
+    begin
+	attributes
+	    "Start" = 2020-009T00:00:00;
+	parameters
+	    (
+	    3T00:00:00,   // dur: duration default to 10T00:00:00;
+	    "constant",   // style: string default to "periodic_1";
+	    3:00:00,      // deltaT: duration default to 1:00:00;
+	    1.000         // scale: float default to 1.000;
+	    );
+    end activity instance a_2

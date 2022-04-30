@@ -1,0 +1,13 @@
+APGEN version "apgen-9.8.9B-Unknown build"
+
+
+directive "Activity Legend Layout" = [
+    "",
+    [ "Generic_Activities", 108 ]
+    ];
+directive "Resource Legend Layout" = [
+    "",
+    [ "rA", 100 ], 
+    [ "rB", 100 ], 
+    [ "rC", 100 ]
+    ];

@@ -1,0 +1,13 @@
+apgen version "assignment"
+
+function tell(n)
+    parameters
+	n: integer default to 0;
+	{
+	write_to_stdout("n: ", n, "\n");
+	return n;
+	}
+
+global float F = 2.2;
+global integer I = F;
+global integer J = tell(I);

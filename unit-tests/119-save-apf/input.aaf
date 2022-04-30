@@ -1,0 +1,44 @@
+apgen version "act-res-1.aaf"
+
+resource Scalar: consumable integer
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: integer default to 1;
+	profile
+		0;
+	usage
+		-x;
+    end resource Scalar
+
+activity type useScalar
+    begin
+	mysterious: float default to 220.0;
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "scalars";
+		"SASF" = ["file" = "dummy.sasf"];
+		"Pattern" = 3;
+	parameters
+		a: integer default to 4;
+		b: string default to "horrible";
+	creation
+		description = "Has been created.";
+		description = description + " Note that mysterious is "
+			+ mysterious;
+	modeling
+		use Scalar(a);
+    end activity type useScalar
+
+activity instance Foo of type useScalar id James_Bond_007
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-039T09:42:07.823;
+		"SASF" += ["type" = "unknown"];
+	parameters
+		(-12, "Hello");
+    end activity instance Foo

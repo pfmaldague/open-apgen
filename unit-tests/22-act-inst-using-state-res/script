@@ -1,0 +1,13 @@
+APGEN script version "apgen-10.0.0pre-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2017-260T14:32:49.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 22-act-inst-using-state-res/input.aaf
+NEWACTDISPLAY
+NEWRESDISPLAY 0
+ADDRESOURCE StateScalar A1R1
+NEWHORIZON A1 FROM 2020-039T05:42:07.823 TO 2020-040T05:42:07.823
+NEWACTIVITY generic NAME generic ID generic TO 2020-039T14:48:32.729 LEGEND "scalars"
+NEWHORIZON A1 FROM 2020-039T04:42:07.823 TO 2020-040T04:42:07.823

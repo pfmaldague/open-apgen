@@ -1,0 +1,32 @@
+apgen version "faster"
+
+activity type the_child
+    begin
+	attributes
+		"Color" = "Purple";
+		"Duration" = 01:00:00;
+		"Legend" = "Children";
+	parameters
+		p: instance default to "generic";
+	modeling
+		p.a_child = this;
+    end activity type the_child
+
+activity type the_parent
+    begin
+	a_child: instance default to "generic";
+	attributes
+		"Color" = "Lavender";
+		"Duration" = 1:00:00;
+		"Legend" = "Parents";
+	nonexclusive_decomposition
+		T: time default to start;
+		the_child(this) at T;
+    end activity type the_parent
+
+activity instance Foo of type the_parent
+    begin
+	attributes
+		"Start" = 2028-163T01:00:00;
+		"Color" = "Yellow";
+    end activity instance Foo

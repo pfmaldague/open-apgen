@@ -1,0 +1,47 @@
+apgen version "usage"
+
+resource StateScalar: state integer
+    begin
+	parameters
+		x: integer default to 1;
+	states
+		0, 1, 2, 3, 4;
+	profile
+		0;
+	usage
+		x;
+    end resource StateScalar
+
+activity type testStateScalar
+    begin
+	attributes
+		"Duration" = 2:00:00;
+	parameters
+		i: integer default to 4;
+	modeling
+		measured: integer default to StateScalar.currentval();
+
+		write_to_stdout("currentval(1): ", measured, "\n");
+		set StateScalar(i);
+
+		wait for span / 2;
+
+		measured = StateScalar.currentval();
+		write_to_stdout("currentval(2): ", measured, "\n");
+
+		wait for span / 2;
+
+		reset StateScalar();
+		wait for 0:0:0;
+		measured = StateScalar.currentval();
+		write_to_stdout("currentval(3): ", measured, "\n");
+
+    end activity type testStateScalar
+
+activity instance tS of type testStateScalar
+    begin
+	attributes
+		"Start" = 2020-001T00:00:00;
+	parameters
+		(2);
+    end activity instance tS

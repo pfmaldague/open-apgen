@@ -1,0 +1,74 @@
+apgen version "curval in profile"
+
+resource A: consumable float
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: float default to 0.0;
+	profile
+		0.0;
+	usage
+		-x;
+    end resource A
+
+resource C: consumable float
+    begin
+	attributes
+		"Description" = "This resource depends on A and B";
+	profile
+		A.currentval() + 2.0 * B.currentval();
+    end resource C
+
+resource B: nonconsumable float
+    begin
+	attributes
+		"Subsystem" = "General";
+	parameters
+		x: float default to 0.0;
+	profile
+		0.0;
+	usage
+		-x;
+    end resource B
+
+activity type A_B_setter
+    begin
+	attributes
+		"Duration" = 1:0:0;
+		"Legend" = "setters";
+	parameters
+		a: float default to 1.0;
+		b: float default to 1.0;
+	modeling
+		use A(a);
+		wait for span/3;
+		use B(b) from now to now + span;
+		wait for span/6;
+		use A(-a/2);
+    end activity type A_B_setter
+
+activity instance Start of type generic
+    begin
+	attributes
+		"Start" = 2020-001T00:00:00;
+		"Duration" = 1:00:00;
+		"Color" = "Spring Green";
+    end activity instance Start
+
+activity instance Set_A_B of type A_B_setter
+    begin
+	attributes
+		"Start" = 2020-001T02:00:00;
+		"Color" = "Hot Pink";
+	parameters
+		(3.0, 2.0);
+    end activity instance Set_A_B
+
+activity instance End of type generic
+    begin
+	attributes
+		"Start" = 2020-001T08:00:00;
+		"Duration" = 1:00:00;
+		"Color" = "Orange Red";
+    end activity instance End

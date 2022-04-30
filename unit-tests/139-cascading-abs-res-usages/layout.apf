@@ -1,0 +1,14 @@
+APGEN version "apgen-X-pre-sept-13-Unknown build"
+
+
+directive "Activity Legend Layout" = [
+    "",
+    [ "Timing", 32 ], 
+    [ "Downlink", 32 ], 
+    [ "D/L", 32 ]
+    ];
+directive "Resource Legend Layout" = [
+    "",
+    [ "TLM_MODE", 100 ], 
+    [ "RATE[\"FOO\"]", 100 ]
+    ];

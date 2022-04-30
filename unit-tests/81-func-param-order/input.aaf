@@ -1,0 +1,14 @@
+apgen version "parameter order"
+
+function F(f, s)
+    parameters
+	s: string default to "";
+	f: float default to 0.0;
+	{
+	t: string default to "";
+	t = s + f;
+	write_to_stdout("returning ", t, "\n");
+	return t;
+	}
+
+global string S = F(3.141592, "Pi = ");

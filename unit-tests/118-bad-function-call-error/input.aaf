@@ -1,0 +1,14 @@
+apgen version "bad call"
+
+function I(a, b, c)
+    parameters
+	a: integer default to 0;
+	b: string default to "";
+	c: float default to 0;
+	{
+		c = 1.0 + a;
+		return c;
+	}
+
+global integer X = I(3, "hello", 3.14);
+global integer Y = I("hello", 3.14);

@@ -1,0 +1,19 @@
+apgen version "foo"
+
+
+global float X = 20.0;
+global array a = [20, 30, 40];
+
+function compare_X(f, A)
+    parameters
+	f: float default to 0.0;
+	A: array default to [0, 0, 0];
+{
+	K: integer default to 0;
+	K = A[0];
+	// write_to_stdout("f: ", f, ", A: ", A, ", f - A[0]: ", f - A[0], "\n");
+	write_to_stdout("K: ", K, "\n");
+	return true;
+}
+
+global boolean B = compare_X(X, a);

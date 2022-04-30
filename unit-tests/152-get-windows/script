@@ -1,0 +1,25 @@
+APGEN script version "apgen-9.8.8c-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2016-271T20:47:18.000
+# hostname=LMC-052973
+# n_apgen_files=0
+OPENFILE 152-get-windows/input.aaf
+OPENFILE 152-get-windows/layout.apf
+
+# not ready for this yet:
+# OPENFILE 152-get-windows/apgen-tol.xml
+
+OPENFILE 152-get-windows/input.apf
+NEWACTDISPLAY
+NEWRESDISPLAY 0
+NEWHORIZON A1 FROM 2013-267T23:48:29.238 TO 2013-275T10:37:19.402
+NEWACTIVITY decompose_via_windows NAME decompose_via_windows ID decompose_via_windows TO 2013-271T00:45:31.601 LEGEND "VIEW_PERIODS"
+
+# use this if get_windows is used in an expansion section:
+SCHEDULEACTIVITY ID decompose_via_windows
+
+# use this if get_windows is used in a decomposition section:
+# DETAILACTIVITY ID decompose_via_windows
+
+#QUIT 0

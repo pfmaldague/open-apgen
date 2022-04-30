@@ -1,0 +1,19 @@
+apgen version "faster"
+
+function A(i)
+    parameters
+	i: integer default to 0;
+    {
+	i = i + 2;
+	return i;
+}
+
+function B(x, y)
+    parameters
+	x: integer default to 0;
+	y: integer default to 1;
+    {
+	z: integer default to x * y;
+	z = z + A(y);
+	return x;
+}

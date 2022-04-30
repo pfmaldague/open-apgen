@@ -1,0 +1,16 @@
+apgen version "confused array elements"
+
+function do_something()
+    {
+    nothing: string default to "hello";
+    args: array default to [];
+    stringvar: string default to "act_id_2";
+    args["act"] = ["act_id_1"];
+    write_to_stdout("args (1): ", args, "\n");
+    args = [];
+    args["act"] = [stringvar];
+    write_to_stdout("args (2): ", args, "\n");
+    return nothing;
+    }
+
+global string S = do_something();

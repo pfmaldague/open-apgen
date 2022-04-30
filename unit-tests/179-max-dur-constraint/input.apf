@@ -1,0 +1,282 @@
+apgen version "V1"
+
+directive "Legend" = "111-forb-overlap";
+directive "Legend" = "222-forb-overlap";
+directive "Legend" = "forb-cond";
+directive "Legend" = "max duration";
+directive "Legend" = "111-req-contain";
+directive "Legend" = "222-req-contain";
+directive "Legend" = "333-req-contain";
+directive "Legend" = "req-follower";
+directive "Legend" = "111-req-preceder";
+directive "Legend" = "222-req-preceder";
+directive "Legend" = "req-prereq";
+
+
+
+
+
+
+
+activity instance Usemd_J of type Usemd_J
+    begin
+        attributes
+            "Color" = "Sky Blue";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "max duration";
+            "Pattern" = 56;
+            "Start" = 1998-160T00:00:00;
+        parameters
+
+#
+# md_J -> "Off"; will trigger rule if md_X goes less than 20:
+            ("Off");
+    end activity instance Usemd_J
+
+activity instance Usemd_X of type Usemd_X
+    begin
+        attributes
+            "Color" = "Orange Red";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "max duration";
+            "Pattern" = 56;
+            "Start" = 1998-160T01:00:00;
+        parameters
+#
+# md_X -> 19, which is less than 20:
+#
+            (11);
+    end activity instance Usemd_X
+
+activity instance Usemd_J of type Usemd_J
+    begin
+        attributes
+            "Color" = "Sky Blue";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "max duration";
+            "Pattern" = 56;
+            "Start" = 1998-160T06:00:00;
+        parameters
+#
+# md_J -> "On"; was "Off" for 5 hours, will trigger a violation:
+#
+            ("On");
+    end activity instance Usemd_J
+
+activity instance Usemd_X of type Usemd_X
+    begin
+        attributes
+            "Color" = "Orange Red";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "max duration";
+            "Pattern" = 56;
+            "Start" = 1998-160T07:00:00;
+        parameters
+#
+# md_X -> 41, which is more than 20; rule cannot be triggered:
+#
+            (-11);
+    end activity instance Usemd_X
+
+activity instance Usemd_J of type Usemd_J
+    begin
+        attributes
+            "Color" = "Sky Blue";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "max duration";
+            "Pattern" = 56;
+            "Start" = 1998-160T08:00:00;
+        parameters
+#
+# md_J -> "Off" - rule will be triggered if md_X turns less than 20 for > 4 hours:
+#
+            ("Off");
+    end activity instance Usemd_J
+
+activity instance Usemd_J of type Usemd_J
+    begin
+        attributes
+            "Color" = "Sky Blue";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "max duration";
+            "Pattern" = 56;
+            "Start" = 1998-160T09:00:00;
+        parameters
+
+#
+# md_J -> "On" - cannot trigger rule
+#
+            ("On");
+    end activity instance Usemd_J
+
+activity instance Usemd_X of type Usemd_X
+    begin
+        attributes
+            "Color" = "Orange Red";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "max duration";
+            "Pattern" = 56;
+            "Start" = 1998-160T10:00:00;
+        parameters
+
+#
+# md_X -> 14 which is < 20; rule will be triggered if md_J -> "Off" for > 4 hours:
+#
+            (16);
+    end activity instance Usemd_X
+
+activity instance Usemd_X of type Usemd_X
+    begin
+        attributes
+            "Color" = "Orange Red";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "max duration";
+            "Pattern" = 56;
+            "Start" = 1998-160T15:00:00;
+        parameters
+
+#
+# md_X -> 46 which is > 20; however, prev value was 14 for 5 hours. Rule is violated.
+#
+            (-16);
+    end activity instance Usemd_X
+
+activity instance Usemd_J of type Usemd_J
+    begin
+        attributes
+            "Color" = "Sky Blue";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "max duration";
+            "Pattern" = 56;
+            "Start" = 1998-160T18:00:00;
+        parameters
+            ("Off");
+    end activity instance Usemd_J
+
+activity instance Usemd_X of type Usemd_X
+    begin
+        attributes
+            "Color" = "Orange Red";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "max duration";
+            "Pattern" = 56;
+            "Start" = 1998-160T19:00:00;
+        parameters
+            (1);
+    end activity instance Usemd_X
+
+activity instance Usemd_J of type Usemd_J
+    begin
+        attributes
+            "Color" = "Sky Blue";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "max duration";
+            "Pattern" = 56;
+            "Start" = 1998-161T20:00:00;
+        parameters
+            ("On");
+    end activity instance Usemd_J
+
+
+activity instance Usefc_X of type Usefc_X
+    begin
+        attributes
+            "Color" = "Orange Red";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "forb-cond";
+            "Pattern" = 56;
+            "Start" = 1998-160T21:00:00;
+        parameters
+            (16);
+    end activity instance Usefc_X
+
+activity instance Usefc_H of type Usefc_H
+    begin
+        attributes
+            "Color" = "Sky Blue";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "forb-cond";
+            "Pattern" = 56;
+            "Start" = 1998-160T22:00:00;
+        parameters
+            ("On");
+    end activity instance Usefc_H
+
+activity instance Usefc_X of type Usefc_X
+    begin
+        attributes
+            "Color" = "Orange Red";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "forb-cond";
+            "Pattern" = 56;
+            "Start" = 1998-160T23:00:00;
+        parameters
+            (-11);
+    end activity instance Usefc_X
+
+activity instance Usefc_H of type Usefc_H
+    begin
+        attributes
+            "Color" = "Sky Blue";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "forb-cond";
+            "Pattern" = 56;
+            "Start" = 1998-160T24:00:00;
+        parameters
+            ("Off");
+    end activity instance Usefc_H
+
+activity instance Usefc_X of type Usefc_X
+    begin
+        attributes
+            "Color" = "Orange Red";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "forb-cond";
+            "Pattern" = 56;
+            "Start" = 1998-160T25:00:00;
+        parameters
+            (17);
+    end activity instance Usefc_X
+
+activity instance Usefc_X of type Usefc_X
+    begin
+        attributes
+            "Color" = "Orange Red";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "forb-cond";
+            "Pattern" = 56;
+            "Start" = 1998-160T26:00:00;
+        parameters
+            (-7);
+    end activity instance Usefc_X
+
+activity instance Usefc_X of type Usefc_X
+    begin
+        attributes
+            "Color" = "Orange Red";
+            "Description" = "";
+            "Duration" = 00:35:00;
+            "Legend" = "forb-cond";
+            "Pattern" = 56;
+            "Start" = 1998-160T27:00:00;
+        parameters
+            (6);
+    end activity instance Usefc_X
+

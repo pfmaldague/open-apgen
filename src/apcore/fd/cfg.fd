@@ -1,0 +1,37 @@
+CONFIG
+# used to extract info from configuration files for apgen's benefit
+file: header record*
+					< global string ScriptContents "Used to create the script that will do the conversion" >
+					< ScriptContents = "CATALOG TRIGGER interesting_cfg_file_events\n" >
+					< ScriptContents = ScriptContents ++ "CATALOG PROGRAM write_start_mark\n" >
+					< ScriptContents = ScriptContents ++ "CATALOG PROGRAM write_cfg_strips_and_formats\n" >
+					< ScriptContents = ScriptContents ++ "CATALOG PROGRAM write_stop_mark\n" >
+					< ScriptContents = ScriptContents ++ "FILE EXIT NOSAVE\n" >
+	end
+header: "DEFINE DESCRIPTOR" continuation_line* any* "\n" end
+continuation_line: any* "\\\n" end
+record:
+	if( "DEFINE STRIP" )		< RecordType = "strip" >
+		" NAME "		< start Name >
+		any*			< end Name >
+		" " any*
+		[description]
+		continuation_line* any* "\n"
+	else if( "DEFINE FORMAT" )	< RecordType = "format" >
+		" NAME "		< start Name >
+		any*			< end Name >
+		" " any*
+		[description]
+		continuation_line* any* "\n"
+	else				< RecordType = "other" >
+		continuation_line* any* "\n"
+	endif
+	end
+
+description:
+		"DESCRIPTION \""	< start description >
+		special_string* any*	< end description >
+		"\""
+end
+special_string: any* "\\?" end
+	

@@ -1,0 +1,6 @@
+apgen version "resources out of order 1"
+
+resource R: consumable float {
+	parameters
+		x: float default to 0.0;
+}

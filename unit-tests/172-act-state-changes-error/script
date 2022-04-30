@@ -1,0 +1,14 @@
+APGEN script version "apgen-10.0.0pre-nov-05-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2017-314T00:01:21.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 172-act-state-changes-error/input.aaf
+OPENFILE 172-act-state-changes-error/input.apf
+OPENFILE 172-act-state-changes-error/layout.apf
+NEWACTDISPLAY
+NEWRESDISPLAY 0
+NEWHORIZON A1 FROM 2013-267T23:48:29.238 TO 2013-275T10:37:19.402
+SCHEDULEACTIVITY ID decompose_via_windows
+#QUIT 0

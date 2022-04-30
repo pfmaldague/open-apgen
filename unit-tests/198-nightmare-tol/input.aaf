@@ -1,0 +1,60 @@
+apgen version "act-res-1.aaf"
+
+resource Foo: settable string
+    begin
+	attributes
+		"Units" = "silver coins";
+	parameters
+		x: string default to "";
+	default
+		"Nothing much :-[\n   although wait;\n    on 2nd thought, no.\n";
+	usage
+		x;
+    end resource Foo
+
+activity type setFoo
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "vectors";
+	parameters
+		a: array default to ["one;\ntwo;\nthree;\n" = ["one = 2", ";\n", "two = 1"]];
+		b: string default to "three";
+	modeling
+		x: string default to b + " again;\n";
+
+		set Foo(x);
+		// wait for 1:00:00;
+		write_to_stdout(now, " - ", "activity before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity after wait (10:00)...\n");
+		x = x + "  again;\n";
+		set Foo(x);
+		write_to_stdout(now, " - ", "activity before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity after wait (10:00)...\n");
+		x = x + "  again;\n";
+		set Foo(x);
+		write_to_stdout(now, " - ", "activity before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity after wait (10:00)...\n");
+		x = x + "  again;\n";
+		set Foo(x);
+		write_to_stdout(now, " - ", "activity before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity after wait (10:00)...\n");
+		x = x + "  again;\n";
+		set Foo(x);
+		write_to_stdout(now, " - ", "activity before wait (10:00)...\n");
+		wait for 10:00;
+		write_to_stdout(now, " - ", "activity after wait (10:00)...\n");
+		x = x + "  again;\n";
+		set Foo(x);
+		write_to_stdout(now, " - ", "activity before wait (9:00)...\n");
+		wait for 9:00;
+		write_to_stdout(now, " - ", "activity after wait (9:00)...\n");
+		x = x + "  again;\n";
+		set Foo(x);
+		
+    end activity type setFoo

@@ -1,0 +1,13 @@
+apgen version "test simple globals"
+
+function write_line( line )
+	parameters
+		line:string default to "";
+	{
+		write_to_stdout( "STDOUT:", line, "\n");
+		return "hello";
+	}
+
+global string S1 = "Never again";
+
+directive S1 = write_line("some other string");

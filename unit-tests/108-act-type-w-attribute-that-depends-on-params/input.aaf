@@ -1,0 +1,26 @@
+apgen version "act-res-1.aaf"
+
+global array A = ["one", "two", "three"];
+global array B = ["AA", "BB", "CC"];
+
+activity type useScalar
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = a;
+	parameters
+		a: string default to "hello";
+    end activity type useScalar
+
+activity type useVector
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "vectors";
+	parameters
+		a: integer default to 4;
+		b: string default to "three";
+		c: string default to "BB";
+    end activity type useVector

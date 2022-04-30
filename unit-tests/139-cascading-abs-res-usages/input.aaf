@@ -1,0 +1,117 @@
+APGEN version 2 + 2
+
+resource TLM_MODE: state string
+    begin
+	parameters
+		x: string default to "";
+	states
+		"INACTIVE", "ACTIVE";
+	profile
+		"INACTIVE";
+	usage
+		x;
+    end resource TLM_MODE
+
+resource RATE["FOO", "VR_04_VIR"]: nonconsumable float
+    begin
+	parameters
+		x: float default to 0.0;
+	profile
+		0.0;
+	usage
+		-x;
+    end resource RATE
+
+resource VOLUME_UPDATE: abstract
+    begin
+	parameters
+		p: string default to "";
+	modeling
+		write_to_stdout("VOLUME_UPDATE: p = ", p, "\n");
+    end resource VOLUME_UPDATE
+
+resource VOLUME_USAGE: abstract
+ begin
+        parameters
+	    Device:	       string default to "";
+            Volume:            float   default to 10.00;
+            Rate:              float    default to 1000.0;
+            End:               time default to now;
+        modeling
+	    write_to_stdout(now, " - SPAWN_VOLUME_USAGE called [", start, "], End = ", End, "\n");
+            use VOLUME_UPDATE(Device);
+            use RATE[Device](Rate) from now to End;
+    end resource VOLUME_USAGE
+
+
+
+resource SPAWN_VOLUME_USAGE: abstract
+    begin
+        parameters
+	    Instrument:	string default to "VR_04_VIR";
+            Rate:              float    default to 1.0;
+        resource usage
+	    write_to_stdout(now, " - SPAWN_VOLUME_USAGE called [", start, ", ", finish, "]\n");
+            use VOLUME_USAGE(Instrument, 100.0, Rate, finish) at start;
+    end resource SPAWN_VOLUME_USAGE
+
+resource DOWNLINK_USAGE: abstract
+    begin
+        parameters
+            DownlinkRate:              float    default to 2.09;
+	modeling
+	    write_to_stdout(now, " - DOWNLINK_USAGE called [", start, ", ", finish, "], rate = ",
+		DownlinkRate, "\n");
+	    if(DownlinkRate > 0.0) {
+		write_to_stdout("    case 1\n");
+	    	use SPAWN_VOLUME_USAGE("VR_04_VIR", -DownlinkRate) from start to start + 1:00:00;
+	    } else {
+		write_to_stdout("    case 2\n");
+	    	use SPAWN_VOLUME_USAGE("VR_04_VIR", DownlinkRate) from start to start + 1:00:00;
+	    }
+    end resource DOWNLINK_USAGE
+
+activity type DOWNLINK
+    begin
+        attributes
+            "Legend" = "Downlink";
+            "Duration" = 08:00:00;
+            "Color" = "Orange";
+            "Pattern" = 0;
+            "Description" = "Select playback telemetry mode from list.  Delay = downlink margin in minutes.";
+        parameters
+            TelemetryMode: string default to "ACTIVE";
+	    DownlinkRate:  float default to 4.00;
+        resource usage
+	    if(TelemetryMode == "ACTIVE") {
+            	use TLM_MODE(TelemetryMode)   from start to finish;
+	    }
+            use DOWNLINK_USAGE(DownlinkRate) from start to finish;
+    end activity type DOWNLINK
+
+activity instance Start of type generic
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 1:00:00;
+	    "Start" = 2020-001T00:00:00;
+	    "Legend" = "Timing";
+    end activity instance Start
+
+activity instance DL of type DOWNLINK
+    begin
+	attributes
+	    "Start" = 2020-001T02:00:00;
+	    "Legend" = "D/L";
+	parameters
+		("ACTIVE", 5.00);
+    end activity instance DL
+
+activity instance End of type generic
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 1:00:00;
+	    "Start" = 2020-002T00:00:00;
+	    "Legend" = "Timing";
+    end activity instance End

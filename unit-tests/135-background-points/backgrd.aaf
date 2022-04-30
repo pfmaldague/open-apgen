@@ -1,0 +1,379 @@
+apgen version "E5"
+
+resource deltat: nonconsumable float
+  begin
+    profile
+      to_seconds(now - 1996-170T00:00:00);
+    usage
+      10.0;
+  end resource deltat
+
+resource missionPhase : state string
+    begin
+       parameters
+          CurrentPhase : string default to "Null";
+       states
+          "Don'tCare","Null","PhaseI","PhaseII","PhaseIII";
+       profile
+          "Don'tCare" until 1996-160T00:00:00
+	  then "Null" until 1996-161T00:00:00
+	  then "PhaseI" until 1996-162T00:00:00
+	  then "PhaseIII";
+       usage
+          CurrentPhase;
+    end resource missionPhase
+
+resource StationAllocation : state string
+    begin
+	parameters
+		on_off: string default to "OFF";
+	states
+		"ON","OFF";
+	profile
+		"OFF";
+	usage
+		on_off;
+    end resource StationAllocation
+
+#resource ThinkHard : abstract
+#   begin
+#	parameters
+#		number_of_thoughts: integer default to 11 ;
+#	resource usage
+## remember: 1st arg. is rate, 2nd arg. is time (in seconds)
+#		use Fuel( number_of_thoughts * 4 , 3.0 ) ;
+#   end resource ThinkHard
+
+#resource FigureThingsOut : abstract
+#   begin
+#	parameters
+#		number_of_instr : integer default to 1 ;
+#	resource usage
+## remember: 2 parameters (1) wattsconsumerate (2) numberOfusages
+##
+## NOTE: THE FOLLOWING LINE GIVES A CRYPTIC ERROR MESSAGE...
+##               use Amps( number_of_instr , 7.5 ) ;
+#		use Amps( number_of_instr , 7 ) ;
+#		use ThinkHard( number_of_instr * 2 ) ;
+#   end resource FigureThingsOut
+
+
+#resource missionAlloc : abstract
+#    begin
+#        parameters
+#            newPhase : integer default to 0;
+#            missionPhase : string default to "Null";
+#            numberOfMaxInstruments : integer default to 5;
+#        resource usage
+#		set missionPhase(missionPhase)
+#			when newPhase!=0;
+#		use missionPhase(missionPhase);           
+#		use MaxInstrument( numberOfMaxInstruments ) ;
+#		use FigureThingsOut( numberOfMaxInstruments ) ;
+#    end resource missionAlloc
+
+
+
+resource Amps : nonconsumable float
+    begin
+	attributes
+	    "Units" = "amp.";
+        parameters
+            wattsconsumerate : float default to 2.52;
+            numberOfusages : integer default to 1;
+        profile
+            1500*cos( ( now - 1996-164T00:00:00 ) / 40:00:30) until 1996-164T00:00:00
+	    then 750 * ( 1.0 + cos( ( now - 1996-164T00:00:00 ) / 20:00:30 ) ) ;
+        usage
+            wattsconsumerate * numberOfusages ;
+    end resource Amps
+    
+
+resource  MaxInstrument : nonconsumable integer
+    begin
+	attributes
+	    "Units" = "# of instr.";
+        parameters
+            numberOfinstruments : integer default to 5;
+        profile
+            15;
+        usage
+            numberOfinstruments;
+    end resource MaxInstrument
+    
+    
+    
+resource Fuel : consumable float
+    begin
+	attributes
+	    "Units" = "lbs.";
+        parameters
+            consumptionPerSec : float default to 1.7;
+            how_long : float default to 1.0;
+        profile
+#            550*exp(-(deltat.currentval()/0:01/87.7)*(log(2)));
+	     550*exp( - ( deltat.currentval() / to_seconds(24:01:00) ) ) ;
+        usage
+            Fuel.currentval()/2.0;
+    end resource Fuel
+
+
+#activity type TestSummary
+#    begin
+#        attributes
+#            "TestVersion" = "E5 Jan18";
+#            "DescriPtion" = "Computational check and Decomposition/Resolution
+#                             test";
+#    end activity type WRONG_TYPE
+#    end activity type TestSummary
+
+
+activity type Station
+    begin
+	attributes
+		"Duration" = 4:00:00;
+		"Legend" = "Special for David";
+	resource usage
+		set StationAllocation( "ON" ) at start;
+		set StationAllocation( "OFF" ) at finish;
+    end activity type Station
+
+
+activity type ConsumeWatts
+    begin
+        attributes
+            "Color" = "Cadet Blue";
+            "Pattern" = 45;
+            "Duration" = 12:30:00;
+	parameters
+	    wattspersecond : local float default to 5.04;
+	    ampspersecond : local float default to 1.26;
+	resource usage
+	    use Amps(ampspersecond*ampspersecond,4);
+    end activity type ConsumeWatts
+
+activity type ResetMissionPhase
+    begin
+        attributes
+            "Color" = "Dodger Blue";
+            "Pattern" = 40;
+            "Duration" = 1:00:00;
+	resource usage
+	    reset missionPhase() at start;
+    end activity type ResetMissionPhase
+
+#activity type OffsetConsumeWatts
+#    begin
+#        attributes
+#            "Color" = "Cadet Blue";
+#            "Pattern" = 45;
+#            "Duration" = 12:30:00;
+#	parameters
+#	    wattspersecond : local float default to 5.04;
+#	    ampspersecond : local float default to 1.26;
+#	    third_param : local integer default to 1;
+#	resource usage
+#	    use Amps(ampspersecond*ampspersecond,4)
+#	        at start+00:00:03;
+#    end activity type OffsetConsumeWatts
+
+
+#activity type RotatePlatform
+#    begin
+#        attributes
+#            "Color" = "Cadet Blue";
+#            "Pattern" = 45;
+#            "Duration" = 5:30:00;
+#        parameters
+#            numberOfwatts : local float default to 1. ;
+#            numberOfplatform : local integer default to 1;
+#        resource usage
+#            use Amps(numberOfwatts,numberOfplatform)
+#                from start-30:00
+#                to finish+30:00
+#                when numberOfplatform <4;
+#	    set missionPhase( "PhaseIII" ) ;
+#    end activity type RotatePlatform
+
+
+#activity type Mosaic
+#    begin
+#        attributes
+#            "Color" = "Aquamarine";
+#            "Pattern" = 25;
+#            "Duration" = 3:00:00;
+#        parameters
+#            numberOfFrame : local integer default to 8;
+#            numberOfFilter : local integer default to 1;
+#            deltaPitch : local float default to 0.0;
+#            deltaRoll : local float default to 0.0;
+#            deltaYaw : local float default to 0.0;
+#            missionid : local string default to "PhaseI";
+#        resource usage
+#            set missionPhase(missionid)
+#                at start+5:00:00 ;
+#            use Fuel(Fuel.currentval(),7)
+#                at start;
+#	    use missionAlloc (
+##	newPhase : integer default to 0;
+#		1 ,
+##       missionPhase : string default to "Null";
+#		"PhaseIII" ,
+##       numberOfMaxInstruments : integer default to 5;
+#		25 ) ;
+#        decomposition
+#            Left_Yaw(3.5,8.5)
+#                at start
+#                when deltaYaw>=0.0;
+#            Left_Roll(3.5,2.5)
+#                at start+1:00:00
+#                when deltaRoll>=0.0;
+#            Pitch_Up(2.4,12)
+#                at start+2:00:00 ;
+#    end activity type Mosaic
+
+
+#activity type Left_Yaw
+#    begin
+#        attributes
+#            "Color" = "Hot Pink";
+#            "Pattern" = 25;
+#            "Duration" = Duration*2:00:2.5;
+#        parameters
+#            Duration : local float default to 2.5;
+#            Fuel_consume_sec : local float default to 3.2;
+#        resource usage
+#            use Fuel(Fuel_consume_sec,Duration)
+#                at start;
+#	    set missionPhase( "PhaseII" ) ;
+#        decomposition
+#            Yaw_motor(Duration,Fuel_consume_sec*0.6)
+#                from start
+#                to finish-30:00;
+#            Yaw_actuator(Duration,Fuel_consume_sec*0.4)
+#                from start+30:00
+#                to finish;
+#    end activity type Left_Yaw
+    
+
+
+activity type Yaw_motor
+    begin
+        attributes
+            "Color" = "Hot Pink";
+            "Pattern" = 25;
+            "Duration" = 2:00:2.5;
+        parameters
+            Duration : local float default to 2.5;
+            Fuel_consume_sec : local float default to 3.2;
+        resource usage
+            use Fuel(Fuel_consume_sec,Duration)
+                at start;
+   end activity type Yaw_motor
+
+
+
+
+#activity type Yaw_actuator
+#    begin
+#        attributes
+#            "Color" = "Hot Pink";
+#            "Pattern" = 25;
+#            "Duration" = 2:00:2.5;
+#        parameters
+#            Duration : local float default to 2.5;
+#            Fuel_consume_sec : local float default to 3.2;
+#        resource usage
+#            use Fuel(Fuel_consume_sec,Duration)
+#                at start;
+#   end activity type Yaw_actuator
+
+
+
+
+
+
+#activity type Left_Roll
+#    begin
+#        attributes
+#            "Color" = "Orange Red";
+#            "Pattern" = 25;
+#            "Duration" = 1:00:2.5;
+#        parameters
+#            Duration : local float default to 2.5;
+#            Fuel_consume_sec : local float default to 2.4;
+#        resource usage
+#            use Fuel(Fuel_consume_sec,Duration)
+#                at start
+#                when Duration<10;
+#    end activity type Left_Roll
+    
+    
+
+#activity type Pitch_Up
+#    begin
+#        attributes
+#            "Color" = "Khaki";
+#            "Pattern" = 25;
+#            "Duration" = 00:30:2.5;
+#        parameters
+#            Duration : local float default to 2.5;
+#            Fuel_consume_sec : local float default to 4.2;
+#        resource usage
+#            use Fuel(Fuel_consume_sec,Duration)
+#                at start
+#                when Duration<10;
+#        resolution
+#            Roll_Pitch(Duration,0.7*Fuel_consume_sec);
+#            Yaw_Pitch(Duration,0.3*Fuel_consume_sec);
+#    end activity type Pitch_Up
+
+
+#activity type Roll_Pitch
+#    begin
+#        attributes
+#            "Color" = "Khaki";
+#            "Pattern" = 30;
+#            "Duration" = 00:30:2.5;
+#        parameters
+#            Duration : local float default to 2.5;
+#            Fuel_consume_sec : local float default to 4.2;
+#        resource usage
+#            use Fuel(Fuel_consume_sec,Duration)
+#                at start
+#                when Duration<10;
+#    end activity type Roll_Pitch
+
+
+#activity type Yaw_Pitch
+#    begin
+#        attributes
+#            "Color" = "Khaki";
+#            "Pattern" = 31;
+#            "Duration" = 00:30:2.5;
+#        parameters
+#            Duration : local float default to 2.5;
+#            Fuel_consume_sec : local float default to 4.2;
+#        resource usage
+#            use Fuel(Fuel_consume_sec,Duration)
+#                at start
+#                when Duration<10;
+#    end activity type Yaw_Pitch
+
+
+activity type Turn_on_Instruments
+    begin
+        attributes
+            "Color" = "Khaki";
+            "Pattern" = 31;
+            "Duration" = 00:30:00;
+        parameters
+            Nbr_on : local integer default to 3;  
+        resource usage
+            use MaxInstrument(Nbr_on/2)
+                from start
+                to finish;
+	    set missionPhase( "PhaseI" ) ;
+    end activity type Turn_on_Instruments
+
+

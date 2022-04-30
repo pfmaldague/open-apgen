@@ -1,0 +1,10 @@
+apgen version "undefined"
+
+activity instance foo of type Undefined
+    begin
+	attributes
+		"Start" = 2000-002T00:00:00;
+		"Duration" = 2:00:00;
+	parameters
+		(1, 2, 3);
+    end activity instance foo

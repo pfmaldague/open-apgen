@@ -1,0 +1,10 @@
+APGEN script version "apgen-X-dec-10-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2018-360T23:15:12.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 166-res-array-in-tol/input.aaf
+BUILD
+OPENFILE 166-res-array-in-tol/apgen-tol.xml
+NEWACTDISPLAY

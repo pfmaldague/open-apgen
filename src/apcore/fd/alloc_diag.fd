@@ -1,0 +1,98 @@
+DSN_ALLOC_DIAG
+# to read DSN allocation files into apgen
+
+file:					< time UniversalTime "UTIME" >
+					< global integer I "" >
+					< global string BaseTime "" >
+					< global duration H_and_M "" >
+					< global integer number_of_stations "" > 
+					< array DSS_number "" >
+					< array DSS_id "" >
+					< time Time1 "" >
+					< time Time2 "" >
+					< time Time3 "" >
+					< time Time4 "" >
+					< real PreCal "" >
+					< real PostCal "" >
+					< real UsableAllocation "" >
+	header
+	any* '\n' line*
+	"DATA_SET_ID" "\s"+ "=" "\s"+ "DSN_" any* "_SCHEDULE;\n"
+	line*
+	"CCSD" any* "\n"
+					< number_of_stations = 0 >
+	record*
+	end
+
+# make header trivial to force seq_review to use this FD:
+header: "CCSD" end
+
+line:	any* "\n" end
+
+record:					< start RawRecord >
+	'\s'				< start I >
+	"??"				< end I >
+					< if I \> 71 then >
+					<    I = I + 1900 >
+					< else >
+					<    I = I + 2000 >
+					< endif >
+	'\s'				< start day >
+	"???"				< end day >
+					< BaseTime = I >
+					< BaseTime = BaseTime ++ "-" ++ day ++ "T00:00:00" >
+	'\s'				< start hh1 >
+	"??"				< end hh1 >
+					< start mm1 >
+	"??"				< end mm1 >
+					< H_and_M = hh1 ++ ":" ++ mm1 ++ ":00" >
+					< Time1 = BaseTime + H_and_M >
+					< UniversalTime = Time1 >
+	'\s'				< start hh2 >
+	"??"				< end hh2 >
+					< start mm2 >
+	"??"				< end mm2 >
+					< H_and_M = hh2 ++ ":" ++ mm2 ++ ":00" >
+					< Time2 = BaseTime + H_and_M >
+					< if Time2 < Time1 then >
+					<	Time2 = Time2 + 24:00:00 >
+					< endif >
+	'\s'				< start hh3 >
+	"??"				< end hh3 >
+					< start mm3 >
+	"??"				< end mm3 >
+					< H_and_M = hh3 ++ ":" ++ mm3 ++ ":00" >
+					< Time3 = BaseTime + H_and_M >
+					< if Time3 < Time1 then >
+					<	Time3 = Time3 + 24:00:00 >
+					< endif >
+	'\s'				< start hh4 >
+	"??"				< end hh4 >
+					< start mm4 >
+	"??"				< end mm4 >
+					< H_and_M = hh4 ++ ":" ++ mm4 ++ ":00" >
+					< Time4 = BaseTime + H_and_M >
+					< if Time4 < Time1 then >
+					<	Time4 = Time4 + 24:00:00 >
+					< endif >
+					< PreCal = ( Time2 - Time1 ) / 0:0:1 >
+					< PostCal = ( Time4 - Time3 ) / 0:0:1 >
+					< UsableAllocation = ( Time3 - Time2 ) / 0:0:1 >
+	"\s"				< start DSS_station >
+	"DSS-"				< start StationLoc >
+	"??"				< end StationLoc >
+					< end DSS_station >
+					< if DSS_number( DSS_station ) \> 0 >
+					< else >
+					<     number_of_stations = number_of_stations + 1 >
+					<     DSS_number( DSS_station ) = StationLoc >
+					<     DSS_id( DSS_station ) = "DSS_" ++ StationLoc >
+					< endif >
+	'\s'
+	"??????"			< start RecordType >
+	"$21 ?"				< end RecordType >
+	'\s'				< start ConfigCode >
+	any*				< end ConfigCode >
+					< end RawRecord >
+	'\n'
+	end

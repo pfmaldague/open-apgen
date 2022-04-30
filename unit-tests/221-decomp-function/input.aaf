@@ -1,0 +1,41 @@
+apgen version "global methods"
+
+activity type child;
+
+nonexclusive_decomposition function set_current_time(a)
+    parameters
+	a: integer default to 0;
+    {
+	write_to_stdout(now, " - in global method, before; parent.T0 = ", parent.T0, "\n");
+	parent.T0 = parent.T0 + 1:01:01;
+	write_to_stdout(now, " - in global method, after;  parent.T0 = ", parent.T0, "\n");
+	child() at parent.T0;
+    }
+
+activity type child
+    begin
+	attributes
+	    "Duration" = 00:10:00;
+    end activity type child
+
+activity type foo
+    begin
+	attributes
+	    "Duration" = 1:00:00;
+	parameters
+	    T: duration default to 1:00:00;
+	nonexclusive_decomposition
+	    T0: time default to start;
+	    write_to_stdout(now, " - parent setting child at T0 = ", T0, "\n");
+	    child() at T0;
+	    set_current_time(2);
+	    write_to_stdout(now, " - parent's T0 after call to set_current_time(): ", T0, "\n");
+    end activity type foo
+
+activity instance F of type foo
+    begin
+	attributes
+	    "Start" = 2021-189T00:00:00;
+	parameters
+	    (5:00:00);
+    end activity instance F

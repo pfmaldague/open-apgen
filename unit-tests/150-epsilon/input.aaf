@@ -1,0 +1,16 @@
+apgen version "epsilon"
+
+global float epsilon = 1.0e-16;
+
+function tell_epsilon() {
+    scale: float default to 0.0;
+
+    if(scale < epsilon) {
+	write_to_stdout("scale (= 0) is less than epsilon = ", epsilon, "\n");
+    } else {
+	write_to_stdout("scale (= 0) is not less than epsilon = ", epsilon, "\n");
+    }
+    return "done";
+}
+
+global string s = tell_epsilon();

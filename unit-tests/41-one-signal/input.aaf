@@ -1,0 +1,124 @@
+apgen version "FOO"
+
+resource SendUpdateResource: abstract
+    begin
+	modeling
+		set signal("Update", ["First shot", now]);
+		set signal("Update again", ["Second shot", true]);
+		write_to_stdout(now, ": abs. res. SendUpdateResource sent the Update signal\n");
+		write_to_stdout(now, ": abs. res. SendUpdateResource waiting for the Resume signal\n");
+		wait for 0:4:0;
+		wait until "Resume";
+		A: array default to get_sender_info("Resume");
+		write_to_stdout(now, ": abs. res. SendUpdateResource got the Resume signal; info = ", A, "\n");
+    end resource SendUpdateResource
+
+resource Fuel: consumable float
+    begin
+	attributes
+		"Units" = "lbs.";
+	parameters
+		x: float default to 0.0;
+	profile
+		20.0;
+	usage
+		x;
+    end resource Fuel
+
+activity type ConsumeFuel
+    begin
+	attributes
+		"Color" = "Yellow";
+		"Duration" = 1:00:00;
+	parameters
+		y: float default to 5.0;
+	modeling
+		use Fuel(y);
+    end activity type ConsumeFuel
+
+activity type WaitForUpdate
+    begin
+	attributes
+		"Duration" = 10:00:00;
+		"Color" = "Spring Green";
+	modeling
+		wait until "Update";
+		A: array default to get_sender_info("Update");
+		write_to_stdout(now, ": act. ", get_id_of(this), " got the Update signal; info: ", A, "\n");
+		delete_signal("Update");
+		if(finish > now) {
+			wait for finish - now; }
+		write_to_stdout(now, ": act. ", get_id_of(this), " sent the Resume signal.\n");
+		set signal("Resume", ["second shot", now]);
+    end activity type WaitForUpdate
+
+activity type WaitForUpdateAgain
+    begin
+	attributes
+		"Duration" = 10:00:00;
+		"Color" = "Spring Green";
+	modeling
+		wait until "Update again";
+		A: array default to get_sender_info("Update again");
+		write_to_stdout(now, ": act. ", get_id_of(this), " got the Update again signal; info: ", A, "\n");
+		delete_signal("Update again");
+		if(finish > now) {
+			wait for finish - now; }
+		write_to_stdout(now, ": act. ", get_id_of(this), " sent the Resume signal.\n");
+		set signal("Resume", ["second shot", now]);
+    end activity type WaitForUpdateAgain
+
+activity type SendUpdate
+    begin
+	attributes
+		"Duration" = 1:00:00;
+		"Color" = "Orange Red";
+	modeling
+		use SendUpdateResource();
+    end activity type SendUpdate
+
+activity instance WaitForUpdate of type WaitForUpdate id WaitForUpdate
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "WaitForUpdate (id WaitForUpdate)";
+	    "Duration" = 10:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "inputs/simple.aaf";
+	    "Start" = 2016-073T19:00:00.000;
+	    "Status" = TRUE;
+	parameters
+	    ();
+    end activity instance WaitForUpdate
+
+activity instance WaitForUpdateAgain of type WaitForUpdateAgain id WaitForUpdateAgain
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "WaitForUpdateAgain (id WaitForUpdateAgain)";
+	    "Duration" = 10:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "inputs/simple.aaf";
+	    "Start" = 2016-073T19:00:00.000;
+	    "Status" = TRUE;
+	parameters
+	    ();
+    end activity instance WaitForUpdateAgain
+
+activity instance SendUpdate of type SendUpdate id SendUpdate
+    begin
+	attributes
+	    "Color" = "Orange Red";
+	    "Description" = "SendUpdate (id SendUpdate)";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic_Activities";
+	    "Pattern" = 0;
+	    "Plan" = "inputs/simple.aaf";
+	    "Start" = 2016-073T23:00:00.000;
+	    "Status" = TRUE;
+	parameters
+	    ();
+    end activity instance SendUpdate
+

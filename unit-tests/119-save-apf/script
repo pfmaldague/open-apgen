@@ -1,0 +1,5 @@
+apgen script version "foo"
+
+OPENFILE 119-save-apf/input.aaf
+SAVEFILE APF output-from-119.apf
+REMODEL

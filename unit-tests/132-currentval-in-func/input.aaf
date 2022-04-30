@@ -1,0 +1,40 @@
+apgen version "foo"
+
+global array DSS_stations = ["San Francisco", "Altadena", "King's Row"];
+
+resource DSS_avForDL(DSS_stations): state string
+    begin
+	attributes
+	    "Units" = "N/A";
+	parameters
+	    x: string default to "";
+	states
+	    "INACTIVE", "ACTIVE";
+	profile
+	    "INACTIVE";
+	usage
+	    x;
+    end resource DSS_avForDL
+
+
+function Any34MDSSavForDL ( ) {
+   i: integer default to 0;
+   while( i < length_of("DSS_avForDL")){
+      if ( DSS_avForDL[i].currentval() == "ACTIVE") {
+	 return "ACTIVE";
+      }
+      i = i + 1;
+   }
+   return "INACTIVE";
+}
+
+activity type use_DSS
+    begin
+	attributes
+	    "Duration" = 1:00:00;
+	parameters
+	    x: string default to "Altadena";
+	modeling
+	    use DSS_avForDL[x]("ACTIVE") from now to now + 1:00:00;
+    end activity type use_DSS
+

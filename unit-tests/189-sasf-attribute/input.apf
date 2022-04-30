@@ -1,0 +1,187 @@
+apgen version "V1"
+
+epoch launch = 1998-160T00:00:00.000 ;
+
+global array SASF_MISSION_NAME = ["output1"="Mission 1", "output2"="Mission 2", "output3"="Mission 3", "output4"="Mission 4"] ;
+global array SASF_SPACECRAFT_NAME = ["output1"="S/C 1", "output2"="S/C 2", "output3"="S/C 3", "output4"="S/C 4"] ;
+global array SASF_PRODUCER_ID = ["output1"="ID 1", "output2"="ID 2", "output3"="ID 3", "output4"="ID 4"] ;
+global array SASF_PROJECT_ACRONYM = ["output1"="P1", "output2"="P2", "output3"="P3", "output4"="P4"] ;
+global array SASF_PROJECT = ["output1"="Project 1", "output2"="Project 2", "output3"="Project 3", "output4"="Project 4"] ;
+global array SASF_SPACECRAFT_NUMBER = ["output1"="1", "output2"="2", "output3"="3", "output4"="4"] ;
+ 
+activity instance A1 of type A1
+    begin
+        attributes
+            "Color" = "Aquamarine";
+            "Description" = "This is A1";
+            "Duration" = 00:00:00;
+            "Pattern" = 25;
+            "Start" = 1998-160T00:00:00.000;
+        parameters
+            ();
+    end activity instance A1
+
+activity instance A20 of type A20
+    begin
+        attributes
+            "Color" = "Aquamarine";
+            "Description" = "This is A20";
+            "Duration" = 00:00:00;
+            "Pattern" = 25;
+            "Start" = 1998-160T01:00:00.000;
+        parameters
+            ();
+    end activity instance A20
+
+activity instance N1 of type N1
+    begin
+        attributes
+            "Color" = "Aquamarine";
+            "Description" = "This is N1";
+            "Duration" = 00:00:00;
+            "Pattern" = 25;
+            "Start" = 1998-160T02:00:00.000;
+        parameters
+            ();
+    end activity instance N1
+
+activity instance A2 of type A2
+    begin
+        attributes
+            "Color" = "Aquamarine";
+            "Description" = "This is A2";
+            "Duration" = 01:00:00;
+            "Pattern" = 25;
+            "Start" = 1998-160T03:00:00.000;
+        parameters
+            (1);
+    end activity instance A2
+
+activity instance A21 of type A21
+    begin
+        attributes
+            "Color" = "Aquamarine";
+            "Description" = "This is A21";
+            "Duration" = 01:00:00;
+            "Pattern" = 25;
+            "Start" = 1998-160T04:00:00.000;
+        parameters
+            (1);
+    end activity instance A21
+
+activity instance A4 of type A4
+    begin
+        attributes
+            "Color" = "Aquamarine";
+            "Description" = "This is A4";
+            "Duration" = 01:00:00;
+            "Pattern" = 25;
+            "Start" = launch + 05:00:00.000;
+            "SASF" += ["REQUESTOR" = "\"Dennis Page\""];
+#            "SASF" = ["REQUESTOR" = "Dennis Page"];
+        parameters
+            (1,6,"MID",00:10:00,launch + 05:10:00.000);
+    end activity instance A4
+
+activity instance A8 of type A8
+    begin
+        attributes
+            "Color" = "Aquamarine";
+            "Description" = "This is A8";
+            "Duration" = 03:00:00;
+            "Pattern" = 25;
+            "Start" = 1998-160T06:00:00.000;
+        parameters
+            (["one", "1", "11", "ONE", "11111"],
+             1,1.1,"MID-1.1",00:01:00,1998-160T06:01:00.000,
+             2,2.,"MID-2",00:02:00,1998-160T06:02:00.000,
+             3,3.,"MID-3",00:03:00,1998-160T06:03:00.000,
+             4,4.,"MID-4",00:04:00,1998-160T06:04:00.000,
+             5,5.,"MID-5",00:05:00,1998-160T06:05:00.000,
+             6,6.,"MID-6",00:06:00,1998-160T06:06:00.000,
+             7,7.,"MID-7",00:07:00,1998-160T06:07:00.000,
+             8,8.,"MID-8",00:08:00,1998-160T06:08:00.000,
+             9,9.,"MID-9",00:09:00,1998-160T06:09:00.000,
+             10,10.,"MID-10",00:10:00,1998-160T06:10:00.000,
+             11,11.1,"MID-11",00:11:00,1998-160T06:11:00.000,
+             12,12.,"MID-12",00:12:00,1998-160T06:12:00.000,
+             13,13.,"MID-13",00:13:00,1998-160T06:13:00.000,
+             14,14.,"MID-14",00:14:00,1998-160T06:14:00.000,
+             15,15.,"MID-15",00:15:00,1998-160T06:15:00.000,
+             16,16.,"MID-16",00:16:00,1998-160T06:16:00.000,
+             17,17.,"MID-17",00:17:00,1998-160T06:17:00.000,
+             18,18.,"MID-18",00:18:00,1998-160T06:18:00.000,
+             19,19.,"MID-19",00:19:00,1998-160T06:19:00.000,
+             20,20.,"MID-20",00:20:00,1998-160T06:20:00.000);
+    end activity instance A8
+
+activity instance A6 of type A6
+    begin
+        attributes
+            "Color" = "Aquamarine";
+            "Description" = "This is A6";
+            "Duration" = 01:00:00;
+            "Pattern" = 25;
+            "Start" = 1998-160T07:00:00.000;
+        parameters
+            (1,6,"MID",00:10:00,1998-160T05:10:00.000);
+    end activity instance A6
+
+activity instance A13 of type A13
+    begin
+        attributes
+            "Color" = "Aquamarine";
+            "Description" = "This is A13";
+            "Duration" = 01:00:00;
+            "Pattern" = 25;
+            "Start" = launch + 08:00:00.000;
+        parameters
+            (1,6,"MID");
+    end activity instance A13
+
+activity instance A20 of type A20
+    begin
+        attributes
+            "Color" = "Aquamarine";
+            "Description" = "This is A20";
+            "Duration" = 01:00:00;
+            "Pattern" = 25;
+            "Start" = 1998-160T09:00:00.000;
+    end activity instance A20
+
+activity instance A21 of type A21
+    begin
+        attributes
+            "Color" = "Aquamarine";
+            "Description" = "This is A21";
+            "Duration" = 01:00:00;
+            "Pattern" = 25;
+            "Start" = 1998-160T10:00:00.000;
+        parameters
+            (1);
+    end activity instance A21
+
+activity instance A22 of type A22
+    begin
+        attributes
+            "Color" = "Aquamarine";
+            "Description" = "This is A22";
+            "Duration" = 01:00:00;
+            "Pattern" = 25;
+            "Start" = 1998-160T11:00:00.000;
+    end activity instance A22
+
+activity instance A4_2 of type A4
+    begin
+        attributes
+            "Color" = "Aquamarine";
+            "Description" = "This is A4";
+            "Duration" = 01:00:00;
+            "Pattern" = 25;
+            "Start" = launch + 12:00:00.000;
+            "SASF" += ["REQUESTOR" = "\"Dennis Page\""];
+#            "SASF" = ["REQUESTOR" = "\"Dennis Page\""];
+        parameters
+            (1,6,"MID",00:10:00,launch + 12:10:00.000);
+    end activity instance A4_2
+

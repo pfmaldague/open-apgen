@@ -1,0 +1,29 @@
+apgen version "foo"
+
+global integer a = 83;
+global float b = 100.02;
+global string c = "HIHIHIHI";
+global boolean d = false;
+global duration e = 1T05:45:01.443;
+global time f = 2029-348T03:19:048.029;
+global array g = [4, 4, 1];
+global array h = ["A" = 224, "B" = "Hmmm..."];
+
+function print_globals(s)
+    parameters
+	s: string default to "";
+{
+	write_to_stdout(s, ":\n");
+	write_to_stdout("  a: ", a, "\n");
+	write_to_stdout("  b: ", b, "\n");
+	write_to_stdout("  c: ", c, "\n");
+	write_to_stdout("  d: ", d, "\n");
+	write_to_stdout("  e: ", e, "\n");
+	write_to_stdout("  f: ", f, "\n");
+	write_to_stdout("  g: ", g, "\n");
+	write_to_stdout("  h: ", h, "\n");
+
+	return false;
+}
+
+global boolean A = print_globals("before");

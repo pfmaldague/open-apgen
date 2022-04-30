@@ -1,0 +1,46 @@
+apgen version "arrays"
+
+global array A = ["X" = ["a" = 0.4, "b" = -0.9], "Z" = ["d" = 11.0, "e" = -4.0]];
+global array B = ["X" = ["a" = 0.4, "b" = -0.9], "Z" = ["d" = 11.0, "e" = -4.0]];
+global array y = ["X", "Z"];
+global array f = ["d", "e"];
+
+
+function F(z)
+    parameters
+	z: string default to "";
+    {
+	i: integer default to 0;
+	write_to_stdout("Before deleting ", z, ":\n");
+	while(i < length_of(A)) {
+		write_to_stdout("    A[", i, "] = ", A[i], "\n");
+		i = i + 1;
+	}
+	delete_element(A, z);
+	i = 0;
+	write_to_stdout("After  deleting ", z, ":\n");
+	while(i < length_of(A)) {
+		write_to_stdout("    A[", i, "] = ", A[i], "\n");
+		i = i + 1;
+	}
+	i = 0;
+	write_to_stdout("Before deleting e:\n");
+	while(i < length_of(y)) {
+		write_to_stdout("    B[", y[i], "] = ", B[y[i]], "\n");
+		i = i + 1;
+	}
+	delete_element(B["Z"], "e");
+	i = 0;
+	write_to_stdout("After  deleting e:\n");
+	while(i < length_of(y)) {
+		write_to_stdout("    B[", y[i], "] = ", B[y[i]], "\n");
+		i = i + 1;
+	}
+	i = 0;
+	write_to_stdout("After  deleting X:\n");
+	delete_element(B, "X");
+	write_to_stdout("    B[Y] = ", B["Z"], "\n");
+	return 0;
+    }
+
+global integer l = F("X");

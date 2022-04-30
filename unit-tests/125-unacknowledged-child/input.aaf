@@ -1,0 +1,25 @@
+apgen version "bad family"
+
+activity instance P1 of type generic id P1
+    begin
+	decomposable into C1;
+	attributes
+		"Start" = 2020-090T00:00:00;
+		"Duration" = 1:00:00;
+    end activity instance P1
+
+activity instance C2 of type generic id C2
+    begin
+	abstractable into P1;
+	attributes
+		"Start" = 2020-090T00:00:00;
+		"Duration" = 1:00:00;
+    end activity instance C2
+
+activity instance C1 of type generic id C1
+    begin
+	abstracted into P1;
+	attributes
+		"Start" = 2020-090T00:00:00;
+		"Duration" = 1:00:00;
+    end activity instance C1

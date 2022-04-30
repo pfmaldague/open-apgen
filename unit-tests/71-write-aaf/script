@@ -1,0 +1,9 @@
+APGEN script version "apgen-10.0.0pre-oct-4-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2017-290T16:37:51.000
+# hostname=LMC-052973
+# n_apgen_files=0
+OPENFILE 71-write-aaf/input.aaf
+NEWACTDISPLAY
+SAVEFILE AAF apgen.aaf [ GLOBALS = "CODE", EPOCHS = "CODE", TIME_SYSTEMS = "CODE", LEGENDS = "NOTHING", TIME_PARAMS = "NOTHING", WIN_SIZE = "NOTHING"] 

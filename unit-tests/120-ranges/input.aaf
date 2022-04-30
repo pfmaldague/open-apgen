@@ -1,0 +1,16 @@
+apgen version ""
+
+local integer li5 = 5 range [ ...*2 ] ? "li5 description";
+local integer li6 = 6 range [ 1 -> ...*2 -> 10 ] ? "li6 description";
+local integer li7 = 7 range [ ...*2 -> 10 ] ? "li7 description";
+local integer li8 = 8 range [ 1 -> ...*2 ] ? "li8 description";
+local integer li9 = 9 range [ 1 -> 10, 21 -> 30 ] $ "li9 units";
+
+global integer gi5 = 5 range [ ...*2 ] ? "gi5 description";
+global integer gi6 = 6 range [ 1 -> ...*2 -> 10 ] ? "gi6 description";
+global integer gi7 = 7 range [ ...*2 -> 10 ] ? "gi7 description";
+global integer gi8 = 8 range [ 1 -> ...*2 ] ? "gi8 description";
+global integer gi9 = 9 range [ 1 -> 10, 21 -> 30 ] $ "gi9 units";
+
+global integer gi10 = 10 range [->100] $ "reverse range";
+

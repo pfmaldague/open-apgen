@@ -1,0 +1,19 @@
+APGEN script version "apgen-10.0.0pre-oct-16-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2017-293T14:48:00.000
+# hostname=LMC-052973
+# n_apgen_files=0
+OPENFILE 76-regen-children/input.aaf
+NEWACTDISPLAY
+ABSTRACTALL
+REDETAILACTIVITY ID generic
+
+# As of 11/8/2017, adding the following causes the parent to disappear:
+# REDETAILACTIVITY ID generic
+# REDETAILACTIVITY ID generic
+# REDETAILACTIVITY ID generic
+# REDETAILACTIVITY ID generic
+# REDETAILACTIVITY ID generic
+# REDETAILACTIVITY ID generic
+# REDETAILACTIVITY ID generic

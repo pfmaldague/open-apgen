@@ -1,0 +1,3 @@
+apgen version "faster"
+
+global integer write_a_report = write_behavior("behavior.txt");

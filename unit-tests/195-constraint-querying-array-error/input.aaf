@@ -1,0 +1,200 @@
+apgen version "foo"
+
+global array A = ["m" = 0.0, "M" = -2.0];
+
+resource redMax: consumable float
+    begin
+	attributes
+	    "Units" = "N/A";
+	    "Subsystem" = "Alarms";
+	    "Interpolation" = true;
+	parameters
+	    x: float default to 0.0;
+	profile
+	    0.0;
+	usage
+	    redMax.currentval() - x;
+    end resource redMax
+
+resource yellowMax: consumable float
+    begin
+	attributes
+	    "Units" = "N/A";
+	    "Subsystem" = "Alarms";
+	    "Interpolation" = true;
+	parameters
+	    x: float default to 0.0;
+	profile
+	    0.0;
+	usage
+	    yellowMax.currentval() - x;
+    end resource yellowMax
+
+resource yellowMin: consumable float
+    begin
+	attributes
+	    "Units" = "N/A";
+	    "Subsystem" = "Alarms";
+	    "Interpolation" = true;
+	parameters
+	    x: float default to 0.0;
+	profile
+	    0.0;
+	usage
+	    yellowMin.currentval() - x;
+    end resource yellowMin
+
+resource redMin: consumable float
+    begin
+	attributes
+	    "Units" = "N/A";
+	    "Subsystem" = "Alarms";
+	    "Interpolation" = true;
+	parameters
+	    x: float default to 0.0;
+	profile
+	    0.0;
+	usage
+	    redMin.currentval() - x;
+    end resource redMin
+
+resource consumedFloat: consumable float
+    begin
+	attributes
+	    "Error High" = redMax.currentval();
+	    "Warning High" = yellowMax.currentval();
+	    "Warning Low" = yellowMin.currentval();
+	    "Error Low" = redMin.currentval();
+	    "Interpolation" = true;
+	    "Auxiliary" = ["redMax", "yellowMax", "yellowMin", "redMin"];
+	parameters
+	    x: float default to 0.0;
+        profile
+	    0;
+	usage
+	    consumedFloat.currentval() - x;
+    end resource consumedFloat
+
+activity type adjust_limits
+    begin
+	attributes
+	    "Duration" = 2T00:00:00;
+	    "Color" = "Orange Red";
+	    "Legend" = "Limits";
+	parameters
+	    red_max: float default to 4.0;
+	    yellow_max: float default to 3.0;
+	    yellow_min: float default to -3.0;
+	    red_min: float default to -4.0;
+	    red_max_rate: float default to 0.02 $ "units per hour";
+	    yellow_max_rate: float default to 0.015 $ "units per hour";
+	    yellow_min_rate: float default to 0.010 $ "units per hour";
+	    red_min_rate: float default to 0.005 $ "units per hour";
+	modeling
+	    i: integer default to 0;
+	    while(i <= 300) {
+		hours: float default to (now - start) / 1:00:00;
+		use redMax(red_max + red_max_rate * hours);
+		use yellowMax(yellow_max + yellow_max_rate * hours);
+		use yellowMin(yellow_min + yellow_min_rate * hours);
+		use redMin(red_min + red_min_rate * hours);
+		wait for span / 300;
+		i = i + 1; }
+    end activity type adjust_limits
+
+activity type consume_modeling
+    begin
+	attributes
+	    "Duration" = 2T00:00:00;
+	    "Color" = "Spring Green";
+	    "Legend" = "Consumers";
+	parameters
+	    offset: float default to 0;
+	    amplitude: float default to 5.0;
+	modeling
+	    i: integer default to 0;
+
+	    while(i <= 300) {
+		hours: float default to (now - start) / 1:00:00;
+		use consumedFloat(offset + amplitude * sin(0.5 * PI * hours));
+		wait for span / 300;
+		i = i + 1; }
+    end activity type consume_modeling
+
+activity type Int
+    begin
+	attributes
+	    "Color" = theColor;
+	    "Duration" = theDuration;
+	    "Legend" = theLegend;
+	parameters
+	    theDuration: duration default to 1:00:00;
+	    theColor: string default to "Lavender";
+	    theLegend: string default to "A";
+    end activity type Int
+
+activity type compute_windows
+    begin
+	attributes
+	    "Color" = "Yellow";
+	    "Duration" = Duration;
+	    "Legend" = "interval_calc";
+	parameters
+	    Duration: duration default to 1T00:00:00;
+	    theType: string default to "and" range ["and", "or", "minus", "xor"];
+	nonexclusive_decomposition
+	    windows: array default to [];
+	    A: array default to [];
+	    B: array default to [];
+	    C: array default to [];
+	    ActualDuration: duration default to 0:0:0;
+
+	    get_windows(consumedFloat.currentval() > redMin.currentval()) for ["min" = 0:0:1, "max" = 2T00:00:00, "actual" = ActualDuration];
+	    A = copy_array(windows);	
+	    windows = [];
+	    get_windows(consumedFloat.currentval() > yellowMin.currentval()) for ["min" = 0:0:1, "max" = 2T00:00:00, "actual" = ActualDuration];
+	    B = copy_array(windows);	
+	    i: integer default to 0;
+	    while(i < length_of(A)) {
+		Int(A[i + 1] - A[i], "Lavender", "consFltGTredMin") at A[i];
+		i = i + 2;
+	    }
+	    i = 0;
+	    while(i < length_of(B)) {
+		B[i] = B[i] + 1:00:00;
+		i = i + 1;
+	    }
+	    i = 0;
+	    while(i < length_of(B)) {
+		Int(B[i + 1] - B[i], "Purple", "consFltGTyMin") at B[i];
+		i = i + 2;
+	    }
+	    C = intervals(theType, A, B);
+	    i = 0;
+	    while(i < length_of(C)) {
+		Int(C[i + 1] - C[i], "Hot Pink", theType) at C[i];
+		i = i + 2;
+	    }
+    end activity type compute_windows
+
+constraint HighRedLimit: forbidden_condition
+    begin
+	condition
+		consumedFloat.currentval() > redMax.currentval();
+	message
+		"consumedFloat value " + to_string(consumedFloat.currentval())
+		    + " exceeds limit " + to_string(redMax.currentval());
+	severity
+		"error";
+    end constraint HighRedLimit
+
+constraint GreaterThanAsubM: forbidden_condition
+    begin
+	condition
+		consumedFloat.currentval() > A["M"];
+	message
+		"consumedFloat value " + to_string(consumedFloat.currentval())
+		    + " exceeds limit A[\"M\"] = " + to_string(A["M"]);
+	severity
+		"error";
+    end constraint GreaterThanAsubM

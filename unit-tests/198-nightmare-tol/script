@@ -1,0 +1,12 @@
+APGEN script version "apgen-X.5.4E-Custom - Thu May 14 11:34:11 PDT 2020"
+# udef=(not found)
+# user=maldague
+# date=2020-135T19:28:16.000
+# hostname=eurcdevapgen2.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 198-nightmare-tol/input.aaf
+NEWACTDISPLAY
+NEWACTIVITY setFoo NAME setFoo ID setFoo TO 2020-136T00:12:02.415 LEGEND "Generic_Activities"
+REMODEL
+WRITETOL "apgen.tol" 2020-136T00:12:02.415 2020-136T01:42:02.643 "FORMAT DEFAULT"
+QUIT 1

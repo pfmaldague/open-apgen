@@ -1,0 +1,316 @@
+apgen version "V1"
+
+resource md_X: consumable integer
+  begin
+    parameters
+      p: integer default to 0;
+    profile
+      30;
+    usage
+      p;
+  end resource md_X 
+
+activity type Usemd_X
+  begin
+    attributes
+      "Color" = "Orange Red";
+    parameters
+      p: local integer default to 0;
+    resource usage
+      use md_X(p);
+  end activity type Usemd_X
+
+resource md_J: state string
+  begin
+    parameters
+      p: string default to "On";
+    states
+      "Off", "On";
+    profile
+      "On";
+    usage
+      p;
+  end resource md_J
+
+activity type Usemd_J
+  begin
+    attributes
+      "Color" = "Sky Blue";
+    parameters
+      p: local string default to "On";
+    resource usage
+      set md_J(p);
+  end activity type Usemd_J
+
+constraint MaxDuration1: maximum_duration
+  begin
+    condition
+      md_X < 20 || md_J == "Off";
+    duration
+      4:0:0;
+    message
+      "maximum duration violation";
+    severity
+      error;
+  end constraint MaxDuration1
+
+resource rpr_inhibit_rule: consumable integer
+  begin
+    parameters
+      p: integer default to 1;
+    profile
+      1;
+    usage
+      p;
+  end resource rpr_inhibit_rule
+
+resource rpr_X: consumable integer
+  begin
+    parameters
+      p: integer default to 0;
+    profile
+      30;
+    usage
+      p;
+  end resource rpr_X 
+
+activity type Userpr_X
+  begin
+    attributes
+      "Color" = "Orange Red";
+    parameters
+      p: local integer default to 0;
+    resource usage
+      use rpr_X(p);
+      use rpr_inhibit_rule(1) when
+	rpr_inhibit_rule.currentval() == 1;
+  end activity type Userpr_X
+
+resource rpr_Y: nonconsumable integer
+  begin
+    parameters
+      p: integer default to 0;
+    profile
+      60;
+    usage
+      p;
+  end resource rpr_Y
+
+activity type Userpr_Y
+  begin
+    attributes
+      "Color" = "Spring Green";
+    parameters
+      p: local integer default to 0;
+    resource usage
+      use rpr_Y(p);
+      use rpr_inhibit_rule(1) when
+	rpr_inhibit_rule.currentval() == 1;
+  end activity type Userpr_Y
+
+resource rpr_H: state string
+  begin
+    parameters
+      p: string default to "Off";
+    states
+      "Off", "On";
+    profile
+      "Off";
+    usage
+      p;
+  end resource rpr_H
+
+activity type Userpr_H
+  begin
+    attributes
+      "Color" = "Sky Blue";
+    parameters
+      p: local string default to "Off";
+    resource usage
+      set rpr_H(p);
+      use rpr_inhibit_rule(1) when
+	rpr_inhibit_rule.currentval() == 1;
+  end activity type Userpr_H
+
+constraint ReqPrereq1: prerequisite_condition
+  begin
+    condition
+      rpr_Y > 50 && rpr_inhibit_rule == 0;
+    prerequisite
+      rpr_X < 20 && rpr_H == "Off";
+    duration
+      4:0:0;
+    message
+      "required prerequisite violation";
+    severity
+      error;
+  end constraint ReqPrereq1
+
+
+
+activity type rpc_A
+    begin
+	attributes
+		"Color" = "Orange Red";
+    end activity type rpc_A
+
+activity type rpc_B
+    begin
+        attributes
+		"Color" = "Sky Blue";
+    end activity type rpc_B
+
+constraint RequiredPreceder1: required_preceder_activity
+    begin
+	type
+		rpc_A;
+	requires_preceder
+		rpc_B;
+	duration
+		1:0:0;
+	message
+		"required preceder violation";
+	severity
+		error;
+    end constraint RequiredPreceder1
+
+activity type rf_A
+    begin
+	attributes
+		"Color" = "Orange Red";
+    end activity type rf_A
+
+activity type rf_B
+    begin
+        attributes
+		"Color" = "Sky Blue";
+    end activity type rf_B
+
+constraint RequiredFollower1: required_follower_activity
+    begin
+	type
+		rf_A;
+	requires_follower
+		rf_B;
+	duration
+		1:0:0;
+	message
+		"required follower violation";
+	severity
+		error;
+    end constraint RequiredFollower1
+
+activity type rc_A
+    begin
+	attributes
+		"Color" = "Orange Red";
+    end activity type rc_A
+
+activity type rc_B
+    begin
+        attributes
+		"Color" = "Sky Blue";
+    end activity type rc_B
+
+constraint RequiredContainment1: required_containment
+    begin
+	type
+		rc_A;
+	must_contain
+		rc_B;
+	message
+		"required containment violation";
+	severity
+		error;
+    end constraint RequiredContainment1
+
+resource fc_X: consumable integer
+  begin
+    parameters
+      p: integer default to 0;
+    profile
+      30;
+    usage
+      p;
+  end resource fc_X 
+
+activity type Usefc_X
+  begin
+    attributes
+      "Color" = "Orange Red";
+    parameters
+      p: local integer default to 0;
+    resource usage
+      use fc_X(p);
+  end activity type Usefc_X
+
+resource fc_H: state string
+  begin
+    parameters
+      p: string default to "Off";
+    states
+      "Off", "On";
+    profile
+      "Off";
+    usage
+      p;
+  end resource fc_H
+
+activity type Usefc_H
+  begin
+    attributes
+      "Color" = "Sky Blue";
+    parameters
+      p: local string default to "Off";
+    resource usage
+      set fc_H(p);
+  end activity type Usefc_H
+
+constraint ForbiddenCon1: forbidden_condition
+  begin
+    condition
+      fc_X < 20 && fc_H == "Off";
+    message
+      "resource condition violation";
+    severity
+      error;
+  end constraint ForbiddenCon1
+
+
+
+activity type fo_A
+    begin
+	attributes
+		"Color"    = "Orange Red";
+    end activity type fo_A
+
+activity type fo_B
+    begin
+        attributes
+		"Color"    = "Sky Blue";
+    end activity type fo_B
+
+constraint ForbiddenOverlap1: forbidden_overlap
+    begin
+	type1
+		fo_A;
+	type2
+		fo_B;
+	message
+		"forbidden overlap violation";
+	severity
+		error;
+    end constraint ForbiddenOverlap1
+
+constraint ForbiddenOverlap2: forbidden_overlap
+    begin
+	type1
+		fo_A;
+	type2
+		fo_A;
+	message
+		"forbidden overlap violation for same activity type";
+	severity
+		error;
+    end constraint ForbiddenOverlap2
+

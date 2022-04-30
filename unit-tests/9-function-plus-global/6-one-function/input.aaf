@@ -1,0 +1,9 @@
+apgen version "faster"
+
+function A(i)
+    parameters
+	i: integer default to 0;
+    {
+	i = i + 2;
+	return i;
+}

@@ -1,0 +1,32 @@
+apgen version "generic"
+
+typedef struct APSS_compression_ratio = [
+	"TWINSPY" = 0.01,
+	"TWINSNY" = 0.01,
+	"PS" = 0.01,
+	"IFG" = 0.01,
+	"28V" = 0.01,
+	"PAE" = 0.01
+	];
+
+activity type TypeFoo
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Legend" = "Foos";
+		"Duration" = 1:00:00;
+	parameters
+		a: APSS_compression_ratio default to (APSS_compression_ratio);
+	resource usage
+		write_to_stdout(get_id_of(this), " - a = ", a, "\n");
+    end activity type TypeFoo
+
+activity instance Foo of type TypeFoo id James_9
+    begin
+	attributes
+		"Duration" = 01:00:00.001;
+		"Start" = 2011-011T22:33:44.123;
+		"Legend" = "Generic";
+	parameters
+		((APSS_compression_ratio));
+    end activity instance Foo

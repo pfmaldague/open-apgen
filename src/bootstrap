@@ -1,0 +1,22 @@
+#! /bin/sh
+
+set -x
+
+case `uname` in
+	Darwin)
+		TOOLIZE=glibtoolize ;;
+	Linux)
+		TOOLIZE=libtoolize ;;
+	*)
+		TOOLIZE=libtoolize ;;
+esac
+
+aclocal -I config \
+&& $TOOLIZE --automake \
+&& autoheader \
+&& automake --gnu --add-missing \
+&& autoconf
+
+
+# deleted the following line which used to come after 'aclocal':
+# && libtoolize --automake \

@@ -1,0 +1,12 @@
+APGEN script version "apgen-X.1-Custom - Wed Feb 27 11:58:58 PST 2019"
+# udef=(not found)
+# user=maldague
+# date=2019-060T17:25:44.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 170-call-spawn/input.aaf
+OPENFILE 170-call-spawn/input.apf
+OPENFILE input/build.scr
+  # BUILD
+NEWACTDISPLAY
+#QUIT 0

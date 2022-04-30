@@ -1,0 +1,12 @@
+apgen version "evaluate PI"
+
+function F(s, x)
+    parameters
+	s: string default to "";
+	x: float default to 0.0;
+	{
+	write_to_stdout(s, x, "\n");
+	return 1;
+}
+
+global integer a = F("PI: ", PI);

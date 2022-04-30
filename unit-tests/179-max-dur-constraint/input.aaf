@@ -1,0 +1,109 @@
+apgen version "V1"
+
+global integer global_twenty = 20;
+
+resource md_X: consumable integer
+  begin
+    parameters
+      p: integer default to 0;
+    profile
+      30;
+    usage
+      p;
+  end resource md_X 
+
+activity type Usemd_X
+  begin
+    attributes
+      "Color" = "Orange Red";
+    parameters
+      p: local integer default to 0;
+    resource usage
+      use md_X(p);
+  end activity type Usemd_X
+
+resource md_J: state string
+  begin
+    parameters
+      p: string default to "On";
+    states
+      "Off", "On";
+    profile
+      "On";
+    usage
+      p;
+  end resource md_J
+
+activity type Usemd_J
+  begin
+    attributes
+      "Color" = "Sky Blue";
+    parameters
+      p: local string default to "On";
+    resource usage
+      set md_J(p);
+  end activity type Usemd_J
+
+constraint MaxDuration1: maximum_duration
+  begin
+    condition
+      md_X.currentval() < 20 || md_J.currentval() == "Off";
+    duration
+      4:0:0;
+    message
+      "maximum duration violation";
+    severity
+      error;
+  end constraint MaxDuration1
+
+resource fc_X: consumable integer
+  begin
+    parameters
+      p: integer default to 0;
+    profile
+      30;
+    usage
+      p;
+  end resource fc_X 
+
+activity type Usefc_X
+  begin
+    attributes
+      "Color" = "Orange Red";
+    parameters
+      p: local integer default to 0;
+    resource usage
+      use fc_X(p);
+  end activity type Usefc_X
+
+resource fc_H: state string
+  begin
+    parameters
+      p: string default to "Off";
+    states
+      "Off", "On";
+    profile
+      "Off";
+    usage
+      p;
+  end resource fc_H
+
+activity type Usefc_H
+  begin
+    attributes
+      "Color" = "Sky Blue";
+    parameters
+      p: local string default to "Off";
+    resource usage
+      set fc_H(p);
+  end activity type Usefc_H
+
+constraint ForbiddenCon1: forbidden_condition
+  begin
+    condition
+      fc_X.currentval() < global_twenty && fc_H.currentval() == "Off";
+    message
+      "resource condition violation";
+    severity
+      warning;
+  end constraint ForbiddenCon1

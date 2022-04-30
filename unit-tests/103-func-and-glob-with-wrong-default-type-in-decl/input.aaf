@@ -1,0 +1,24 @@
+apgen version "faster"
+
+function A(f)
+    parameters
+	f: float default to 0;
+    {
+    i: float default to 0;
+    i = 2.2;
+    write_to_stdout("A(", f, "): i = ", i, "\n");
+    return i;
+    }
+
+function tell(f)
+    parameters
+	f: float default to 0.0;
+    {
+    write_to_stdout("tell(", f, ")\n");
+    return f;
+    }
+
+global float F = A(1.5);
+global float G = tell(1.6);
+directive F = pi;
+global float H = tell(F);

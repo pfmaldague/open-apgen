@@ -1,0 +1,35 @@
+apgen version "act-res-1.aaf"
+
+global array A = ["one", "two", "three"];
+global array B = ["AA", "BB", "CC"];
+
+resource StateVector(A, B): state integer
+    begin
+	attributes
+		"Units" = "silver coins";
+	parameters
+		x: integer default to 1;
+	states
+	    when "[\"two\"][\"CC\"]":
+		0, 1, 2, 3, 4, 5, 6;
+	    when default:
+		0, 1, 2, 3;
+	profile
+		0;
+	usage
+		x;
+    end resource StateVector
+
+activity type setStateVector
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "vectors";
+	parameters
+		a: integer default to 2;
+		b: string default to "three";
+		c: string default to "BB";
+	modeling
+		set StateVector[b][c](a);
+    end activity type setStateVector

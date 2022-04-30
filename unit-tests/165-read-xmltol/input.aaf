@@ -1,0 +1,26 @@
+apgen version "act-res-1.aaf"
+
+resource Scalar: consumable integer
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: integer default to 1;
+	profile
+		0;
+	usage
+		-x;
+    end resource Scalar
+
+activity type useScalar
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "scalars";
+	parameters
+		a: integer default to 4;
+		b: string default to "horrible";
+	modeling
+		use Scalar(a);
+    end activity type useScalar

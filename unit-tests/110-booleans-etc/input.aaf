@@ -1,0 +1,17 @@
+apgen version "foo"
+
+function tell(n)
+    parameters
+	n: integer default to 0;
+	{
+	i: integer default to 0;
+	r: integer default to 0;
+	while(i < n) {
+		r = r + i;
+		i = i + 1;
+	}
+	write_to_stdout("returning ", r, "\n");
+	return r;
+	}
+
+global integer a = tell(3);

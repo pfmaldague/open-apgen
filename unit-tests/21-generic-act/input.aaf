@@ -1,0 +1,9 @@
+apgen version "generic"
+
+activity instance Foo of type generic id James_9
+    begin
+	attributes
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-039T09:42:07.823;
+		"Legend" = "Generic";
+    end activity instance Foo

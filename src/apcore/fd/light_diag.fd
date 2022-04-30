@@ -1,0 +1,37 @@
+LIGHT_TIME_DIAG
+# to provide apgen users with explanations as to why a given file is NOT in Light Time format
+
+file:					< time UniversalTime "UTIME" >
+					< global integer I "" >
+					< global integer TotalNumberOfRecords "" >
+					< real up_seconds "" >
+					< real down_seconds "" >
+					< global integer NumberOfRecords "" >
+					< TotalNumberOfRecords <= 0 >
+	header
+	any* '\n' line*
+	"\$\$" any* "LIGHT TIME FILE" any* "\n"
+	any* "\$\$EOS" any* "\n"
+	record*
+	"\$\$EOF" any* "\n"
+	"CCSD" any* "$>"
+	end
+
+# make the header trivial to force seq_review to use this FD:
+header: "CCSD" end
+
+line:	any* "\n" end
+
+record:					< start RawRecord >
+					< NumberOfRecords = CurrentRecord >
+					< start UniversalTime >
+	"$2 $cr09 - $3 $cr09 /
+	$2 $cr09 : $2 $cr09 : $2 $cr09" < end UniversalTime >
+	"\s"+				< start down_seconds >
+	"$cr09"+ '.' "$cr09"+		< end down_seconds >
+	"\s"+				< start up_seconds >
+	"$cr09"+ '.' "$cr09"+		< end up_seconds >
+	any*				< end RawRecord >
+					< TotalNumberOfRecords = TotalNumberOfRecords + 1 >
+	'\n' end
+	end

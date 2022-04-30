@@ -1,0 +1,108 @@
+apgen version "faster"
+
+activity type the_child
+    begin
+	x: integer default to 13;
+	attributes
+		"Color" = "Purple";
+		"Description" = p;
+		"Duration" = 01:00:00;
+		"Legend" = "Children";
+	parameters
+		p: string default to "";
+	creation
+		x = 10;
+		write_to_stdout(id, " -> create(): setting x to ", x, "\n");
+	modeling
+		span = get_parent_of(this).span / 2;
+		write_to_stdout("the_child: local var x = ", x, "\n");
+	destruction
+		write_to_stdout(id, " -> destroy()\n");
+    end activity type the_child
+
+activity type the_parent
+    begin
+	T: time default to start;
+	attributes
+		"Color" = "Lavender";
+		"Duration" = 1:00:00;
+		"Legend" = "Parents";
+	parameters
+		C: integer default to 2 ? "Number of children";
+	creation
+		T = start - 1:00:00;
+		write_to_stdout(id, " -> create(): setting T to ", T, "\n");
+	nonexclusive_decomposition
+		i: integer default to 0;
+		T = start;
+		while(i < C) {
+			write_to_stdout(id, ": creating child at ", T, "\n");
+			the_child(id) at T;
+			T = T + span;
+			i = i + 1;
+		}
+	destruction
+		write_to_stdout(id, " -> destroy()\n");
+    end activity type the_parent
+
+activity instance Foo1 of type the_child id Foo1
+    begin
+	abstractable into generic;
+	attributes
+	    "Color" = "Purple";
+	    "Duration" = 00:28:32.850;
+	    "Legend" = "Children";
+	    "Pattern" = 0;
+	    "Plan" = "59-read-apf/input.aaf";
+	    "Start" = 2028-163T01:02:03.000;
+	    "Status" = TRUE;
+	parameters
+	    ("The first-born");
+    end activity instance Foo1
+
+activity instance Foo of type the_parent id generic
+    begin
+	decomposed into Foo1, Foo2, Foo3;
+	attributes
+	    "Color" = "Yellow";
+	    "Description" = "Foo (id )";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Parents";
+	    "Pattern" = 0;
+	    "Plan" = "59-read-apf/input.aaf";
+	    "Start" = 2028-163T01:02:03.000;
+	    "Status" = TRUE;
+	parameters
+	    (3);
+    end activity instance Foo
+
+activity instance Foo2 of type the_child id Foo2
+    begin
+	abstractable into generic;
+	attributes
+	    "Color" = "Purple";
+	    "Duration" = 00:28:32.850;
+	    "Legend" = "Children";
+	    "Pattern" = 0;
+	    "Plan" = "59-read-apf/input.aaf";
+	    "Start" = 2028-163T02:02:03.000;
+	    "Status" = TRUE;
+	parameters
+	    ("the second-born");
+    end activity instance Foo2
+
+activity instance Foo3 of type the_child id Foo3
+    begin
+	abstractable into generic;
+	attributes
+	    "Color" = "Purple";
+	    "Duration" = 00:28:32.850;
+	    "Legend" = "Children";
+	    "Pattern" = 0;
+	    "Plan" = "59-read-apf/input.aaf";
+	    "Start" = 2028-163T03:02:03.000;
+	    "Status" = TRUE;
+	parameters
+	    ("the third-born");
+    end activity instance Foo3
+

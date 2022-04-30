@@ -1,0 +1,256 @@
+apgen version "apgen-X.1-Custom - Wed Feb 27 09:44:28 PST 2019"
+
+
+# udef=(not found)
+# user=maldague
+# date=2019-058T18:57:31.000
+# hostname=LMC-052973
+# n_apgen_files=4
+# apgen_file=172-act-state-changes/input.aaf 2019-058T18:54:03.000
+# apgen_file=172-act-state-changes/input.apf 2019-058T18:53:08.000
+# apgen_file=172-act-state-changes/layout.apf 2019-058T18:39:23.000
+# apgen_file=Standalone Expression
+
+# directive "Legend" = [ "Generic_Activities", 32 ];
+# directive "Legend" = [ "VIEW_PERIODS", 32 ];
+# directive "Legend" = [ "Pictures", 32 ];
+# directive "Legend" = [ "Generic Activities", 32 ];
+# directive "Legend" = [ "Fake Parents", 32 ];
+
+# global boolean enabled = TRUE;
+
+activity instance generic of type generic id generic
+    begin
+	attributes
+	    "Color" = "Dodger Blue";
+	    "Description" = "generic (id generic)";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic Activities";
+	    "Pattern" = 0;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-310T00:00:00.000;
+	    "Status" = "scheduled";
+    end activity instance generic
+
+activity instance DefineOpportunities_d1 of type ObsOpportunity id ObsOpportunity
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 00:00:00.056;
+	    "Legend" = "VIEW PERIODS";
+	    "Pattern" = 56;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-310T02:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    00:00:00.056
+	    );
+    end activity instance DefineOpportunities_d1
+
+activity instance DefineOpportunities of type DefineOpportunities id DefineOpportunities
+    begin
+	decomposed into ObsOpportunity, ObsOpportunity_29, ObsOpportunity_30, ObsOpportunity_31, 
+		ObsOpportunity_32, ObsOpportunity_33, ObsOpportunity_34, ObsOpportunity_35, 
+		ObsOpportunity_36, ObsOpportunity_37;
+	attributes
+	    "Color" = "Dodger Blue";
+	    "Description" = "DefineOpportunities (id DefineOpportunities)";
+	    "Duration" = 02:00:00;
+	    "Legend" = "VIEW PERIODS";
+	    "Pattern" = 13;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-310T02:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    02:00:00,
+	    10
+	    );
+    end activity instance DefineOpportunities
+
+activity instance decompose_via_windows of type decompose_via_windows id decompose_via_windows
+    begin
+	attributes
+	    "Color" = "Violet Red";
+	    "Description" = "decompose_via_windows (id decompose_via_windows)";
+	    "Duration" = 002T00:00:00;
+	    "Legend" = "Generic Activities";
+	    "Pattern" = 0;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-310T08:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    2018-310T09:00:00.000,
+	    003T00:00:00
+	    );
+    end activity instance decompose_via_windows
+
+activity instance DefineOpportunities_d2 of type ObsOpportunity id ObsOpportunity_29
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 00:15:47.072;
+	    "Legend" = "VIEW PERIODS";
+	    "Pattern" = 56;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-310T14:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    00:15:47.072
+	    );
+    end activity instance DefineOpportunities_d2
+
+activity instance DefineOpportunities_d3 of type ObsOpportunity id ObsOpportunity_30
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 01:30:40.358;
+	    "Legend" = "VIEW PERIODS";
+	    "Pattern" = 56;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-311T02:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    01:30:40.358
+	    );
+    end activity instance DefineOpportunities_d3
+
+activity instance DefineOpportunities_d4 of type ObsOpportunity id ObsOpportunity_31
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 00:55:02.281;
+	    "Legend" = "VIEW PERIODS";
+	    "Pattern" = 56;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-311T14:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    00:55:02.281
+	    );
+    end activity instance DefineOpportunities_d4
+
+activity instance DefineOpportunities_d5 of type ObsOpportunity id ObsOpportunity_32
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 01:03:55.924;
+	    "Legend" = "VIEW PERIODS";
+	    "Pattern" = 56;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-312T02:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    01:03:55.924
+	    );
+    end activity instance DefineOpportunities_d5
+
+activity instance DefineOpportunities_d6 of type ObsOpportunity id ObsOpportunity_33
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 00:26:16.506;
+	    "Legend" = "VIEW PERIODS";
+	    "Pattern" = 56;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-312T14:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    00:26:16.506
+	    );
+    end activity instance DefineOpportunities_d6
+
+activity instance DefineOpportunities_d7 of type ObsOpportunity id ObsOpportunity_34
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 00:05:38.721;
+	    "Legend" = "VIEW PERIODS";
+	    "Pattern" = 56;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-313T02:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    00:05:38.721
+	    );
+    end activity instance DefineOpportunities_d7
+
+activity instance DefineOpportunities_d8 of type ObsOpportunity id ObsOpportunity_35
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 01:21:27.826;
+	    "Legend" = "VIEW PERIODS";
+	    "Pattern" = 56;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-313T14:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    01:21:27.826
+	    );
+    end activity instance DefineOpportunities_d8
+
+activity instance DefineOpportunities_d9 of type ObsOpportunity id ObsOpportunity_36
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 01:21:30.934;
+	    "Legend" = "VIEW PERIODS";
+	    "Pattern" = 56;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-314T02:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    01:21:30.934
+	    );
+    end activity instance DefineOpportunities_d9
+
+activity instance DefineOpportunities_d10 of type ObsOpportunity id ObsOpportunity_37
+    begin
+	abstractable into DefineOpportunities;
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 01:52:09.789;
+	    "Legend" = "VIEW PERIODS";
+	    "Pattern" = 56;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-314T14:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    01:52:09.789
+	    );
+    end activity instance DefineOpportunities_d10
+
+activity instance generic of type generic id generic_2
+    begin
+	attributes
+	    "Color" = "Dodger Blue";
+	    "Description" = "generic (id generic)";
+	    "Duration" = 01:00:00;
+	    "Legend" = "Generic Activities";
+	    "Pattern" = 0;
+	    "Plan" = "172-act-state-changes/input.apf";
+	    "Start" = 2018-315T00:00:00.000;
+	    "Status" = "scheduled";
+    end activity instance generic
+

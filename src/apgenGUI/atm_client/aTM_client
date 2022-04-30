@@ -1,0 +1,21 @@
+! The following default settings will make APGEN look like it used to:
+!
+! Apgen*fontList:					-*-times-medium-r-*-*-*-140-*-*-*-*-iso8859-1
+! Apgen.mainFont:					-*-times-medium-r-*-*-*-120-*-*-*-*-iso8859-1
+! Apgen.smallerFont:				-*-times-medium-r-*-*-*-120-*-*-*-*-iso8859-1
+! Apgen*fontList:					-*-helvetica-medium-r-*-*-*-140-*-*-*-*-iso8859-1
+! Apgen*fontList:					-adobe-helvetica-medium-r-normal--12-120-75-75-p-67
+Apgen*fontList:					-adobe-helvetica-medium-r-normal--14-140-75-75-p-77-iso8859-1
+Apgen.mainFont:					-adobe-helvetica-medium-r-normal--12-120-75-75-p-67-*-*
+Apgen.smallerFont:				-adobe-helvetica-medium-r-normal--10-100-75-75-p-56-iso8859-1
+! Apgen.mainFont:					-*-helvetica-medium-r-*-*-*-120-*-*-*-*-iso8859-1
+! Apgen.smallerFont:				-*-helvetica-medium-r-*-*-*-120-*-*-*-*-iso8859-1
+Apgen.PLOT fontList:				fixed
+Apgen*foreground:				Black
+Apgen*background:				LightSeaGreen
+Apgen.textBackgroundColor:			Grey80
+Apgen.resourceOKFillColor:                      LightSeaGreen
+Apgen.resourceOverMaximumFillColor:		Red
+Apgen.resourceUnderMinimumFillColor:		Red
+Apgen.resourceNotOKFillColor:                   Red
+Apgen.resource_display_height:                  50

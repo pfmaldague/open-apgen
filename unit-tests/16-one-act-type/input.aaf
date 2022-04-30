@@ -1,0 +1,54 @@
+apgen version "act-res-1.aaf"
+
+global array A = ["one", "two", "three"];
+global array B = ["AA", "BB", "CC"];
+
+resource Scalar: consumable integer
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: integer default to 1;
+	profile
+		0;
+	usage
+		-x;
+    end resource Scalar
+
+resource Vector(A, B): consumable integer
+    begin
+	attributes
+		"Units" = "silver coins";
+	parameters
+		x: integer default to 1;
+	profile
+		0;
+	usage
+		-x;
+    end resource Vector
+
+activity type useScalar
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "scalars";
+	parameters
+		a: integer default to 4;
+	modeling
+		use Scalar(a);
+    end activity type useScalar
+
+activity type useVector
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "vectors";
+	parameters
+		a: integer default to 4;
+		b: string default to "three";
+		c: string default to "BB";
+	modeling
+		use Vector[b][c](a);
+    end activity type useVector

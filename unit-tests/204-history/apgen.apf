@@ -1,0 +1,135 @@
+apgen version "apgen-X.7.4-Custom - Sat Jan 9 13:15:31 PST 2021"
+
+
+# udef=(not found)
+# user=maldague
+# date=2021-010T15:04:58.000
+# hostname=MT-206177
+# n_apgen_files=2
+# apgen_file=204-history/input.aaf 2021-010T15:02:11.000
+# apgen_file=New
+
+# directive "Legend" = [ "Generic Activities", 32 ];
+
+# global boolean enabled = TRUE;
+# global time now = 2021-183T01:17:29.185;
+
+activity instance generic of type generic id generic
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 00:03:00;
+	    "Legend" = "S";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2021-181T23:00:00;
+	    "Status" = "scheduled";
+    end activity instance generic
+
+activity instance S1 of type A_S id S1
+    begin
+	attributes
+	    "Color" = "Aquamarine";
+	    "Duration" = 001T00:00:00;
+	    "Legend" = "S";
+	    "Pattern" = 0;
+	    "Plan" = "204-history/input.aaf";
+	    "Start" = 2021-182T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    001T00:00:00,
+	    00:06:00
+	    );
+    end activity instance S1
+
+activity instance C1 of type A_C
+    begin
+	attributes
+	    "Color" = "Aquamarine";
+	    "Duration" = 001T00:00:00;
+	    "Legend" = "C";
+	    "Pattern" = 0;
+	    "Plan" = "204-history/input.aaf";
+	    "Start" = 2021-183T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    001T00:00:00,
+	    00:06:00,
+	    0.1
+	    );
+    end activity instance C1
+
+activity instance N1 of type A_N
+    begin
+	attributes
+	    "Color" = "Aquamarine";
+	    "Duration" = 001T00:00:00;
+	    "Legend" = "N";
+	    "Pattern" = 0;
+	    "Plan" = "204-history/input.aaf";
+	    "Start" = 2021-184T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    001T00:00:00,
+	    00:06:00
+	    );
+    end activity instance N1
+
+activity instance T1 of type A_T
+    begin
+	attributes
+	    "Color" = "Aquamarine";
+	    "Duration" = 001T00:00:00;
+	    "Legend" = "T";
+	    "Pattern" = 0;
+	    "Plan" = "204-history/input.aaf";
+	    "Start" = 2021-185T00:00:00.000;
+	    "Status" = "scheduled";
+	parameters
+	    (
+	    001T00:00:00,
+	    00:06:00,
+	    0.1
+	    );
+    end activity instance T1
+
+activity instance s1 of type scheduler
+    begin
+	attributes
+	    "Start" = 2021-182T00:00:00;
+    end activity instance s1
+
+activity instance generic of type generic id generic_3
+    begin
+	attributes
+	    "Color" = "Dodger Blue";
+	    "Duration" = 00:03:00;
+	    "Legend" = "S";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2021-183T01:30:00;
+	    "Status" = "scheduled";
+    end activity instance generic
+
+
+activity instance s1 of type scheduler
+    begin
+	attributes
+	    "Start" = 2021-182T00:00:00;
+    end activity instance s1
+
+activity instance generic of type generic id generic_3
+    begin
+	attributes
+	    "Color" = "Dodger Blue";
+	    "Duration" = 00:03:00;
+	    "Legend" = "S";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2021-183T01:30:00;
+	    "Status" = "scheduled";
+    end activity instance generic
+

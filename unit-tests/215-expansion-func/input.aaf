@@ -1,0 +1,170 @@
+apgen version "foo"
+
+//
+// This file provides an example of a global method,
+// which in this case is called "carry_out_expansion".
+//
+
+global instance fake_parent_instance = "generic";
+
+resource OKtoObserve: state integer
+    begin
+	parameters
+		value: integer default to 1 ;
+	states
+		0,1;
+	profile
+		0;
+	usage
+		value;
+    end resource OKtoObserve
+
+resource ObsInProgress: state boolean
+    begin
+	parameters
+		value: boolean default to true ;
+	states
+		false, true;
+	profile
+		false;
+	usage
+		value;
+    end resource ObsInProgress
+
+activity type ObsOpportunity;
+
+activity type DefineOpportunities
+    begin
+	attributes
+		"Color" = "Dodger Blue";
+		"Pattern" = 13 ;
+		"Duration" = Duration ;
+		"Legend" = "VIEW PERIODS";
+	parameters
+		Duration: duration default to 2:00:00;
+		how_many: integer default to 10;
+ 	decomposition
+		i: integer default to 0;
+		t: time default to start;
+		while( i < how_many )
+			{
+			ObsOpportunity(Duration * random()) at t ;
+			t = t + 12:00:00 ;
+			i = i + 1 ;
+			}
+    end activity type DefineOpportunities
+
+activity type ObsOpportunity
+    begin
+	attributes
+		"Color" = "Orange Red" ;
+		"Pattern" = 56 ;
+		"Duration" = Duration ;
+		"Legend" = "VIEW PERIODS";
+	parameters
+		Duration: duration default to 2:00:00;
+	resource usage
+		if(is_frozen("OKtoObserve") == false)
+			{
+			use OKtoObserve( 1 ) ;
+			}
+		else
+			{
+			write_to_stdout("resource OKtoObserve is frozen...\n");
+			}
+    end activity type ObsOpportunity
+
+activity type Observation
+    begin
+	attributes
+		"Color" = "Aquamarine" ;
+		"Pattern" = 49 ;
+		"Duration" = Duration ;
+		"Legend" = "Pictures";
+		"Decomposition Suffix" = "One_Picture" ;
+	parameters
+		Duration: duration default to 00:30 ;
+		theColor: string default to "Aquamarine";
+	modeling
+		Color = theColor;
+
+		write_to_stdout("activity ", id, " using ObsInProgress\n");
+
+		use ObsInProgress(true) from start to finish ;
+    end activity type Observation
+
+activity type fake_parent
+    begin
+	attributes
+		"Legend" = "Fake Parents";
+		"Duration" = D;
+		"Color" = C;
+	parameters
+		D: duration default to 1:00:00;
+		C: string default to "Spring Green";
+	modeling
+		if(fake_parent_instance.exists() == false) {
+			fake_parent_instance = this;
+		}
+    end activity type fake_parent
+
+//
+// This global method can be called or spawned by
+// the expansion section of an activity type:
+//
+expansion function carry_out_expansion() {
+	windows: array default to [];
+	actual_duration: duration default to 0:0:0;
+	i: integer default to 0;
+
+	write_to_stdout(now, " - carry_out_expansion starts\n");
+
+	wait for 0:0:0;
+	get_windows(OKtoObserve.currentval() == 1) for [
+		"start" = now,
+		"min" = parent.min_requirement,
+		"max" = parent.how_long,
+		"actual" = actual_duration];
+
+	if(length_of(windows) > 0 && fake_parent_instance.exists() == false) {
+		fake_parent(parent.span, parent.Color);
+	}
+	while(i < length_of(windows)) {
+		write_to_stdout(parent.id, " creating green observation at ",
+			windows[i], "\n");
+
+		wait for windows[i];
+
+		Observation(00:30:00, "Spring Green");
+
+		wait for windows[i + 1];
+
+		write_to_stdout(parent.id, " creating red observation at ",
+			windows[i + 1], "\n");
+
+		Observation(00:30:00, "Orange Red");
+
+		i = i + 2;
+	}
+    }
+
+activity type decompose_via_windows
+    begin
+	attributes
+		"Color" = "Violet Red";
+		"Duration" = how_long;
+	parameters
+		how_long: duration default to 1T00:00:00;
+		min_requirement: duration default to 0:1:0;
+	expansion
+		write_to_stdout(now, " - ", id, " calling carry_out_expansion()\n");
+
+		//
+		// Remove 'spawn' if you want sequential execution
+		// of the two method calls:
+		//
+		spawn carry_out_expansion();
+		write_to_stdout(now, " - ", id, " calling carry_out_expansion()\n");
+		carry_out_expansion();
+
+    end activity type decompose_via_windows

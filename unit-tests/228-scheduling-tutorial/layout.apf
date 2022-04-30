@@ -1,0 +1,12 @@
+APGEN version "apgen-X.9.0-Custom - Wed Dec 29 09:02:51 PST 2021"
+
+
+directive "Activity Legend Layout" = [
+    "",
+    [ "Generic Activities", 100 ]
+    ];
+directive "Resource Legend Layout" = [
+    "",
+    [ "pointing", 100 ], 
+    [ "range_to_target", 246 ]
+    ];

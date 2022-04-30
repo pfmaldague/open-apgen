@@ -1,0 +1,4 @@
+apgen version "global arrays"
+
+local float x = A["A"]["a"];
+

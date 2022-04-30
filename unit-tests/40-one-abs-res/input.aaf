@@ -1,0 +1,60 @@
+apgen version "act-res-1.aaf"
+
+resource Scalar: consumable integer
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: integer default to 1;
+	profile
+		0;
+	usage
+		-x;
+    end resource Scalar
+
+resource Verbose: consumable integer
+    begin
+	attributes
+		"Subsystem" = "Algebra";
+	parameters
+		s: string default to "";
+	profile
+		0;
+	usage
+		-Strlen(s);
+    end resource Verbose
+
+resource Hyper: abstract
+    begin
+	attributes
+		"Subsystem" = "Algebra";
+	parameters
+		c: integer default to 0;
+		d: string default to "foo";
+	resource usage
+		use Scalar(c) at start;
+		use Verbose(d) at finish;
+    end resource Hyper
+
+activity type useHyper
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.000;
+		"Legend" = "scalars";
+	parameters
+		a: integer default to 4;
+		b: string default to "horrible";
+	modeling
+		use Hyper(a, b) from start to finish;
+    end activity type useHyper
+
+activity instance Foo of type useHyper id James_Bond_007
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-039T09:42:07.823;
+	parameters
+		(-12, "Hello");
+    end activity instance Foo

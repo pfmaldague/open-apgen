@@ -1,0 +1,44 @@
+apgen version "simple stuff"
+
+resource non_cons_A: nonconsumable integer
+    begin
+	attributes
+		"Units" = "km";
+	parameters
+		i: integer default to 0;
+	profile
+		0;
+	usage
+		-i;
+    end resource non_cons_A
+
+activity type use_A_default
+    begin
+	attributes
+		"Color" = "Spring Green";
+	parameters
+		u: integer default to 2;
+	resource usage
+		use non_cons_A(u);
+    end activity type use_A_default
+
+activity type use_A_from_to
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 0:30:0;
+	parameters
+		u: integer default to 2;
+		S: duration default to 0:4:0;
+		E: duration default to 0:25:0;
+	resource usage
+		use non_cons_A(u) from start + S to finish + E;
+    end activity type use_A_from_to
+
+activity instance Adefault of type use_A_default id A0
+    begin
+	attributes
+		"Start" = 2020-011T01:00:00;
+	parameters
+		(10);
+    end activity instance Adefault

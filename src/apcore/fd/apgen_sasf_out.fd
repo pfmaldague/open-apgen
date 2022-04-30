@@ -1,0 +1,27 @@
+APGEN_SASF_OUT
+# used to process sasf files WRITTEN by apgen
+file: header record* end
+
+header: "apgen SASF OUT format" any* "\n" end
+
+record:							< start RawRecord >
+	any* [one_substitution]				< end RawRecord >
+	"\n"
+	end
+
+one_substitution:					< end RawRecord >
+	if( "apgen_SASF_MISSION_NAME" )
+							< RawRecord = "CASSINI" >
+	else if( "apgen_SASF_SPACECRAFT_NAME" )
+							< RawRecord = "CASSINI" >
+	else if( "apgen_SASF_PROJECT" ) ["_ACRONYM"]
+							< RawRecord = "CAS" >
+	else if( "apgen_SASF_PRODUCER_ID" )
+							< RawRecord = "MPVT" >
+	else if( "apgen_SASF_SPACECRAFT_NUMBER" )
+							< RawRecord = "82" >
+	endif						< start RawRecord >
+	any*
+	end
+	end
+	

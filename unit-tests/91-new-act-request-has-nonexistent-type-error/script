@@ -1,0 +1,5 @@
+apgen script version "nonexistent"
+
+
+NEWACTIVITY generic NAME Foo ID Foo TO 2000-001T00:00:00 LEGEND "Dummy"
+NEWACTIVITY BadType NAME Foo ID Foo TO 2000-001T01:00:00 LEGEND "Dummy"

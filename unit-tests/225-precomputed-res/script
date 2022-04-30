@@ -1,0 +1,16 @@
+APGEN script version "apgen-X.9.0-Custom - Wed Dec 29 09:02:51 PST 2021"
+# udef=(not found)
+# user=maldague
+# date=2022-004T18:56:00.000
+# hostname=eurcdevapgen2.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 225-precomputed-res/SC_state.aaf
+OPENFILE 225-precomputed-res/input.aaf
+BUILD
+NEWACTDISPLAY
+NEWRESDISPLAY 0
+ADDRESOURCE SC_State["X"] A1R1
+ADDRESOURCE SC_State["Y"] A1R1
+ADDRESOURCE SC_State["Z"] A1R1
+NEWHORIZON A1 FROM 2030-296T09:00:00.000 TO 2030-358T21:00:00.000
+OPENFILE 225-precomputed-res/layout.apf

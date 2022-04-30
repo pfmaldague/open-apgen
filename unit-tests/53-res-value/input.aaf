@@ -1,0 +1,63 @@
+apgen version "resource value"
+
+resource A: consumable float
+    begin
+	attributes
+		"Units" = "dollars";
+		"Description" = "The resource we are planning to consume.";
+	parameters
+		x: float default to 0.0;
+	profile
+		0.0;
+	usage
+		-x;
+    end resource A
+
+activity type SetTheLandscape
+    begin
+	attributes
+		"Duration" = 3:00:00;
+		"Color" = "Spring Green";
+		"Legend" = "setters";
+	parameters
+		x: float default to 3.0;
+	modeling
+		use A(x);
+		wait for span / 3.0;
+		use A(x/2);
+		wait for span / 3.0;
+		use A(-x);
+		wait for span / 3.0;
+		use A(x/4);
+    end activity type SetTheLandscape
+
+activity type Probe
+    begin
+	attributes
+		"Color" = "Salmon";
+		"Legend" = "probes";
+		"Duration" = 00:09:00;
+	parameters
+		T: time default to 2000-001T00:00:00;
+	modeling
+		x: float default to A.value(T);
+		y: float default to A.value(T + 1:00:00);
+		z: float default to A.value(T + 2:00:00);
+	write_to_stdout(now, " - ", get_id_of(this), ": x ", x, ", y ", y, ", z ", z, "\n");
+    end activity type Probe
+
+activity instance Foo of type SetTheLandscape
+    begin
+	attributes
+		"Start" = 2020-110T00:00:00;
+	parameters
+		(1);
+    end activity instance Foo
+
+activity instance Bar of type Probe
+    begin
+	attributes
+		"Start" = 2020-110T04:00:00;
+	parameters
+		(2020-110T00:30:00);
+    end activity instance Foo

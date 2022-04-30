@@ -1,0 +1,131 @@
+apgen version "foo"
+
+function a_matrix()
+    {
+	A: array default to [];
+	A1: array default to [0.5, 0.9, -0.2];
+	A2: array default to [-0.1, 0.34, -0.7];
+	A3: array default to [-0.4, -0.01, 0.8];
+	A[0] = copy_array(A1);
+	A[1] = copy_array(A2);
+	A[2] = copy_array(A3);
+	return copy_array(A);
+    }
+
+function matrix_times_scalar(A, x)
+    parameters
+	A: array default to [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]];
+	x: float default to 1.0;
+    {
+	i: integer default to 0;
+	while(i < 3) {
+		j: integer default to 0;
+		while(j < 3) {
+			A[i][j] = x * A[i][j];
+			j = j + 1;
+		}
+		i = i + 1;
+	}
+	return copy_array(A);
+    }
+
+function matrix_plus_matrix(A, B)
+    parameters
+	A: array default to [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]];
+	B: array default to [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]];
+    {
+	i: integer default to 0;
+	j: integer default to 0;
+	C: array default to [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]];
+	D: array default to [0.0, 0.0, 0.0];
+	while(i < 3) {
+		j = 0;
+		while(j < 3) {
+			D[j] = A[i][j] + B[i][j];
+			j = j + 1;
+		}
+		C[i] = copy_array(D);
+		i = i + 1;
+	}
+	return copy_array(C);
+    }
+
+function matrix_times_matrix(A, B)
+    parameters
+	A: array default to [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]];
+	B: array default to [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]];
+    {
+	i: integer default to 0;
+	j: integer default to 0;
+	k: integer default to 0;
+	f: float default to 0.0;
+	C: array default to [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]];
+	D: array default to [0.0, 0.0, 0.0];
+	while(i < 3) {
+		j = 0;
+		while(j < 3) {
+			k = 0;
+			f = 0.0;
+			while(k < 3) {
+				f = f + A[i][k] * B[k][j];
+				k = k + 1;
+			}
+			D[j] = f;
+			j = j + 1;
+		}
+		C[i] = copy_array(D);
+		i = i + 1;
+	}
+	A = copy_array(C);
+	return A;
+    }
+
+function F(N, x)
+    parameters
+	N: integer default to 0;
+	x: float default to 0.0;
+    {
+	i: integer default to 0;
+	f: array default to [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]];
+	term: array default to [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]];
+	y: array default to a_matrix();
+	while(i < N) {
+		f = matrix_plus_matrix(f, term);
+		i = i + 1;
+		term = matrix_times_scalar(term, -x/i);
+		term = matrix_times_matrix(term, y);
+	}
+	return f;
+    }
+
+function exponentials(M, N)
+    parameters
+	M: integer default to 100;
+	N: integer default to 12;
+    {
+	i: integer default to 0;
+	x: float default to 0.0;
+	A: array default to [];
+	B: array default to [];
+	C: array default to [];
+	while(i < M) {
+		d: float default to i;
+		x = 5.0 * (d / M);
+		B = F(N, x);
+		C = F(N, -x);
+		A = matrix_times_matrix(B, C);
+		if(i % 10 == 0) {
+		    write_to_stdout("A(x = ", x, ") = ", 
+			A[0][0], " ", A[0][1], " ", A[0][2], "\n",
+			"           ", A[1][0], " ", A[1][1], " ", A[1][2], "\n",
+			"           ", A[2][0], " ", A[2][1], " ", A[2][2], "\n",
+			"\n");
+		}
+		i = i + 1;
+	}
+	return 0;
+    }
+
+global integer A0 = 1000;
+global integer B0 = 40;
+global integer C0 = exponentials(A0, B0);

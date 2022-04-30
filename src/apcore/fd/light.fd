@@ -1,0 +1,43 @@
+LIGHT_TIME
+# to read Light Time files into apgen
+
+file:					< time UniversalTime "UTIME" >
+					< global integer I "" >
+					< global integer TotalNumberOfRecords "" >
+					< real up_seconds "" >
+					< real down_seconds "" >
+					< global integer NumberOfRecords "" >
+					< global string ScriptContents "Used to create the script that will do the conversion" >
+					< ScriptContents = ScriptContents ++ "CATALOG PROGRAM write_start_mark\n" >
+					< ScriptContents = ScriptContents ++ "CATALOG PROGRAM write_light_time_resources\n" >
+					< ScriptContents = ScriptContents ++ "CATALOG PROGRAM write_stop_mark\n" >
+					< ScriptContents = ScriptContents ++ "FILE EXIT NOSAVE\n" >
+					< TotalNumberOfRecords <= 0 >
+	header
+	record*
+	"\$\$EOF" any* "\n"
+	"CCSD" any* "$>"
+	end
+
+header: "CCSD" any* '\n' line*
+#	the following added because some files append the 'LIGHT TIME FILE' message to an SFDU line:
+	any*
+	"\$\$" any* "LIGHT TIME FILE" any* "\n"
+	any* "\$\$EOS" any* "\n"
+	end
+
+line:	any* "\n" end
+
+record:					< start RawRecord >
+					< NumberOfRecords = CurrentRecord >
+					< start UniversalTime >
+	"$2 $cr09 - $3 $cr09 /
+	$2 $cr09 : $2 $cr09 : $2 $cr09" < end UniversalTime >
+	"\s"+				< start down_seconds >
+	"$cr09"* '.' "$cr09"+		< end down_seconds >
+	"\s"+				< start up_seconds >
+	"$cr09"* '.' "$cr09"+		< end up_seconds >
+	any*				< end RawRecord >
+					< TotalNumberOfRecords = TotalNumberOfRecords + 1 >
+	'\n' end
+	end

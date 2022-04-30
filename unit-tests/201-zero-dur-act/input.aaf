@@ -1,0 +1,38 @@
+apgen version "no duration"
+
+attributes
+directive attribute appeal: boolean default to false;
+directive attribute amount: integer default to 0;
+end attributes
+
+resource A: settable integer
+    begin
+	parameters
+		x: integer default to 0;
+	default
+		0;
+	usage
+		x;
+    end resource A
+
+activity type B
+    begin
+	attributes
+	    "Legend" = "Bees";
+	    "appeal" = true;
+	    "amount" = 1;
+	parameters
+	    x: integer default to 5;
+	modeling
+	    set A(x);
+    end activity type B
+
+activity instance b of type B
+    begin
+	attributes
+	    "Start" = 2021-001T00:00:00;
+	    "Duration" = 00:00:00;
+	    "amount" = 0;
+	parameters
+	    (2);
+    end activity instance b

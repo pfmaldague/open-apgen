@@ -1,0 +1,47 @@
+apgen version "computed indices"
+
+function compute_A(N)
+    parameters
+	N: integer default to 4;
+	{
+	A: array default to [];
+	s: string default to "a_";
+	i: integer default to 0;
+	while(i < N) {
+		A[i] = s + i;
+		i = i + 1;
+	}
+	return copy_array(A);
+	}
+
+global array B = compute_A(5);
+
+resource R(B): consumable float
+    begin
+	attributes
+		"Description" = "Has computed array of indices";
+	parameters
+		x: float default to 0.0;
+	profile
+		0.0;
+	usage
+		-x;
+    end resource R
+
+activity type U
+    begin
+	attributes
+		"Duration" = 1:00:00;
+	parameters
+		y: float default to 2.0;
+	resource usage
+		use R["a_1"](y) at start;
+    end activity type U
+
+activity instance k of type U
+    begin
+	attributes
+		"Legend" = "users";
+	parameters
+		(3.4);
+    end activity instance k

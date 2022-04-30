@@ -1,0 +1,55 @@
+apgen version "integer index into an arrayed resource"
+
+global array X = ["one", "two", "three", "four"];
+
+resource R(X): state string
+    begin
+	attributes
+		"Description" = "random";
+	parameters
+		f: string default to "flopping about";
+	states
+		"idle", "awake", "flopping about", "thriving";
+	profile
+		"idle";
+	usage
+		f;
+    end resource R
+
+activity type U
+    begin
+	attributes
+		"Legend" = "Us";
+		"Duration" = 12:00:00;
+		"Color" = "Purple";
+	parameters
+		a: string default to "awake";
+	modeling
+		use R[0](a) from start to finish;
+    end activity type U
+
+activity instance S of type generic
+    begin
+	attributes
+		"Legend" = "Generics";
+		"Start" = 2020-001T00:00:00;
+		"Color" = "Spring Green";
+		"Duration" = 1:00:00;
+    end activity instance S
+
+activity instance u of type U
+    begin
+	attributes
+		"Start" = 2020-001T05:00:00;
+	parameters
+		("flopping about");
+    end activity instance u
+
+activity instance E of type generic
+    begin
+	attributes
+		"Legend" = "Generics";
+		"Color" = "Orange Red";
+		"Start" = 2020-001T10:00:00;
+		"Duration" = 1:00:00;
+    end activity instance S

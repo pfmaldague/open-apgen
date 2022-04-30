@@ -1,0 +1,37 @@
+apgen version "this in attributes"
+
+global array List = ["one", "two", "three"];
+
+
+resource R(List): consumable float
+    begin
+	attributes
+		"Units" = "N/A";
+		"Subsystem" = id;
+	parameters
+		p: float default to 0.0;
+	profile
+		0.0;
+	usage
+		-p;
+    end resource R
+
+activity type A
+    begin
+	attributes
+		"Duration" = 1:00:00;
+	parameters
+		x: float default to 20.0;
+		s: string default to "three";
+	resource usage
+		use R[s](x);
+    end activity type A
+
+activity instance Foo of type A
+    begin
+	attributes
+		"Start" = 2019-201T23:33:14;
+	parameters
+		(23.9, "two");
+    end activity instance Foo
+

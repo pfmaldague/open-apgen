@@ -1,0 +1,16 @@
+apgen version "resources out of order 1"
+
+resource R: consumable float {
+	parameters
+		x: float default to 0.0;
+}
+
+activity type A
+    begin
+	attributes
+		"Duration" = 1:00:00;
+	parameters
+		x: float default to 1.0;
+	modeling
+		use R(x) at start;
+    end activity type A

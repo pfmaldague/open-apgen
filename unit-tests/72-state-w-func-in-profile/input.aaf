@@ -1,0 +1,277 @@
+apgen version "small piece of DSN modeling"
+
+local duration DSN_TXR_ON_DELAY = 00:10:00;
+local duration DSN_TXR_OFF_DELAY = 00:05:00;
+local duration DSN_TXR_OFF_EXTRA = 00:10:00;
+local duration DSN_UL_ACQ_Time = 00:05:00;
+local duration DSN_RNG_ON_WAIT = 00:05:00;
+local duration DSN_RNG_ACQ_DELAY = 00:05:00;
+local duration DSN_Lockup_Time = 00:05:00;
+local duration DSN_Minimum_Transmitter_On_Time = 00:15:00;
+local float DSN_Transmitter_Elevation_Limit = 10.5;
+local duration DSN_Precal_Time  = 00:10:00;
+local duration DSN_Postcal_Time = 00:05:00;
+local duration MIN_DSN_TXR_ON_DURATION = 00:15:00;
+local duration MIN_DSN_TXR_OFF_DURATION = 00:05:00;
+
+local array DSSDefs = [ "DSS-12",
+                        "DSS-14",
+                        "DSS-15",
+                        "DSS-16",
+                        "DSS-24",
+                        "DSS-25",
+                        "DSS-26",
+                        "DSS-27",
+                        "DSS-34",
+                        "DSS-35",
+                        "DSS-36",
+                        "DSS-42",
+                        "DSS-43",
+                        "DSS-45",
+                        "DSS-46",
+                        "DSS-48",
+                        "DSS-54",
+                        "DSS-55",
+                        "DSS-61",
+                        "DSS-62",
+                        "DSS-63",
+                        "DSS-65",
+                        "DSS-66",
+                        "DSS-73",
+                        "DSS-74",
+                        "DSS-75",
+			"DSS-83",
+			"DSS-84",
+			"DSS-85",
+			"Mauna Kea",
+			"Cerro Paranal",
+			"Cerro Tololo",
+			"La Palma",
+			"Mount John",
+			"Greenbank",
+			"VLA",
+			"OCTL",
+			"ASFS",
+			"AS3S",
+			"MC1S",
+			"DXAS",
+			"SG1S",
+			"KLMS",
+			"SG3S",
+			"TR2S",
+			"WAPS"
+];
+
+local array AntennaType = ["DSS-12" = "34M_HEF",
+                            "DSS-14" = "70M",
+                            "DSS-15" = "34M_HEF",
+                            "DSS-16" = "26M",
+                            "DSS-24" = "34M_BWG",
+                            "DSS-25" = "34M_BWG",
+                            "DSS-26" = "34M_SBW",
+                            "DSS-27" = "34M_BWG",
+                            "DSS-34" = "34M_SBW",
+                            "DSS-35" = "34M_SBW",
+                            "DSS-36" = "34M_BWG",
+                            "DSS-42" = "34M_HEF",
+                            "DSS-43" = "70M",
+                            "DSS-45" = "34M_HEF",
+                            "DSS-46" = "26M",
+                            "DSS-48" = "64M_JAXA",
+                            "DSS-54" = "34M_BWG",
+                            "DSS-55" = "34M_SBW",
+                            "DSS-61" = "34M_HEF",
+                            "DSS-62" = "34M_HEF",
+                            "DSS-63" = "70M",
+                            "DSS-65" = "34M_HEF",
+                            "DSS-66" = "26M",
+                            "DSS-73"  = "15M_ESA",
+                            "DSS-74" = "35M_ESA",
+                            "DSS-75" = "15M_ESA",
+		            "DSS-83" = "35M_ESA",
+		            "DSS-84" = "35M_ESA",
+		            "DSS-85" = "13M_SSC",
+			    "Mauna Kea"     = "Optical",
+			    "Cerro Paranal" = "Optical",
+			    "Cerro Tololo"  = "Optical",
+			    "La Palma"      = "Optical",
+			    "Mount John"    = "Optical",
+			    "Greenbank"     = "Non-DSN",
+			    "VLA"           = "Non-DSN",
+			    "OCTL"          = "Optical",
+			    "ASFS"       = "11M",
+			    "AS3S"       = "11M",
+			    "MC1S"       = "10M",
+			    "DXAS"       = "10M",
+			    "SG1S"       = "11M",
+			    "KLMS"       = "11M",
+			    "SG3S"       = "13.6M",
+			    "TR2S"       = "7.3M",
+			    "WAPS"       = "11M"
+
+];
+
+function SubChar( InputString, FromChar, ToChar )
+	parameters
+		InputString: string default to "";
+		FromChar: string default to "";
+		ToChar: string default to "";
+	{
+		OutputString: string default to "";
+		i: integer default to 0;
+		while ( i < Strlen(InputString) ){
+
+			if ( extract(InputString,i,1) == FromChar ){
+
+				OutputString = OutputString + ToChar;
+			}
+			else{
+
+				OutputString = OutputString + extract(InputString,i,1);
+			}
+			i = i + 1;
+		}
+		return OutputString;
+
+	}
+
+function TransmitterRequired(config_code)
+	parameters
+        config_code: string default to "" ;
+        {
+		ConfigCodeIndex: string default to "";
+		ConfigCodeIndex = "A_"+config_code;
+
+        	if( Config_Codes_Table[ConfigCodeIndex]["X_TXL"] == 1){
+        	    return TRUE;
+        	}
+        	else{
+        	    return FALSE;
+        	}
+        }
+
+resource DSS_avForDL(DSSDefs): state string
+    begin
+        attributes
+	    "Subsystem" = "Ground";
+        parameters
+            neededState: string default to "INACTIVE";
+        states
+            "INACTIVE",
+            "ACTIVE";
+        profile
+            "INACTIVE";
+        usage
+            neededState;
+    end resource DSS_avForDL
+
+function Any34MDSSavForDL ( )
+	{
+		i: integer default to 0;
+                while( i < length_of("DSS_avForDL")){
+			if ( DSS_avForDL[i].currentval() == "ACTIVE" && extract(AntennaType[i],0,3) == "34M" ){
+				return "ACTIVE";
+			}
+			i = i + 1;
+		}
+		return "INACTIVE";
+	}
+
+resource Any_34M_DSS_avForDL: state string
+    begin
+        attributes
+	    "Subsystem" = "Ground";
+        parameters
+            neededState: string default to "INACTIVE";
+        states
+            "INACTIVE",
+            "ACTIVE";
+        profile
+            Any34MDSSavForDL( );
+    end resource Any_34M_DSS_avForDL
+
+
+resource Update_DSS: abstract
+    begin
+	attributes
+	    "Subsystem" = "Ground";
+	parameters
+	    DSS: string default to "";
+	    which: string default to "INACTIVE";
+	modeling
+        set DSS_avForDL[DSS](which) ;
+    end resource Update_DSS
+
+activity type TrackingAllocation
+    begin
+        attributes
+	    "Subsystem" = "Ground";
+            "Legend" = "DSN";
+            "Duration" = Duration;
+            "Color" = "Orange";
+	    "Description" = "TrackingAllocation";
+         parameters
+            Duration: duration default to 00:00:00 ? "Duration of station tracking activity (EOT-BOT)";
+            DSS:  string default to "DSS-15" range [DSSDefs] ? "Ground station identifier, i.e. DSS-15";
+            PASS: string default to "0000" ;
+	    config_code:   string   default to ""    ? "Station configuration code";
+	    DESC:          string   default to "Test"            ? "Pass description";
+	creation
+	    name = DSS + "_Pass_" + PASS + "_" + SubChar(trim(DESC,3)," ","_");
+	    BOT: time default to start;
+	    EOT: time default to start + Duration;
+	modeling
+		BOT: time default to start;
+		EOT: time default to BOT + Duration;
+
+		use Update_DSS(DSS,"ACTIVE");
+
+
+		if ( TransmitterRequired(config_code) == TRUE
+			&& Duration >= ( DSN_TXR_ON_DELAY + MIN_DSN_TXR_ON_DURATION + DSN_TXR_OFF_DELAY)){
+
+			wait for DSN_TXR_ON_DELAY;
+			wait for (Duration - DSN_TXR_ON_DELAY - DSN_TXR_OFF_DELAY);
+			wait for DSN_TXR_OFF_DELAY;
+
+		} else{
+			wait for EOT-BOT;
+		}
+		use Update_DSS(DSS, "INACTIVE");
+    end activity type TrackingAllocation
+
+activity type station_allocation
+    begin
+	attributes
+	    "Subsystem" = "Ground";
+            "Legend" = "DSN";
+            "Duration" = BOA_BOT+BOT_EOT+EOT_EOA;
+	    "Description" = "DSN Station Allocation activity, generated by processing a DSN_EIGHT_WEEK_SCHEDULE file or by the Apgen scheduling activity Schedule_DSS_Allocation";
+	parameters
+	    spacecraft_id: string   default to "140"             ? "Spacecraft identification number";
+	    BOA:           time     default to 2001-001T00:00:00 ? "Beginning of the allocation (including pre-cal)";
+	    BOT_EOT:       duration default to 01:00:00          ? "Time from beginning of track to end of track";
+	    BOA_BOT:       duration default to 08:00:00          ? "Time from beginning of allocation to beginning of track";
+	    EOT_EOA:       duration default to 00:15:00          ? "Time from end of track to end of allocation";
+	    station_id:    string   default to "DSS-15"          ? "Station identification number";
+	    config_code:   string   default to "N002"            ? "Station configuration code";
+	    PASS:          string   default to "0001"            ? "Pass number";
+	    PROJ:          string   default to "DIF"             ? "Project identification";
+	    DESC:          string   default to "Test"            ? "Pass description";
+	    WORK_CODE:     string   default to "1A1"    ? "Work code";
+        creation
+            DSS: string default to station_id ;
+	    span =BOA_BOT+BOT_EOT+EOT_EOA;
+	    name = "DSS_"+extract(DSS,4,2)+"_"+PASS;
+        modeling
+            DSS: string default to station_id ;
+	    BOT: time default to BOA + BOA_BOT;
+	    name = "DSS_"+extract(DSS,4,2)+"_"+PASS;
+	    span =BOA_BOT+BOT_EOT+EOT_EOA;
+
+        nonexclusive_decomposition
+
+       	    BOT: time default to BOA + BOA_BOT;
+	    DSS: string default to station_id ;
+            TrackingAllocation(BOT_EOT,DSS,PASS,config_code, DESC) at BOT;
+    end activity type station_allocation

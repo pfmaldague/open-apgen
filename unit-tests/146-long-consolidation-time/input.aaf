@@ -1,0 +1,139 @@
+apgen version "Instrument_Scheduler_functions.aaf"
+
+resource UVSOpMode: state string
+    begin
+	states
+		"OFF", "ON";
+	profile
+		"OFF";
+    end resource UVSOpMode
+
+resource EISNACOpMode: state string
+    begin
+	states
+		"OFF", "ON";
+	profile
+		"OFF";
+    end resource EISNACOpMode
+
+resource EISWACOpMode: state string
+    begin
+	states
+		"OFF", "ON";
+	profile
+		"OFF";
+    end resource EISWACOpMode
+
+resource ETHEMISOpMode: state string
+    begin
+	states
+		"OFF", "ON";
+	profile
+		"OFF";
+    end resource ETHEMISOpMode
+
+resource REASONOpMode: state string
+    begin
+	states
+		"OFF", "ON";
+	profile
+		"OFF";
+    end resource REASONOpMode
+
+resource SUDAOpMode: state string
+    begin
+	states
+		"OFF", "ON";
+	profile
+		"OFF";
+    end resource SUDAOpMode
+
+resource MISEOpMode: state string
+    begin
+	states
+		"OFF", "ON";
+	profile
+		"OFF";
+    end resource MISEOpMode
+
+resource MASPEXOpMode: state string
+    begin
+	states
+		"OFF", "ON";
+	profile
+		"OFF";
+    end resource MASPEXOpMode
+
+# @return is_low_rate -  TRUE: We are sending only low-rate data
+#                        FALSE: We are sending some high-rate data
+function isLowRateData()
+{
+    is_high_rate: boolean default to FALSE;
+    is_high_rate = ( UVSOpMode.currentval() == "SCIENCE_ESAA_STARE" || 
+                     UVSOpMode.currentval() == "SCIENCE_ESAA_SCAN" || 
+                     UVSOpMode.currentval() == "SCIENCE_JUPTRAN" || 
+                     UVSOpMode.currentval() == "SCIENCE_SOCC" || 
+                     UVSOpMode.currentval() == "SCIENCE_NCTORS" || 
+                     UVSOpMode.currentval() == "SCIENCE_SOLOCC" || 
+                     UVSOpMode.currentval() == "DARK_CALIBRATION" || 
+                     EISNACOpMode.currentval() == "FRAMING" || 
+                     EISNACOpMode.currentval() == "PUSHBROOM" || 
+                     EISWACOpMode.currentval() == "FRAMING" || 
+                     EISWACOpMode.currentval() == "PUSHBROOM" ||
+                     ETHEMISOpMode.currentval() == "FLYBY" ||
+                     ETHEMISOpMode.currentval() == "SCAN" ||
+                     ETHEMISOpMode.currentval() == "CALIBRATION" ||
+                     REASONOpMode.currentval() == "ACTIVE_SOUNDING" ||
+                     SUDAOpMode.currentval() == "PROCESSING" ||
+                     MISEOpMode.currentval() == "TRANSFER" ||
+                     MISEOpMode.currentval() == "PROCESSING" ||
+                     MASPEXOpMode.currentval() == "FLYBY_OPTIMIZE_AND_CALIBRATE" ||
+                     MASPEXOpMode.currentval() == "FLYBY_BKG_MEAS" ||
+                     MASPEXOpMode.currentval() == "FLYBY_CRYOTRAP_COOLDOWN" ||
+                     MASPEXOpMode.currentval() == "FLYBY_SCIENCE_ACQ" ||
+                     MASPEXOpMode.currentval() == "FLYBY_PROCESSING" ||
+                     MASPEXOpMode.currentval() == "LRA_SCIENCE_ACQ" ||
+                     MASPEXOpMode.currentval() == "LRA_BKG_MEAS_WITH_PUMP" ||
+                     MASPEXOpMode.currentval() == "LRA_OPTIMIZE_AND_CALIBRATE" ||
+                     MASPEXOpMode.currentval() == "LRA_PROCESSING" );
+
+    if( UVSOpMode.currentval() == "SCIENCE_ESAA_STARE" || 
+                     UVSOpMode.currentval() == "SCIENCE_ESAA_SCAN" || 
+                     UVSOpMode.currentval() == "SCIENCE_JUPTRAN" || 
+                     UVSOpMode.currentval() == "SCIENCE_SOCC" || 
+                     UVSOpMode.currentval() == "SCIENCE_NCTORS" || 
+                     UVSOpMode.currentval() == "SCIENCE_SOLOCC" || 
+                     UVSOpMode.currentval() == "DARK_CALIBRATION" || 
+                     EISNACOpMode.currentval() == "FRAMING" || 
+                     EISNACOpMode.currentval() == "PUSHBROOM" || 
+                     EISWACOpMode.currentval() == "FRAMING" || 
+                     EISWACOpMode.currentval() == "PUSHBROOM" ||
+                     ETHEMISOpMode.currentval() == "FLYBY" ||
+                     ETHEMISOpMode.currentval() == "SCAN" ||
+                     ETHEMISOpMode.currentval() == "CALIBRATION" ||
+                     REASONOpMode.currentval() == "ACTIVE_SOUNDING" ||
+                     SUDAOpMode.currentval() == "PROCESSING" ||
+                     MISEOpMode.currentval() == "TRANSFER" ||
+                     MISEOpMode.currentval() == "PROCESSING" ||
+                     MASPEXOpMode.currentval() == "FLYBY_OPTIMIZE_AND_CALIBRATE" ||
+                     MASPEXOpMode.currentval() == "FLYBY_BKG_MEAS" ||
+                     MASPEXOpMode.currentval() == "FLYBY_CRYOTRAP_COOLDOWN" ||
+                     MASPEXOpMode.currentval() == "FLYBY_SCIENCE_ACQ" ||
+                     MASPEXOpMode.currentval() == "FLYBY_PROCESSING" ||
+                     MASPEXOpMode.currentval() == "LRA_SCIENCE_ACQ" ||
+                     MASPEXOpMode.currentval() == "LRA_BKG_MEAS_WITH_PUMP" ||
+                     MASPEXOpMode.currentval() == "LRA_OPTIMIZE_AND_CALIBRATE" ||
+                     MASPEXOpMode.currentval() == "LRA_PROCESSING" )  {
+	write_to_stdout("made it past the huge if!!!\n");
+    }
+                      
+    if (is_high_rate) {
+    	return false;
+    }
+    else {
+    	return true;
+    }          
+	
+}
+
+

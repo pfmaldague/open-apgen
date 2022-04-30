@@ -1,0 +1,25 @@
+APGEN script version "apgen-10.0.0pre-nov-05-Unknown build"
+# udef=(not found)
+# user=maldague
+# date=2017-311T15:40:37.000
+# hostname=scriabin.jpl.nasa.gov
+# n_apgen_files=0
+OPENFILE 26-state-res-array-w-labeled-states/input.aaf
+NEWACTDISPLAY
+NEWRESDISPLAY 0
+ADDRESOURCE StateVector["one"]["AA"] A1R1
+ADDRESOURCE StateVector["one"]["BB"] A1R1
+ADDRESOURCE StateVector["one"]["CC"] A1R1
+ADDRESOURCE StateVector["three"]["AA"] A1R1
+ADDRESOURCE StateVector["three"]["BB"] A1R1
+ADDRESOURCE StateVector["three"]["CC"] A1R1
+ADDRESOURCE StateVector["two"]["AA"] A1R1
+ADDRESOURCE StateVector["two"]["BB"] A1R1
+ADDRESOURCE StateVector["two"]["CC"] A1R1
+NEWHORIZON A1 FROM 2020-002T01:02:02.020 TO 2020-003T01:02:02.020
+NEWHORIZON A1 FROM 2020-002T00:02:02.020 TO 2020-003T00:02:02.020
+NEWHORIZON A1 FROM 2020-001T20:02:02.020 TO 2020-002T20:02:02.020
+NEWACTIVITY generic NAME generic ID generic TO 2020-001T20:45:19.488 LEGEND "bars"
+NEWACTIVITY generic NAME generic ID generic TO 2020-002T16:57:28.602 LEGEND "New Activities"
+REMODEL
+#QUIT 0

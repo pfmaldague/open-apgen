@@ -1,0 +1,15 @@
+apgen version "complex array"
+
+global array A_static = ["first" = [1, 2, 3, 4], "second" = ["one" = "pretty", "two" = "large"]];
+
+function die_early(i, s)
+    parameters
+	i: integer default to 0;
+	s: string default to "hello";
+    {
+    A: array default to [];
+    A = ["first" = A_static["second"], "second" = A_static["first"], "third" = i, "fourth" = s];
+    return A;
+    }
+
+global array B = die_early(4, "hello");

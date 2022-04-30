@@ -1,0 +1,33 @@
+apgen version "Huh?"
+
+resource A: consumable integer
+    begin
+        parameters
+	    x: integer default to 10;
+	profile
+	    100;
+	usage
+	    x;
+    end resource A
+
+activity type B
+    begin
+	attributes
+	    "Duration" = 1:00:00;
+	parameters
+	    y: integer default to 10;
+	modeling
+	    use A(y);
+    end activity type B
+
+activity type S
+    begin
+        attributes
+	    "Duration" = 5:00:00;
+	parameters
+	    N: integer default to 10;
+        expansion
+	    windows: array default to [];
+	    get_windows(A.currentval() < 70) for ["min" = 0:0:1, "max" = 1T00:00:00];
+	    write_to_stdout("Windows: ", windows, "\n");
+    end activity type S

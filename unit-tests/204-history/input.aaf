@@ -1,0 +1,197 @@
+apgen version "history"
+
+global array S_indices = ["alpha", "beta"];
+
+resource S(S_indices): state string
+    begin
+	attributes
+	    "Subsystem" = "S";
+	    "Units" = "N/A";
+	parameters
+	    s: string default to "";
+	states
+	    "OFF", "ON";
+	profile
+	    "OFF";
+	usage
+	    s;
+    end resource S
+
+resource C: consumable float
+    begin
+	attributes
+	    "Subsystem" = "C";
+	    "Units" = "doubloons";
+	parameters
+	    f: float default to 0.0;
+	profile
+	    0.0;
+	usage
+	    -f;
+    end resource C
+
+resource N: nonconsumable float
+    begin
+	attributes
+	    "Subsystem" = "N";
+	    "Units" = "doubloons";
+	parameters
+	    f: float default to 0.0;
+	profile
+	    0.0;
+	usage
+	    -f;
+    end resource N
+
+resource T: settable float
+    begin
+	attributes
+	    "Subsystem" = "T";
+	    "Units" = "doubloons";
+	parameters
+	    f: float default to 0.0;
+	default
+	    0.0;
+	usage
+	    f;
+    end resource T
+	
+
+activity type A_S
+    begin
+	attributes
+	    "Color" = "Aquamarine";
+	    "Legend" = "S";
+	    "Duration" = d;
+	parameters
+	    d: duration default to 01:30:00;
+	    incr: duration default to 00:05:00;
+	modeling
+	    t: time default to start;
+	    State: string default to "ON";
+	    while(t <= finish) {
+		if(State == "ON") {
+		    State = "OFF";
+		} else if(State == "OFF") {
+		    State = "ON";
+		}
+		wait for t;
+		set S["beta"](State);
+		t = t + incr;
+	    }
+    end activity type A_S
+
+activity type A_C
+    begin
+	attributes
+	    "Color" = "Aquamarine";
+	    "Legend" = "S";
+	    "Duration" = d;
+	parameters
+	    d: duration default to 01:30:00;
+	    incr: duration default to 00:05:00;
+	    delta: float default to 0.1;
+	modeling
+	    t: time default to start;
+	    while(t <= finish) {
+		wait for t;
+		use C(delta);
+		t = t + incr;
+		delta = delta * 1.01;
+	    }
+    end activity type A_C
+
+activity type A_N
+    begin
+	attributes
+	    "Color" = "Aquamarine";
+	    "Legend" = "S";
+	    "Duration" = d;
+	parameters
+	    d: duration default to 01:30:00;
+	    incr: duration default to 00:05:00;
+	modeling
+	    t: time default to start;
+	    while(t <= finish) {
+		wait for t;
+		use N(1.0) from now to now + 00:03:00;
+		t = t + incr;
+	    }
+    end activity type A_N
+
+activity type A_T
+    begin
+	attributes
+	    "Color" = "Purple";
+	    "Legend" = "T";
+	    "Duration" = d;
+	parameters
+	    d: duration default to 01:30:00;
+	    incr: duration default to 00:05:00;
+	    delta: float default to 0.1;
+	modeling
+	    t: time default to start;
+	    while(t <= finish) {
+		wait for t;
+		set T(delta);
+		t = t + incr;
+		delta = delta * 1.01;
+	    }
+    end activity type A_T
+
+function print_A(s, A)
+    parameters
+	s: string default to "a";
+	A: array default to [];
+    {
+    T: array default to A["times"];
+    V: array default to A["values"];
+    i: integer default to 0;
+
+    write_to_stdout(now, " - ", s, ":\n");
+    while(i < length_of(T)) {
+	write_to_stdout("    ", T[i], " - ", V[i], "\n");
+	i = i + 1;
+    }
+    }
+
+activity type scheduler
+    begin
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 12:00:00;
+	    "Legend" = "schedulers";
+	concurrent_expansion
+	    t: time default to start + 00:03:00;
+	    A: array default to [];
+	    C: array default to [];
+	    N: array default to [];
+	    T: array default to [];
+	    while(t < finish) {
+		A = S["beta"].history(t - 00:10:00, t + 00:10:00);
+		wait for t;
+		print_A("A", A);
+		t = t + 6:00;
+	    }
+	    t = start + 1T00:03:00;
+	    while(t < finish + 1T00:00:00) {
+		C = C.history(t - 00:10:00, t + 00:10:00);
+		wait for t;
+		print_A("C", C);
+		t = t + 6:00;
+	    }
+	    t = start + 2T00:03:00;
+	    while(t < finish + 2T00:00:00) {
+		N = N.history(t - 00:10:00, t + 00:10:00);
+		wait for t;
+		print_A("N", C);
+		t = t + 6:00;
+	    }
+	    t = start + 3T00:03:00;
+	    while(t < finish + 3T00:00:00) {
+		T = T.history(t - 00:10:00, t + 00:10:00);
+		wait for t;
+		print_A("T", T);
+		t = t + 6:00;
+	    }
+    end activity type scheduler

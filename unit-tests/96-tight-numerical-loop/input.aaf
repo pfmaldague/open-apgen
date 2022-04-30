@@ -1,0 +1,38 @@
+apgen version "foo"
+
+function F(N, x)
+    parameters
+	N: integer default to 0;
+	x: float default to 0.0;
+    {
+	i: integer default to 0;
+	f: float default to 0.0;
+	term: float default to 1.0;
+	while(i < N) {
+		f = f + term;
+		i = i + 1;
+		term = -term * x / i;
+	}
+	return f;
+    }
+
+function exponentials(M, N)
+    parameters
+	M: integer default to 100;
+	N: integer default to 12;
+    {
+	i: integer default to 0;
+	x: float default to 0.0;
+	e: float default to 0.0;
+	while(i < M) {
+		x = 5.0 * (i / M);
+		e = F(N, x);
+		// write_to_stdout("exp(", x, ") = ", e, "\n");
+		i = i + 1;
+	}
+	return 0;
+    }
+
+global integer A = 100000;
+global integer B = 30;
+global integer C = exponentials(A, B);

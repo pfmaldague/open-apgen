@@ -1,0 +1,5 @@
+APGEN script version "apgen-X.1-Custom - Wed Feb 27 11:58:58 PST 2019"
+OPENFILE 165-read-xmltol/input.aaf
+OPENFILE input/build.scr
+OPENFILE 165-read-xmltol/apgen-tol.xml
+NEWACTDISPLAY

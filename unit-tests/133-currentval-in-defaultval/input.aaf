@@ -1,0 +1,53 @@
+apgen version "usage"
+
+resource StateScalar: state integer
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: integer default to 1;
+	states
+		0, 1, 2, 3, 4;
+	profile
+		0;
+	usage
+		x;
+    end resource StateScalar
+
+resource StateVector["a", "b", "c"]: state integer
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: integer default to 1;
+	states
+		0, 1, 2, 3, 4;
+	profile
+		0;
+	usage
+		x;
+    end resource StateScalar
+
+activity type useStateScalar
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "scalars";
+	parameters
+		a: integer default to StateScalar.currentval();
+		b: integer default to StateVector["b"].currentval();
+	modeling
+		use StateScalar(a) from start to finish;
+    end activity type useStateScalar
+
+
+activity instance Foo of type useStateScalar id James_Bond_007
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-039T09:42:07.823;
+	parameters
+		(1, 2);
+    end activity instance Foo

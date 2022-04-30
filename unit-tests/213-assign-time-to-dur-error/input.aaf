@@ -1,0 +1,8 @@
+apgen version "duration"
+
+activity instance Foo of type generic
+    begin
+	attributes
+	    "Start" = 2021-010T00:00:00;
+	    "Duration" = 2020-001T00:00:00;
+    end activity instance Foo

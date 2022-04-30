@@ -1,0 +1,36 @@
+apgen version "member of member"
+
+
+activity type C
+    begin
+	attributes
+	    "Color" = "Aquamarine";
+	    "Duration" = 00:15:00;
+	modeling
+	    write_to_stdout("C: grandparent's foo is ", parent.parent.foo, "\n");
+    end activity type C
+
+activity type B
+    begin
+	attributes
+	    "Color" = "Spring Green";
+	    "Duration" = 00:30:00;
+	nonexclusive_decomposition
+	    C();
+    end activity type B
+
+activity type A
+    begin
+	foo: integer default to 10;
+	attributes
+	    "Color" = "Orange Red";
+	    "Duration" = 01:00:00;
+	nonexclusive_decomposition
+	    B();
+    end activity type A
+
+activity instance F of type A
+    begin
+	attributes
+	    "Start" = 2021-100T00:00:00;
+    end activity instance F

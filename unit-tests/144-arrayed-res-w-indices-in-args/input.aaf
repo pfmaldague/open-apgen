@@ -1,0 +1,32 @@
+apgen version "arrays"
+
+global array Antennas = ["One", "Iceland", "Belgium", "Japan"];
+
+function integer compute_something(string i);
+
+function compute_something(i)
+    parameters
+	i: string default to 0;
+	{
+	write_to_stdout("compute_something(): i = ", i, "\n");
+
+	if(i == "One") {
+		return 23;
+	} else if(i == "Iceland") {
+		return 10;
+	} else {
+		return 2;
+	}
+	}
+
+resource Info(Antennas): consumable integer
+    begin
+	attributes
+	    "Error Low" = compute_something(indices[0]);
+	parameters
+		x: integer default to 0;
+	profile
+		0;
+	usage
+		-x;
+    end resource Info

@@ -1,0 +1,60 @@
+apgen version "simple limits"
+
+resource R: consumable float
+    begin
+	attributes
+		"Maximum" = 10.0;
+		"Minimum" = -10.0;
+	parameters
+		x: float default to 0.0;
+	profile
+		0.0;
+	usage
+		-x;
+    end resource R
+
+activity type A
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 5:00:00;
+	parameters
+		s: float default to 2.0;
+	modeling
+		use R(6 * s);
+		wait for 00:40:00;
+		use R(-3 * s);
+		wait for 00:40:00;
+		use R(-6 * s);
+		wait for 00:40:00;
+		use R(-2.5 * s);
+		wait for 00:40:00;
+		use R(-5.0 * s);
+		wait for 00:40:00;
+		use R(15.0 * s);
+    end activity type A
+
+activity instance S of type generic
+    begin
+	attributes
+		"Color" = "Purple";
+		"Duration" = 00:30:00;
+		"Start" = 2020-001T00:00:00;
+    end activity instance S
+
+activity instance A0 of type A
+    begin
+	attributes
+		"Start" = 2020-001T04:00:00;
+	parameters
+		(1.85);
+    end activity instance A0
+
+
+activity instance E of type generic
+    begin
+	attributes
+		"Color" = "Purple";
+		"Duration" = 00:30:00;
+		"Start" = 2020-002T00:00:00;
+    end activity instance E

@@ -1,0 +1,48 @@
+apgen version "faster"
+
+
+activity type ghost
+    begin
+	attributes
+		"Color" = s;
+		"Duration" = d;
+		"Legend" = "Ghosts";
+	parameters
+		d: duration default to 1:00:00;
+		s: string default to "Spring Green";
+    end activity type ghost
+
+activity type the_child
+    begin
+	attributes
+		"Color" = "Purple";
+		// This is interesting but it fails during consolidation:
+		// "Duration" = p.span / 2;
+		"Duration" = 01:00:00;
+		"Legend" = "Children";
+	parameters
+		p: instance default to "generic";
+	creation
+		write_to_stdout("p: ", p, "\n");
+    end activity type the_child
+
+activity type the_parent
+    begin
+	attributes
+		"Color" = "Lavender";
+		"Duration" = 6:00:00;
+		"Legend" = "Parents";
+	nonexclusive_decomposition
+		T: time default to start - 1:00:00;
+		U: time default to finish + 1:00:00;
+		ghost(span + 3:00:00, "Spring Green") at start - 1:00:00;
+		ghost(span, "Orange Red") at start;
+		the_child(this) every 00:10:00 from T to U;
+    end activity type the_parent
+
+activity instance Foo of type the_parent
+    begin
+	attributes
+		"Start" = 2028-163T01:02:03;
+		"Color" = "Yellow";
+    end activity instance Foo

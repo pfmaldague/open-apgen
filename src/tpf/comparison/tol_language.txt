@@ -1,0 +1,202 @@
+#
+# TOL LANGUAGE DEFINITION FILE
+#
+# This file is a specification of the "TOL" language. TOL output
+# files created by APGenX conform to this syntax. The syntax allows
+# more general statements, but we are not going to worry about that.
+# The point of creating this file is to build an efficient parser
+# for TOL files.
+#
+input_file
+#
+#
+#  The header starts with
+#
+#     apgen TOL format -- <version> - <date>
+#     meta_tol=<meta TOL file name>
+#     n_hidden_resources=<n>
+#     udef=<udef identification>
+#     user=<user name>
+#     date=<date>
+#     hostname=<host name>
+#     n_apgen_files=<f>
+#
+#  followed by <f> records of the form
+#
+#     apgen_file=<file name>
+#
+#  and finally
+#
+#     (This header to be removed by seq_review when using non-raw format)
+#     $$EOH
+#
+#  The TOL lex parser reads this whole thing as TOK_HEADER_START followed
+#  by <f> TOK_INPUTFILE records followed by
+#  TOK_HEADER_END
+#
+   TOK_HEADER_START
+   rest_of_header
+      =tol_header_files
+         =!OneInputFile-one_input_file
+            =TOK_AUXFILE
+            | =TOK_INPUTFILE
+         | =tol_header_files one_input_file
+   activity_metadata
+      TOK_ACT_METADATA
+      =!ActivityData-act_metadata
+         =activity_datum
+            =!OneActivityDatum-TOK_SYM
+            '='
+            TOLArray
+               '['
+               =!ValueArray-rest_of_list
+                  =expression_list
+                     =!tol_value-TOLValue
+                        optional_minus
+                           ='-'
+                           | =!Null-null
+                        =!ValueInteger-TOK_INTEGER
+                        | optional_minus =!ValueFloat-TOK_FLOAT
+                        | =!ValueTime-TOK_TIME
+                        | optional_minus =!ValueDuration-TOK_DURATION
+                        | =!ValueTrue-TOK_TRUE
+                        | =!ValueFalse-TOK_FALSE
+                        | =!ValueString-TOK_STRING
+                        | =TOLArray
+                     | =expression_list ',' TOLValue
+                  | =keyword_value_pairs
+                     =keyword_value_pair
+                        =!KeywordValuePair-TOK_STRING '=' TOLValue
+                     | =keyword_value_pairs ',' keyword_value_pair
+                  | =!Null-null
+               ']'
+            ','
+         | =act_metadata activity_datum
+#
+#     #
+#     # Activity metadata are absent in a partial TOL.
+#     # Note: as of now (July 2020) partial TOL are
+#     # not output by APGenX; only partial XMLTOL are.
+#     #
+#
+      | =!Null-null
+#
+#   #
+#   # Unlike activity types, resource metadata
+#   # are always present
+#   #
+#
+   resource_metadata
+      TOK_RES_METADATA
+      =!ResourceData-res_metadata
+         =resource_datum
+            =!OneResourceDatum-TOK_SYM
+            indices
+               =!Indices-TOLindices
+                  =oneIndex
+                     '['
+                     =!OneIndex-TOK_STRING
+                     ']'
+                  | =TOLindices
+                  oneIndex
+               | =!Null-null
+            '='
+            TOLArray
+            ','
+         | =res_metadata resource_datum
+      TOK_HEADER_END
+   =rest_of_file
+      =!TolFile-records
+         =!Record-record
+            =!TimeStamp-time_stamp
+               =TOK_TIME
+            ','
+            record_content
+               =!TOLActStart-TOK_START
+               ','
+               activity_name
+                  act_name_prefix
+                     =TOK_FLOAT
+                     | =TOK_INTEGER
+                     | =!Null-null
+                  =TOK_SYM
+               ','
+#
+#              #
+#              # This symbol is actually 'd'
+#              #
+#
+               TOK_SYM ',' TOK_DURATION ','
+#
+#              #
+#              # "VISIBLE" or "INVISIBLE"
+#              #
+#
+               TOK_STRING ','
+#
+#              #
+#              # activity type
+#              #
+#
+               TOK_TYPE '=' TOK_SYM ','
+#
+#              #
+#              # activity unique ID
+#              #
+#
+               activity_id
+                  TOK_NODEID '='
+                  =!ActId-TOK_SYM
+               ',' TOK_LEGEND '=' TOK_STRING ',' TOK_DESCRIPTION '=' TOK_STRING ','
+               TOK_ATTRIBUTES '=' '('
+               attributes
+                  =!Attributes-one_attribute
+                     =!Attribute-TOK_STRING
+                     '='
+                     TOLValue
+                  | =attributes ',' one_attribute
+               ')' ',' TOK_PARAMETERS '=' '('
+               rest_of_parameters
+                  =parameters
+                     =!Parameters-one_parameter
+                        =!Parameter-TOK_SYM
+                        '='
+                        TOLValue
+                     | =parameters ',' one_parameter
+                  | =!Null-null
+               ')'
+#
+#              #
+#              # parent=<my_parent_ID>
+#              #
+#
+               ',' TOK_SYM '=' TOK_SYM
+               ';'
+               | =!TOLActEnd-TOK_END ',' TOK_SYM ';'
+               | =!TOLResValue-TOK_RES
+               ','
+               TOK_SYM
+               indices
+               '='
+               TOLValue
+               ';'
+               | =!TOLWarning-TOK_WARNING ',' TOK_SYM ',' TOK_STRING ';'
+               | =!TOLError-TOK_ERROR ',' TOK_SYM ',' TOK_STRING ';'
+               | =!TOLRelease-TOK_RELEASE ',' TOK_SYM ',' TOK_STRING ';'
+               | =!TOLUnreleased-TOK_UNRELEASED ',' TOK_SYM ',' TOK_STRING ';'
+         | =records record
+#
+#     #
+#     # terminate is a built-in rule which causes the
+#     # parser to return immediately with a zero return
+#     # code, indicating that the input is valid.
+#     #
+#     # The idea here is that as soon as the processing
+#     # threads have decided they have enough data, they
+#     # can send a message to the lex parser telling it
+#     # to return the token TOK_TERMINATE instead of the
+#     # next time stamp, thus successfully terminating.
+#
+      | records
+      =!Terminate-terminate
+      | =!Null-null

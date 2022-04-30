@@ -1,0 +1,25 @@
+apgen version "Dennis suggested this"
+
+activity type child
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:00:00;
+		"Legend" = "Children";
+    end activity type child
+
+activity type parent
+    begin
+	attributes
+		"Legend" = "Parents";
+		"Duration" = 4:00:00;
+		"Color" = "Purple";
+	decomposition
+		child();
+    end activity type parent
+
+activity instance Foo of type parent
+    begin
+	attributes
+		"Start" = 2019-006T09:00:00;
+    end activity instance Foo

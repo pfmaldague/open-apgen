@@ -1,0 +1,49 @@
+apgen version "usage"
+
+global array manyStates = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+			"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1", "i1", "j1", "k1", "l1", "m1", "n1", "o1", "p1", "q1", "r1", "s1", "t1", "u1", "v1", "w1", "x1", "y1", "z1",
+			"a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2", "i2", "j2", "k2", "l2", "m2", "n2", "o2", "p2", "q2", "r2", "s2", "t2", "u2", "v2", "w2", "x2", "y2", "z2"];
+
+resource StateScalar: state string
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: string default to manyStates[3];
+	states
+		manyStates;
+	profile
+		manyStates[0];
+	usage
+		x;
+    end resource StateScalar
+
+activity type useStateScalar
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "scalars";
+	parameters
+		a: integer default to 4;
+	modeling
+		i: integer default to 0;
+		delta: duration default to a * 1:00;
+		while(i < (length_of(manyStates) * 4)) {
+			write_to_stdout("using manyStates[", i, "] = ", manyStates[i % length_of(manyStates)], "\n");
+			use StateScalar(manyStates[i % length_of(manyStates)]) from now to now + delta;
+			wait for delta * 1.5;
+			i = i + 1;
+		}
+    end activity type useStateScalar
+
+
+activity instance Foo of type useStateScalar id James_Bond_007
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-039T09:42:07.823;
+	parameters
+		(1);
+    end activity instance Foo

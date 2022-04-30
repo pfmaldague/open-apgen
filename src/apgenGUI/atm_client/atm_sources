@@ -1,0 +1,37 @@
+libATM_client_a_SOURCES=  \
+	../../atm_client/ACT_sys.C \
+	../../atm_client/APconfig.C \
+	../../atm_client/CON_sys.C \
+	../../atm_client/DSsource.C \
+	../../atm_client/gtk_editor_bridge.C \
+	../../atm_client/gtk_xmlwin_bridge.C \
+	../../atm_client/gtk_globals_bridge.C \
+	../../atm_client/IO_plot.C \
+	../../atm_client/IO_plot_intfc.C \
+	../../atm_client/IO_plot_util.C \
+	../../atm_client/IO_plotheader.C \
+	../../atm_client/IO_seqtalk.C \
+	../../atm_client/RD_sys.C \
+	../../atm_client/UI_abspanzoom.C \
+	../../atm_client/UI_activitydisplay.C \
+	../../atm_client/UI_ds_draw.C \
+	../../atm_client/UI_ds_timeline.C \
+	../../atm_client/UI_exec.C \
+	../../atm_client/UI_mainwindow.C \
+	../../atm_client/UI_mainwindowbx.C \
+	../../atm_client/UI_messagewarndialog.C \
+	../../atm_client/UI_mw_draw.C \
+	../../atm_client/UI_openfsd.C \
+	../../atm_client/UI_popups.C \
+	../../atm_client/UI_printdialog.C \
+	../../atm_client/UI_resabsscrollzoom.C \
+	../../atm_client/UI_resabsscrollzoombx.C \
+	../../atm_client/UI_resourcedisplay.C \
+	../../atm_client/UI_save.C \
+	../../atm_client/UI_vertical_scroll.C \
+	../../atm_client/UI_xmltol.C \
+	../../atm_client/client_errors.C \
+	../../atm_client/panel.C
+
+atm_SOURCES =  \
+	../../atm_client/main.C

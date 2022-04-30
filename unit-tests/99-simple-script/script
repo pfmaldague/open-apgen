@@ -1,0 +1,4 @@
+apgen script version "foo"
+
+OPENFILE 99-simple-script/input.aaf
+REMODEL

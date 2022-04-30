@@ -1,0 +1,30 @@
+apgen version "foo"
+
+script new_activity() {
+	args: array default to [];
+	params: array default to [];
+	result: array default to [];
+	files: array default to [];
+
+	args["type"] = "nonexcl_level_1";
+	args["name"] = "ActCreatedByScript";
+	args["id"] = "Foo_foofoo";
+	args["start"] = 2012-054T19:10:00.000;
+	args["legend"] = "A_new_special_legend";
+	params["I1"] = 23443;
+	params["I2"] = -11;
+	args["params"] = copy_array(params);
+	result = xcmd("NEW_ACTIVITY", args);
+	write_to_stdout("new_activity: Activity just created = ", result, "\n");
+	}
+
+script detail() {
+	args: array default to [];
+	result: array default to [];
+	args["new"] = TRUE;
+	result = xcmd("DETAIL_ALL", args);
+	write_to_stdout("detail_all: got ", length_of(result), " child acts.\n");
+	return result;
+	}
+
+

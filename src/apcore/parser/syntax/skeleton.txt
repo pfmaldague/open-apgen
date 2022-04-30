@@ -1,0 +1,892 @@
+#
+# SKELETON.TXT
+#
+# This file is the input to the gramgen syntax generator. The format of this
+# file needs to be documented; right now the only "documentation" is the
+# (not very complex) code in gramgen.C, and of course the comments below.
+#
+# The resulting grammar is contained in output file grammar.y. This
+# generated file is deleted by build.sh, but the bison output file
+# grammar.output is not; it provides a good summary of the grammar
+# rules and how these rules are implemented.
+#
+# In a nutshell, each line in this file (other than comments, which
+# are identified by a '#' at the beginning of the line) defines a
+# syntax rule in a simplified yacc format. The first line defines
+# the top-level item, which starts at the beginning of the line.
+# Each line is indented by an amount that is a multiple of a fixed
+# number (usually 4). Other values of the indentation can be used,
+# and must be supplied to gramgen so it can deal with it.
+#
+# The rules that define an item at level n are indented at level n+1.
+# The items that enter the definition must be one of the following:
+#
+#   - a token, which is anything that starts with the prefix TOK_
+#   - a literal of the form 'x' where x is any ASCII character
+#   - a non-terminal, which is any combination of letters, underscores
+#     and digits
+#   - the "or" symbol, |
+#
+# The first time a non-terminal is used, it must be defined in the
+# line(s) immediately below it. Successive items in the definition
+# of a non-terminal can be put on the same line, but a non-terminal
+# being used for the first time must appear on a new line with nothing
+# following it.
+#
+# One, and only one, of the items defining a non-terminal must be
+# preceded by an = sign. This identifies the "leading item" in a
+# definition. The leading item is used by gramgen to construct the
+# semantic action of the rule that expresses a definition.
+#
+# A simple example
+# ================
+#
+# The following skeleton snippet:
+#
+# input_file
+#     TOK_BEGIN
+#     =sentence
+#         =TOK_WORD
+#         | =sentence TOK_WORD
+#     TOK_END
+#
+# results in the following yacc source file (prelude omitted):
+#
+# input_file: TOK_BEGIN sentence TOK_END
+#             {
+#             $$ = parsedExp(new pE($2));
+#             $$->add($1);
+#             $$->add($3);
+#             }
+# sentence:   TOK_WORD
+#             {
+#             $$ = parsedExp(new pE($1));
+#             }
+#             | sentence TOK_WORD
+#             {
+#             $$ = parsedExp(new pE($1));
+#             $$->add($2);
+#             }
+#
+# Basic features of the output grammar
+# ====================================
+#
+# As seen in the above example:
+#
+#    1. Semantic values, identified by a '$' (this is the
+#       yacc convention), have type parsedExp<pE> where
+#       parsedExp is an APGenX-specific smart pointer template,
+#       and pE (parsed Expression) is the class containing
+#       the parsed data. In its simplest form, a pE object
+#       contains a string (which is basically what the lexer
+#       provides as yytext) and a vector of pE's which have
+#       been added to it via the pE::add() method.
+#
+#    2. The first statement in the semantic action defines the
+#       semantic value of the item being defined ($$ in yacc-speak)
+#       as a new parsedExp (which is a smart pointer for parsed
+#       expressions, which are implemented as the pE class) with
+#       the semantic value of the item that was preceded by '='
+#       as its argument.
+#
+#    3. Items in the definition that were not preceded by '='
+#       are added to the item being defind using the pE::add()
+#       method.
+#
+# Note that the rules regarding recursion, as illustrated by
+# the definition of 'sentence' in the above examples, are
+# taken directly from the yacc grammar generator.
+#
+# These rules are enough to provide a complete parsed tree of the
+# input file; the top-level item can be examined by using the
+# two main grammar-oriented methods of the pE class:
+#
+#    1. pE::getData(), which returns the string content of the
+#       object used in the pE constructor
+#
+#    2. pE::expressions, which has type std::vector<pE> and whose
+#       elements are the items passed to the pE::add() method.
+#
+# Parsing is only the first step of reading a file, however. The
+# next step is called "consolidation." During this step, APGenX
+# will extract from the parsed tree all the information it needs
+# to construct internal objects that reflect the semantics of the
+# adaptation file.
+#
+# In order to make the consolidation process as straightforward
+# as possible, gramgen provides a mechanism for overriding the
+# base pE class and making it resemble more closely the object that 
+# APGenX needs to build, evaluate and execute in the course of a
+# modeling session. This override mechanism consists in defining
+# the leading item in the following format:
+#
+#      item
+#          one_component
+#          ...
+#          =!LeadingItem-another_component
+#          ...
+#          last_component
+#
+# Here, the string contained between the ! and - characters, in
+# this case LeadingItem, is interpreted as the name of the constructor
+# for a class derived from pE.
+#
+input_file
+    TOK_APGEN TOK_VERSION
+    Expression
+#
+#       #
+#       # We take care of list expressions first, because they
+#       # may contain a number of features that makes their
+#       # definition somewhat verbose, although not in a deep
+#       # way. Basically, each keyword-pair value in a struct-style
+#       # list can be documented by means of a description, a range
+#       # and a unit specification.
+#       #
+#
+        =list
+            '['
+            =!Array-rest_of_list
+                =expression_list
+                    =!ExpressionList-Expression
+                    | =expression_list ',' Expression
+                | =keyword_value_pairs
+                    =docum_assignment
+                        =!Assignment-Expression
+                        TOK_EQUAL_SIGN
+                        Expression
+                        opt_range
+                            TOK_RANGE
+                            =!VarRange-range_list
+                                ='['
+                                range_block_exp
+                                    =range_exp
+                                        =!RangeExpression-Expression
+                                        | =!RangeExpression-Expression TOK_RANGE_SYM
+                                        | =!RangeExpression-Expression TOK_RANGE_SYM Expression
+                                        | =!RangeExpression-Expression TOK_RANGE_SYM TOK_MULTIPLE_OF Expression
+                                        opt_rest_of_range
+                                            =TOK_RANGE_SYM Expression
+                                            | =!Null-null
+                                        | =!RangeExpression-TOK_MULTIPLE_OF Expression
+                                        opt_rest_of_range
+                                        | =!ReverseRangeExpression-TOK_RANGE_SYM Expression
+                                    | =range_block_exp ',' range_exp
+                                ']'
+                                | =!Symbol-TOK_ID
+                            | TOK_RANGE TOK_FUNC
+                            =!VarRange-simple_function_call
+                                =!FunctionCall-TOK_INTERNAL_FUNC
+                                zero_or_more_args
+                                    '('
+                                    =expression_list
+                                    ')'
+                                    | ='(' ')'
+                                | =!FunctionCall-TOK_LOCAL_FUNCTION zero_or_more_args
+                            | =!Null-null
+                        opt_descr
+                            '?' =!VarDescription-TOK_STRINGVAL
+                            | =!Null-null
+                        opt_units
+                            '$' =!VarUnits-TOK_STRINGVAL
+                            | =!Null-null
+                    | =keyword_value_pairs ',' docum_assignment
+                | =!Null-null
+            ']'
+#
+#       #
+#       # Next, Expressions containing numeric quantities which can be
+#       # combined via arithmetic and logical operators are defined.
+#       # Note that precedence rules are fully taken care of by the
+#       # structure of the syntax.
+#       #
+#
+        | =maybe_ORed
+            =maybe_ANDed
+                =maybe_compared
+                    =maybe_equal
+                        =maybe_a_sum
+                            =maybe_added_or_subtracted
+                                =maybe_a_product
+                                    =maybe_a_factor
+                                        =atom
+                                            =time_value
+                                                =!Constant-TOK_TIME
+                                                | =!Constant-TOK_STRINGVAL ':' TOK_DURATION
+                                            | =other_atom
+                                                '(' =!Parentheses-Expression ')'
+                                                | '('
+                                                =!DataTypeDefaultValue-builtin_type
+                                                    =TOK_DATA_TYPE
+                                                    | =TOK_INSTANCE
+                                                ')'
+                                                | '(' =!DataTypeDefaultValue-TOK_DYN_TYPE ')'
+                                                | =a_number
+                                                    =!Constant-TOK_NUMBER
+                                                    | =!Constant-TOK_FALSE
+                                                    | =!Constant-TOK_TRUE
+                                                | =!Constant-TOK_DURATION
+                                                | =!ByValueSymbol-TOK_MULT TOK_ID
+                                                | =!Constant-TOK_PI
+                                                | =!Constant-TOK_RAD
+                                                | =symbol
+                                                    =!Symbol-TOK_ID
+                                                    | =!Symbol-TOK_START
+                                                    | =!Symbol-TOK_FINISH
+                                                    | =!Symbol-TOK_NODEID
+                                                    | =!Symbol-TOK_TYPE
+                                                | =qualified_symbol
+                                                    =!QualifiedSymbol-symbol
+                                                    qualifications
+                                                        =!Qualifications-qualification
+                                                            =index_list
+                                                                =!MultidimIndices-single_index
+                                                                    '[' =!SingleIndex-Expression ']'
+                                                                | =index_list single_index
+                                                        | =!Qualifications-member
+                                                            =dot_member
+                                                                '.'
+                                                                =!ClassMember-symbol
+                                                            | =dot_member index_list
+                                                        | =qualifications member
+                                                | =function_call
+                                                    =!FunctionCall-TOK_INTERNAL_FUNC zero_or_more_args
+                                                    | =!FunctionCall-TOK_LOCAL_FUNCTION zero_or_more_args
+                                                    | =!FunctionCall-symbol zero_or_more_args
+                                                | =function_call qualifications
+#
+#                                               #
+#                                               # The following version of FunctionCall includes
+#                                               # expressions of the form
+#                                               #
+#                                               #    <object>.<method>(arg, arg, ...)
+#                                               #
+#                                               # If <object> is a resource, the method can be
+#                                               #
+#                                               #	- currentval
+#                                               #       - value
+#                                               #       - history
+#                                               #       - interpval
+#                                               #
+#                                               # If <object> is an activity instance, the method can be
+#                                               #
+#                                               #	- exists
+#                                               #
+#                                               # As of now (April 2022) these are the only valid methods.
+#                                               #
+#
+                                                | =!FunctionCall-qualified_symbol zero_or_more_args
+                                                | =!Constant-TOK_STRINGVAL
+                                            | =!UnaryMinus-TOK_MINUS
+                                            exp_modifiable_by_unary_minus
+                                                =other_atom
+                                                | =time_value
+                                        | maybe_a_factor =!RaiseToPower-TOK_EXPONENT atom
+                                    | maybe_a_product =!MultiplicativeExp-TOK_MULT maybe_a_factor
+                                    | maybe_a_product =!MultiplicativeExp-TOK_DIV maybe_a_factor
+                                    | maybe_a_product =!MultiplicativeExp-TOK_MOD maybe_a_factor
+                            | maybe_a_sum =!AdditiveExp-TOK_PLUS maybe_added_or_subtracted
+                            | maybe_a_sum =!AdditiveExp-TOK_MINUS maybe_added_or_subtracted
+                    | maybe_equal =!EqualityTest-TOK_EQUAL maybe_equal
+                    | maybe_equal =!EqualityTest-TOK_NOTEQUAL maybe_equal
+                | maybe_compared =!Comparison-TOK_LESSTHAN maybe_compared
+                | maybe_compared =!Comparison-TOK_LESSTHANOREQ maybe_compared
+                | maybe_compared =!Comparison-TOK_GTRTHANOREQ maybe_compared
+                | maybe_compared =!Comparison-TOK_GTRTHAN maybe_compared
+            | maybe_ORed =!Logical-TOK_ANDOP maybe_ANDed
+        | Expression =!Logical-TOK_OROP maybe_ORed
+#
+#   #
+#   # Finally, high-level items such as activities and resources are defined.
+#   # These items involve many Expressions, but since we have already fully
+#   # defined them, we can use them as building blocks here. We start with
+#   # resource definitions, which gives us a chance to introduce 'programs'
+#   # as lists of statements.
+#   #
+#   # DSL statements belong to two distinct categories:
+#   #
+#   #   - a small subset of the general-purpose capabilities provided by
+#   #     a standard language such as C, Java or C++; this subset
+#   #     is sufficient for carrying out any desired operation, but without the
+#   #     convenience and object orientation provided by standard languages
+#   #
+#   #   - time, duration, array and instance data types which are not normally
+#   #     provided by standard languages. Arrays, in particular, make it very
+#   #     easy to define multi-level containers for mission system data that
+#   #     would require the use of templates in languages like C++
+#   #
+#   #   - a small set of advanced time-oriented capabilities which provide
+#   #     quick access to sophisticated modeling and scheduling algorithms
+#   #     
+#   # Note that in cases where the convenience of a standard language is
+#   # essential, the user-defined library mechanism can be used to introduce
+#   # externally defined C or C++ programs via functions which can be invoked
+#   # from within the adaptation.
+#   #
+#
+    =!InputFile-file_body
+        =!File-adaptation_item
+            =!Resource-resource_prefix
+                TOK_RESOURCE
+                =!ResourceInfo-TOK_ID
+                resource_arrays
+                    =list
+                    | '('
+                    =array_list
+                        =!ArrayList-one_array
+                            =list
+                            | =!Symbol-TOK_ID
+                        | =array_list ',' one_array
+                    ')'
+                    | =!Null-null
+                ':'
+            resource_def
+#
+#               #
+#               # Concrete resource declaration
+#               #
+#
+                =!ResourceDef-concrete_resource_def_top_line
+                    =!ConcreteResourceTypeEtc-concrete_resource_type_etc
+                        =assoc_res
+                            =!ResourceType-TOK_ASSOC
+                            | =!ResourceType-TOK_ASSOC TOK_CONSUMABLE
+                        | =integral_res
+                            =!ResourceType-TOK_INTEGRAL
+                            TOK_ID
+                        | =resource_type
+                            =!ResourceType-TOK_CONSUMABLE
+                            | =!ResourceType-TOK_NONCONSUMABLE
+                            | =!ResourceType-TOK_SETTABLE
+                            | =!ResourceType-TOK_STATE
+                            | =!ResourceType-TOK_EXTERN
+                    resource_data_type
+                        =!DataType-builtin_type
+                '{'
+                res_parameter_section_or_null
+                    TOK_PARAMETERS
+                    =!Parameters-param_declarations
+                        =!Declarations-declaration
+                            =!Declaration-TOK_ID
+                            ':'
+                            param_scope_and_type
+                                TOK_LOCAL =!DataType-builtin_type
+                                | =!DataType-builtin_type
+                                | =!DataType-TOK_DYN_TYPE
+                            TOK_DEFAULT
+                            TOK_TO
+                            Expression
+                            opt_range
+                            opt_descr
+                            opt_units
+                            ';'
+                        | =param_declarations declaration
+                    | =!Null-null
+                '}'
+#
+#               #
+#               # Abstract resource declaration
+#               #
+#
+                | =!ResourceDef-abstract_resource_def_top_line
+                    =TOK_ABSTRACT
+                '{' res_parameter_section_or_null '}'
+#
+#               #
+#               # Abstract resource definition
+#               #
+#
+                | =!ResourceDef-abstract_resource_def_top_line
+                TOK_BEGIN
+                opt_attributes_section_res
+                res_parameter_section_or_null
+                resource_usage_section
+                    =!ModelingSection-resource_usage_header
+                        =TOK_RESOURCE TOK_USAGE
+                        | =TOK_MODEL
+#
+#                   #
+#                   # Although the "program" element appears first within
+#                   # the definition of abstract resources, it is generic
+#                   # in nature and appears in various places, including
+#                   # concrete resources and activity type definitions.
+#                   #
+#
+                    program
+                        =!Program-statement
+                            =not_if_statement
+                                =one_declarative_assignment
+                                | =declaration
+                                | =return_statement
+                                    TOK_RETURN =!Return-Expression ';'
+                                | =continue_statement
+                                    =!Continue-TOK_CONTINUE ';'
+                                | =while_statement
+                                    =!While-while_statement_header
+                                        TOK_WHILE '(' =Expression ')'
+                                    '{' program '}'
+                                | =generalized_function_call
+                                    =child_activity_name_w_arguments
+                                        =!Decomp-TOK_ACT_TYPE '('
+                                        optional_expression_list
+                                            =expression_list
+                                            | =!Null-null
+                                        ')'
+                                        temporalSpecification
+                                            =!TemporalSpec-TOK_AT Expression
+                                            | =!TemporalSpec-TOK_IMMEDIATELY
+                                            | =from_to_clause
+                                                =!TemporalSpec-TOK_FROM Expression TOK_TO Expression
+                                            | =!Null-null
+                                    | =!Decomp-TOK_CALL
+                                    call_or_spawn_arguments
+                                        '(' =expression_list ')'
+                                    temporalSpecification
+                                    | =!Decomp-TOK_SPAWN call_or_spawn_arguments temporalSpecification
+                                    | =!FunctionCall-TOK_INTERNAL_FUNC zero_or_more_args
+                                    | =!FunctionCall-TOK_LOCAL_FUNCTION zero_or_more_args
+                                    | =!FunctionCall-TOK_METHOD zero_or_more_args
+                                    | TOK_SPAWN
+                                    =!FunctionCall-TOK_METHOD zero_or_more_args
+                                    | =qualified_symbol
+                                    | =!Usage-resource_usage_with_arguments
+                                        TOK_ACTION
+                                        =!ResUsageWithArgs-resource_usage_name
+                                            =TOK_ID
+                                            | =TOK_ID index_list
+                                        '('
+                                        optional_expression_list
+                                        ')'
+                                    temporalSpecification
+                                ';'
+                                | =wait_statement
+#
+#                                   #
+#                                   # The semantics of WAIT FOR are straightforward:
+#                                   # just wait for a duration that is the value of
+#                                   # the supplied Expression. The duration must be
+#                                   # positive or zero, and the current thread is
+#                                   # _always_ interrupted, even if the duration is 0.
+#                                   #
+#                                   # The semantics of WAIT UNTIL are more complex.
+#                                   # If the supplied Expression is a duration, the
+#                                   # meaning is the same as WAIT FOR except that the
+#                                   # Expression should be a time, not a duration. In
+#                                   # addition, it is not an error if the time is
+#                                   # earlier than 'now'; the current thread is only
+#                                   # interrupted if the specified time is strictly
+#                                   # greater than 'now'.
+#                                   #
+#
+                                    TOK_WAIT TOK_FOR =!WaitFor-Expression ';'
+                                    | TOK_WAIT TOK_UNTIL =!WaitUntil-Expression ';'
+                                    | TOK_WAIT TOK_UNTIL TOK_REGEXP =!WaitUntilRegexp-Expression ';'
+                                    | TOK_GETWINDOWS '(' =!GetWindows-expression_list ')'
+                                    TOK_FOR Expression ';'
+                                    | TOK_INTERPWINS '(' =!GetInterpwins-expression_list ')'
+                                    TOK_FOR Expression ';'
+                            | =if_statement
+                                =if_statement_header
+                                    =!If-TOK_IF '(' Expression ')'
+                                    | =!If-TOK_ELSE TOK_IF '(' Expression ')'
+                                    | =!If-TOK_ELSE
+                                '{'
+                                program
+                                '}'
+                                | =if_statement_header
+                                not_if_statement
+                        | =program statement
+                TOK_END TOK_RESOURCE TOK_ID
+#
+#               #
+#               # Concrete resource definition
+#               #
+#               # This is one of the most complex definitions in the DSL,
+#               # because of the need to accommodate an override mechanism
+#               # in the definitions of individual elements of an arrayed
+#               # resource. A README file should be devoted to the design
+#               # of the override mechanism. For a first look, it helps
+#               # to look at existing examples in a mission-specific
+#               # adaptation such as Europa Clipper.
+#               #
+#
+                | =!ResourceDef-concrete_resource_def_top_line
+                TOK_BEGIN
+                opt_attributes_section_res
+                    =TOK_ATTRIBUTES
+                    attr_progs
+                        =declarative_program
+                            =!Program-one_declarative_assignment
+                                =!Assignment-lhs_of_assign
+                                    =symbol
+                                    | =qualified_symbol
+                                    | =!Constant-TOK_STRINGVAL
+                                assignment_op
+                                    =TOK_EQUAL_SIGN
+                                    | =TOK_MERGE
+                                Expression ';'
+                            | =declarative_program one_declarative_assignment
+                        | =labeled_programs
+                            =labeled_program
+                                =!LabeledProgram-when_case_label
+                                    =TOK_WHEN TOK_STRINGVAL ':'
+                                    | =TOK_WHEN TOK_DEFAULT ':'
+                                    | =TOK_WHEN index_list ':'
+                                declarative_program
+                            | =labeled_programs labeled_program
+                    | =!Null-null
+                res_parameter_section_or_null
+                opt_states_section
+                    =TOK_STATES
+                    state_list
+                        =expression_list ';'
+                        | =labeled_state_list
+                            =single_labeled_states
+                                =!LabeledStates-when_case_label
+                                expression_list ';'
+                            | =labeled_state_list single_labeled_states
+                    | =!Null-null
+                opt_profile_section
+                    =TOK_PROFILE
+                    profile_list
+                        =list_of_profile_expressions
+                            =!ProfileList-Expression
+                            | =list_of_profile_expressions TOK_UNTIL Expression TOK_THEN Expression
+                        ';'
+                        | =labeled_profile_list
+                            =labeled_profile_body
+                                =!LabeledProfiles-when_case_label
+                                list_of_profile_expressions ';'
+                            | =labeled_profile_list labeled_profile_body
+                    | =!Null-null
+                opt_time_series
+                    =time_series
+                        time_series_keyword
+                            =!TimeSeriesStart-TOK_TIME_SERIES
+                        =!ExpressionListPrecomp-one_series
+                            =single_res_name
+                                =!SinglePrecompResName-TOK_STRINGVAL
+                            TOK_EQUAL_SIGN '['
+                            inside_array_precomp
+                                =!ArrayPrecomp-keyword_value_pairs_precomp
+                                    =one_pair_precomp
+                                        =!AssignmentPrecomp-TOK_STRINGVAL
+                                        TOK_EQUAL_SIGN
+                                        '['
+                                        one_number
+                                            =!OneNumber-TOK_NUMBER
+                                            | TOK_MINUS
+                                            =!OneNumber-TOK_NUMBER
+                                        ',' one_number
+                                        ']'
+                                    | =keyword_value_pairs_precomp ','
+                                    one_pair_precomp
+                            ']' ';'
+                        | =time_series
+                        one_series
+                    | =!Null-null
+                opt_default_section
+                    =TOK_DEFAULT
+                    default_list
+                        =!DefaultExpression-Expression ';'
+                        | =!LabeledDefaultList-labeled_default_list
+                            =single_labeled_default
+                                =!LabeledDefault-when_case_label
+                                Expression ';'
+                            | =labeled_default_list single_labeled_default
+                    | =!Null-null
+                usage_section_or_null
+                    =usage_section
+                        TOK_USAGE =!UsageSection-Expression ';'
+                    TOK_END TOK_RESOURCE TOK_ID
+                    | TOK_END TOK_RESOURCE =TOK_ID
+#
+#           #
+#           # Function and Method definitions have "side effects." A side
+#           # effect, by definition, is an action that modifies the rules
+#           # for token parsing. The first time a function is encountered,
+#           # the name of the function is unknown to the tokenizer (flex)
+#           # and it is therefore identified as TOK_ID (which stands for
+#           # a generic symbol). After the function has been parsed, its
+#           # name has been registered as a "local function," i. e., a
+#           # function that is defined in an AAF. From then on in the
+#           # parsing process, it can be used in the body of another
+#           # function, a resource definition, an activity type
+#           # or instance definition, or a constraint definition. 
+#           #
+#           # Functions can be declared before they are defined. This
+#           # means that by the time the parser hits the definition,
+#           # the function name will be reported as a TOK_LOCAL_FUNCTION
+#           # rather than TOK_ID. Both possibilities have to be covered.
+#           # Duplicate definitions, which are therefore tolerated by
+#           # the syntax parser, will be detected in the consolidation
+#           # phase.
+#           #
+#
+            | =function_def
+                =!FunctionDeclaration-start_function_decl
+                    TOK_FUNC
+                    function_return_type
+                        =!FunctionReturnType-builtin_type
+                        | =!FunctionReturnType-TOK_VOID
+                    =!FunctionIdentity-TOK_ID
+#
+#                   #
+#                   # As explained above, the following duplicate is
+#                   # required for functions that have been declared
+#                   # before they are defined.
+#                   #
+#
+                    | TOK_FUNC function_return_type
+                    =!FunctionIdentity-TOK_LOCAL_FUNCTION
+                '('
+                signature
+                    =!Signature-signature_stuff
+                        =!DataType-builtin_type
+                    TOK_ID
+                    | =signature ',' signature_stuff TOK_ID
+                    | =!Null-null
+                ')'
+                ';'
+                | =!FunctionDefinition-start_function_def
+                    TOK_FUNC
+                    =!FunctionIdentity-TOK_ID
+                    | TOK_FUNC
+                    =!FunctionIdentity-TOK_LOCAL_FUNCTION
+#
+#                   #
+#                   # Method definitions are similar to function definitions,
+#                   # except that they must specify which section of an activity
+#                   # or abstract resource definition they can be invoked from.
+#                   #
+#                   # For the time being, method declarations are not supported
+#                   # but that could be changed easily.
+#                   #
+#
+                    | TOK_MODEL TOK_FUNC
+                    =!FunctionIdentity-TOK_ID
+                    | TOK_RESOURCE TOK_USAGE TOK_FUNC
+                    =!FunctionIdentity-TOK_ID
+                    | TOK_DECOMPOSITION TOK_FUNC
+                    =!FunctionIdentity-TOK_ID
+                '('
+                optional_func_params
+                    =symbol_list
+                        =one_symbol_in_list
+                            =TOK_ID
+                            | =TOK_AMPERSAND TOK_ID
+                        | =symbol_list ',' one_symbol_in_list
+                    ')' TOK_PARAMETERS param_declarations
+                    | =')'
+                '{'
+                program
+                '}'
+            | =activity_type_decl
+                activity_type_preface
+                    =TOK_ACTIVITY TOK_TYPE
+                    | =TOK_ACTIVITY TOK_TEMPLATE
+                    | =TOK_INSTANCE TOK_TYPE
+                =!ActTypeDecl-activity_name
+                    =TOK_ID
+                    | =TOK_ACT_TYPE
+                ';'
+            | =activity_type_def
+                =!ActType-initial_act_type_section
+                    =!ActTypeInitial-activity_type_header
+                        activity_type_preface
+                        =activity_name
+                        TOK_BEGIN
+                    opt_type_class_variables
+                        =!ActTypeClassVariables-type_class_variables
+                            =!Program-class_var_declaration
+                                =declaration
+                            | =type_class_variables class_var_declaration
+                        | =!Null-null
+                    opt_act_attributes_section
+                        TOK_ATTRIBUTES =!ActTypeAttributes-declarative_program
+                        | =!Null-null
+                    opt_act_type_param_section
+                        TOK_PARAMETERS
+                        =!Parameters-param_declarations
+                        | =!Null-null
+                body_of_activity_type_def
+                    =!ActTypeBody-opt_creation_section
+                        =!TypeCreationSection-TOK_CREATION
+                        program
+                        | =!Null-null
+                    opt_res_usage_section
+                        =resource_usage_section
+                        | =!Null-null
+                    opt_decomposition_section
+                        =!ActTypeDecomp-decomposition_header
+                            =TOK_DECOMPOSITION
+                        program
+                        opt_res_usage_section
+                        | =!Null-null
+                    opt_destruction_section
+                        =!TypeCreationSection-TOK_DESTRUCTION
+                        program
+                        | =!Null-null
+                    end_of_activity_type_def
+                        =TOK_END
+                        type_tail_end
+                            TOK_ACTIVITY TOK_TYPE =TOK_ACT_TYPE
+                            | TOK_ACTIVITY TOK_TEMPLATE =TOK_ACT_TYPE
+                            | TOK_INSTANCE TOK_TYPE =TOK_ACT_TYPE
+            | =constraint_def
+                TOK_CONSTRAINT TOK_ID ':' =!PassiveCons-TOK_ID
+                TOK_BEGIN
+                opt_constraint_class_variables
+                    '{'
+                    =cons_declarations
+                        =declaration
+                        | =cons_declarations declaration
+                    '}'
+                    | =!Null-null
+                constraint_body
+                    =!PassiveConsItem-constraint_item
+                        =TOK_CON_KWD Expression ';'
+                        | =TOK_TYPE TOK_ACT_TYPE ';'
+                        | =TOK_DATA_TYPE Expression ';'
+                        | =TOK_ID TOK_ID ';'
+                        | =TOK_ID TOK_ACT_TYPE ';'
+                    | =constraint_body constraint_item
+                constraint_message
+                    TOK_MESSAGE =!PassiveConsMessage-Expression ';'
+                constraint_severity
+                    TOK_SEVERITY =!PassiveConsSeverity-Expression ';'
+                TOK_END TOK_CONSTRAINT TOK_ID
+#
+#            #
+#            # GLOBAL ITEM
+#            #
+#
+            | =global_item
+#
+#                #
+#                # Epoch
+#                #
+#
+                TOK_EPOCH =!Global-TOK_ID TOK_EQUAL_SIGN Expression ';'
+#
+#                #
+#                # Time System
+#                #
+#
+                | TOK_TIMESYSTEM =!Global-TOK_ID TOK_EQUAL_SIGN Expression ';'
+#
+#                #
+#                # Global variable. The term 'local' is an anachronism; it
+#                # actually means the same as 'global'. The term 'constant'
+#                # can also be used; in that case, the global item can be
+#                # computed in its declaration but it can never be evaluated
+#                # again.
+#                #
+#
+                | local_or_global
+                    =TOK_GLOBAL
+                    | =TOK_LOCAL
+                    | =TOK_CONSTANT
+                any_data_type
+                    =builtin_type
+                    | =TOK_DYN_TYPE
+                =!Global-TOK_ID TOK_EQUAL_SIGN Expression opt_range opt_descr opt_units ';'
+#
+#                #
+#                # Typedef
+#                #
+#
+                | =!Typedef-typedef_preface
+                    TOK_TYPEDEF TOK_STRUCT =TOK_ID
+                    | TOK_TYPEDEF TOK_LIST =TOK_ID
+                TOK_EQUAL_SIGN Expression opt_range opt_descr opt_units ';'
+#
+#            #
+#            # CUSTOM ATTRIBUTES
+#            #
+#
+            | =attributes_custom
+                =!CustomAttributes-TOK_ATTRIBUTES
+                custom_decls
+                    =custom_declaration
+                        TOK_DIRECTIVE TOK_ATTRIBUTE =declaration
+                    | =custom_decls custom_declaration
+                TOK_END TOK_ATTRIBUTES
+#
+#            #
+#            # PLAN ITEM
+#            #
+#
+        | =!File-plan_item
+#
+#                #
+#                # Directive
+#                #
+#
+            =directive
+                TOK_DIRECTIVE =!Directive-one_declarative_assignment
+                | TOK_DIRECTIVE =!Directive-Expression ';'
+#
+#                #
+#                # ACTIVITY INSTANCE
+#                #
+#
+            | =activity_instance
+                =!ActInstance-act_instance_header
+                    TOK_ACTIVITY TOK_INSTANCE
+                    =activity_id
+                        =TOK_ID
+                        | =TOK_ACT_TYPE
+                        | =TOK_STRINGVAL
+                    TOK_OF TOK_TYPE
+                    TOK_ACT_TYPE
+                    rest_of_activity
+                        TOK_NODEID =activity_id
+                        | =!Null-null
+                TOK_BEGIN
+                decomposition_info
+                    =one_decomposition_info
+                        =!Hierarchy-TOK_HIERARCHY_KEYWORD TOK_INTO
+                        id_list
+                            =!IdList-activity_id
+                            | =id_list ',' activity_id
+                        ';'
+                    | =one_decomposition_info one_decomposition_info
+                    | =!Null-null
+                attributes_section_inst
+                    TOK_ATTRIBUTES
+                    =declarative_program
+                    | =!Null-null
+                param_section_inst
+                    TOK_PARAMETERS '('
+                    =expression_list
+                    ')' ';'
+                    | TOK_PARAMETERS '(' =')' ';'
+                    | =!Null-null
+                TOK_END TOK_ACTIVITY TOK_INSTANCE activity_id
+        | =file_body adaptation_item
+        | =file_body plan_item
+#
+#    #
+#    # APGEN ADAPTATION FILE HEADER
+#    #
+#
+    | TOK_APGEN TOK_VERSION =Expression
+#
+#    #
+#    # SPECIAL TOKENS FOR EXPRESSIONS TO BE COMPILED
+#    #
+#
+    | =TOK_SINGLE_EXPRESSION Expression
+#
+#    #
+#    # DITTO FOR STATEMENTS
+#    #
+#
+    | =TOK_SINGLE_STATEMENT statement
+#
+#    #
+#    # DITTO FOR PARAMETER LISTS
+#    #
+#
+    | =TOK_SINGLE_PARAM_LIST expression_list

@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XML_TOL>
+  <ResourceMetadata>
+    <ResourceSpec>
+      <Name>StateVector</Name>
+      <Index level="0">one</Index>
+      <Index level="1">AA</Index>
+      <DataType>integer</DataType>
+      <PossibleStates>
+        <IntegerValue>0</IntegerValue>
+        <IntegerValue>1</IntegerValue>
+        <IntegerValue>2</IntegerValue>
+        <IntegerValue>3</IntegerValue>
+      </PossibleStates>
+      <Units>silver coins</Units>
+      <Interpolation>constant</Interpolation>
+      <Maximum/>
+      <Minimum/>
+      <Subsystem/>
+    </ResourceSpec>
+    <ResourceSpec>
+      <Name>StateVector</Name>
+      <Index level="0">one</Index>
+      <Index level="1">BB</Index>
+      <DataType>integer</DataType>
+      <PossibleStates>
+        <IntegerValue>0</IntegerValue>
+        <IntegerValue>1</IntegerValue>
+        <IntegerValue>2</IntegerValue>
+        <IntegerValue>3</IntegerValue>
+      </PossibleStates>
+      <Units>silver coins</Units>
+      <Interpolation>constant</Interpolation>
+      <Maximum/>
+      <Minimum/>
+      <Subsystem/>
+    </ResourceSpec>
+    <ResourceSpec>
+      <Name>StateVector</Name>
+      <Index level="0">one</Index>
+      <Index level="1">CC</Index>
+      <DataType>integer</DataType>
+      <PossibleStates>
+        <IntegerValue>0</IntegerValue>
+        <IntegerValue>1</IntegerValue>
+        <IntegerValue>2</IntegerValue>
+        <IntegerValue>3</IntegerValue>
+      </PossibleStates>
+      <Units>silver coins</Units>
+      <Interpolation>constant</Interpolation>
+      <Maximum/>
+      <Minimum/>
+      <Subsystem/>
+    </ResourceSpec>
+    <ResourceSpec>
+      <Name>StateVector</Name>
+      <Index level="0">two</Index>
+      <Index level="1">AA</Index>
+      <DataType>integer</DataType>
+      <PossibleStates>
+        <IntegerValue>0</IntegerValue>
+        <IntegerValue>1</IntegerValue>
+        <IntegerValue>2</IntegerValue>
+        <IntegerValue>3</IntegerValue>
+      </PossibleStates>
+      <Units>silver coins</Units>
+      <Interpolation>constant</Interpolation>
+      <Maximum/>
+      <Minimum/>
+      <Subsystem/>
+    </ResourceSpec>
+    <ResourceSpec>
+      <Name>StateVector</Name>
+      <Index level="0">two</Index>
+      <Index level="1">BB</Index>
+      <DataType>integer</DataType>
+      <PossibleStates>
+        <IntegerValue>0</IntegerValue>
+        <IntegerValue>1</IntegerValue>
+        <IntegerValue>2</IntegerValue>
+        <IntegerValue>3</IntegerValue>
+      </PossibleStates>
+      <Units>silver coins</Units>
+      <Interpolation>constant</Interpolation>
+      <Maximum/>
+      <Minimum/>
+      <Subsystem/>
+    </ResourceSpec>
+    <ResourceSpec>
+      <Name>StateVector</Name>
+      <Index level="0">two</Index>
+      <Index level="1">CC</Index>
+      <DataType>integer</DataType>
+      <PossibleStates>
+        <IntegerValue>0</IntegerValue>
+        <IntegerValue>1</IntegerValue>
+        <IntegerValue>2</IntegerValue>
+        <IntegerValue>3</IntegerValue>
+        <IntegerValue>4</IntegerValue>
+        <IntegerValue>5</IntegerValue>
+        <IntegerValue>6</IntegerValue>
+      </PossibleStates>
+      <Units>silver coins</Units>
+      <Interpolation>constant</Interpolation>
+      <Maximum/>
+      <Minimum/>
+      <Subsystem/>
+    </ResourceSpec>
+    <ResourceSpec>
+      <Name>StateVector</Name>
+      <Index level="0">three</Index>
+      <Index level="1">AA</Index>
+      <DataType>integer</DataType>
+      <PossibleStates>
+        <IntegerValue>0</IntegerValue>
+        <IntegerValue>1</IntegerValue>
+        <IntegerValue>2</IntegerValue>
+        <IntegerValue>3</IntegerValue>
+      </PossibleStates>
+      <Units>silver coins</Units>
+      <Interpolation>constant</Interpolation>
+      <Maximum/>
+      <Minimum/>
+      <Subsystem/>
+    </ResourceSpec>
+    <ResourceSpec>
+      <Name>StateVector</Name>
+      <Index level="0">three</Index>
+      <Index level="1">BB</Index>
+      <DataType>integer</DataType>
+      <PossibleStates>
+        <IntegerValue>0</IntegerValue>
+        <IntegerValue>1</IntegerValue>
+        <IntegerValue>2</IntegerValue>
+        <IntegerValue>3</IntegerValue>
+      </PossibleStates>
+      <Units>silver coins</Units>
+      <Interpolation>constant</Interpolation>
+      <Maximum/>
+      <Minimum/>
+      <Subsystem/>
+    </ResourceSpec>
+    <ResourceSpec>
+      <Name>StateVector</Name>
+      <Index level="0">three</Index>
+      <Index level="1">CC</Index>
+      <DataType>integer</DataType>
+      <PossibleStates>
+        <IntegerValue>0</IntegerValue>
+        <IntegerValue>1</IntegerValue>
+        <IntegerValue>2</IntegerValue>
+        <IntegerValue>3</IntegerValue>
+      </PossibleStates>
+      <Units>silver coins</Units>
+      <Interpolation>constant</Interpolation>
+      <Maximum/>
+      <Minimum/>
+      <Subsystem/>
+    </ResourceSpec>
+  </ResourceMetadata>
+  <TOLrecord type="ACT_START">
+    <TimeStamp>2020-002T02:02:02.020</TimeStamp>
+    <Instance>
+      <ID>James_Bond_008</ID>
+      <Name>Bar</Name>
+      <Type>setStateVector</Type>
+      <Parent/>
+      <Visibility>visible</Visibility>
+      <Attributes>
+        <Attribute>
+          <Name>Color</Name>
+          <StringValue>Purple</StringValue>
+        </Attribute>
+        <Attribute>
+          <Name>span</Name>
+          <DurationValue milliseconds="3602000">01:00:02</DurationValue>
+        </Attribute>
+        <Attribute>
+          <Name>legend</Name>
+          <StringValue>bars</StringValue>
+        </Attribute>
+        <Attribute>
+          <Name>misc</Name>
+          <EmptyListValue/>
+        </Attribute>
+        <Attribute>
+          <Name>plan</Name>
+          <StringValue>166-res-array-in-tol/apf</StringValue>
+        </Attribute>
+        <Attribute>
+          <Name>sasf</Name>
+          <EmptyListValue/>
+        </Attribute>
+        <Attribute>
+          <Name>start</Name>
+          <TimeValue milliseconds="1577930522020">2020-002T02:02:02.020</TimeValue>
+        </Attribute>
+        <Attribute>
+          <Name>status</Name>
+          <StringValue>scheduled</StringValue>
+        </Attribute>
+      </Attributes>
+      <Parameters/>
+    </Instance>
+  </TOLrecord>
+  <TOLrecord type="RES_VAL">
+    <TimeStamp>2020-002T02:02:02.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <Index level="0">one</Index>
+      <Index level="1">AA</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_VAL">
+    <TimeStamp>2020-002T02:02:02.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <Index level="0">one</Index>
+      <Index level="1">BB</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_VAL">
+    <TimeStamp>2020-002T02:02:02.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <Index level="0">one</Index>
+      <Index level="1">CC</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_VAL">
+    <TimeStamp>2020-002T02:02:02.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <Index level="0">two</Index>
+      <Index level="1">AA</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_VAL">
+    <TimeStamp>2020-002T02:02:02.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <Index level="0">two</Index>
+      <Index level="1">BB</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_VAL">
+    <TimeStamp>2020-002T02:02:02.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <Index level="0">two</Index>
+      <Index level="1">CC</Index>
+      <IntegerValue>6</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_VAL">
+    <TimeStamp>2020-002T02:02:02.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <Index level="0">three</Index>
+      <Index level="1">AA</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_VAL">
+    <TimeStamp>2020-002T02:02:02.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <Index level="0">three</Index>
+      <Index level="1">BB</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_VAL">
+    <TimeStamp>2020-002T02:02:02.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <Index level="0">three</Index>
+      <Index level="1">CC</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="ACT_END">
+    <TimeStamp>2020-002T03:02:04.020</TimeStamp>
+    <ActivityID>James_Bond_008</ActivityID>
+  </TOLrecord>
+  <TOLrecord type="ACT_START">
+    <TimeStamp>2020-002T04:02:02.020</TimeStamp>
+    <Instance>
+      <ID>James_Bond_009</ID>
+      <Name>Bar</Name>
+      <Type>setStateVector</Type>
+      <Parent/>
+      <Visibility>visible</Visibility>
+      <Attributes>
+        <Attribute>
+          <Name>Color</Name>
+          <StringValue>Purple</StringValue>
+        </Attribute>
+        <Attribute>
+          <Name>span</Name>
+          <DurationValue milliseconds="3602000">01:00:02</DurationValue>
+        </Attribute>
+        <Attribute>
+          <Name>legend</Name>
+          <StringValue>bars</StringValue>
+        </Attribute>
+        <Attribute>
+          <Name>misc</Name>
+          <EmptyListValue/>
+        </Attribute>
+        <Attribute>
+          <Name>plan</Name>
+          <StringValue>166-res-array-in-tol/apf</StringValue>
+        </Attribute>
+        <Attribute>
+          <Name>sasf</Name>
+          <EmptyListValue/>
+        </Attribute>
+        <Attribute>
+          <Name>start</Name>
+          <TimeValue milliseconds="1577937722020">2020-002T04:02:02.020</TimeValue>
+        </Attribute>
+        <Attribute>
+          <Name>status</Name>
+          <StringValue>scheduled</StringValue>
+        </Attribute>
+      </Attributes>
+      <Parameters/>
+    </Instance>
+  </TOLrecord>
+  <TOLrecord type="RES_VAL">
+    <TimeStamp>2020-002T04:02:02.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <Index level="0">one</Index>
+      <Index level="1">CC</Index>
+      <IntegerValue>2</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="ACT_END">
+    <TimeStamp>2020-002T05:02:04.020</TimeStamp>
+    <ActivityID>James_Bond_009</ActivityID>
+  </TOLrecord>
+  <TOLrecord type="RES_FINAL_VAL">
+    <TimeStamp>2020-002T05:02:04.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <State res_state="RESET"/>
+      <Index level="0">one</Index>
+      <Index level="1">AA</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_FINAL_VAL">
+    <TimeStamp>2020-002T05:02:04.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <State res_state="RESET"/>
+      <Index level="0">one</Index>
+      <Index level="1">BB</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_FINAL_VAL">
+    <TimeStamp>2020-002T05:02:04.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <State res_state="SET"/>
+      <Index level="0">one</Index>
+      <Index level="1">CC</Index>
+      <IntegerValue>2</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_FINAL_VAL">
+    <TimeStamp>2020-002T05:02:04.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <State res_state="RESET"/>
+      <Index level="0">two</Index>
+      <Index level="1">AA</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_FINAL_VAL">
+    <TimeStamp>2020-002T05:02:04.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <State res_state="RESET"/>
+      <Index level="0">two</Index>
+      <Index level="1">BB</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_FINAL_VAL">
+    <TimeStamp>2020-002T05:02:04.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <State res_state="SET"/>
+      <Index level="0">two</Index>
+      <Index level="1">CC</Index>
+      <IntegerValue>6</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_FINAL_VAL">
+    <TimeStamp>2020-002T05:02:04.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <State res_state="RESET"/>
+      <Index level="0">three</Index>
+      <Index level="1">AA</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_FINAL_VAL">
+    <TimeStamp>2020-002T05:02:04.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <State res_state="RESET"/>
+      <Index level="0">three</Index>
+      <Index level="1">BB</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="RES_FINAL_VAL">
+    <TimeStamp>2020-002T05:02:04.020</TimeStamp>
+    <Resource>
+      <Name>StateVector</Name>
+      <State res_state="RESET"/>
+      <Index level="0">three</Index>
+      <Index level="1">CC</Index>
+      <IntegerValue>0</IntegerValue>
+    </Resource>
+  </TOLrecord>
+</XML_TOL>

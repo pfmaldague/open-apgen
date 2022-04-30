@@ -1,0 +1,5 @@
+APGEN script version "execute attributes in instance"
+OPENFILE 217-test-att-vals-in-instance/input.aaf
+NEWACTDISPLAY
+NEWACTIVITY NewLegendInModeling NAME NewLegendInModeling_from_script ID NewLegendInModeling TO 2021-100T04:00:00 LEGEND "Generic_Activities"
+NEWACTIVITY LegendInTypeOnly NAME LegendInTypeOnly_from_script ID LegendInTypeOnly TO 2021-100T04:00:00 LEGEND "Generic_Activities"

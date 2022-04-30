@@ -1,0 +1,7 @@
+APGEN script version "apgen-X.8.4-Custom - Wed Apr 14 07:36:50 PDT 2021"
+OPENFILE 219-scheduling-a-cascade-of-activities/input1.aaf
+BUILD
+NEWACTDISPLAY
+NEWACTIVITY TopLevel NAME TopLevel ID TopLevel TO 2020-001T00:00:00 LEGEND "TopLevel"
+SCHEDULEACTIVITY ALL
+NEWACTIVITY TopLevelDecomp NAME TopLevelDecomp ID TopLevelDecomp TO 2020-001T00:00:00 LEGEND "TopLevelDecomp"

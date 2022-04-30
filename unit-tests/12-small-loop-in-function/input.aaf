@@ -1,0 +1,25 @@
+apgen version "loop1"
+
+function A(n)
+    parameters
+	n: integer default to 0;
+    {
+    i: integer default to 0;
+    k: integer default to 0;
+    while(i < n) {
+	k = k + i * i;
+	i = i + 1;
+    }
+    return k;
+}
+
+function send_to_user(s)
+    parameters
+	s: string default to "";
+    {
+	write_to_stdout("send_to_user: ", s, "\n");
+	return 1;
+}
+
+global integer B = A(6);
+global integer dummy = send_to_user(to_string(B));

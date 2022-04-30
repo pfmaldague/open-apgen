@@ -1,0 +1,135 @@
+apgen version "foo"
+
+
+resource OKtoObserve: state integer
+    begin
+	parameters
+		value: integer default to 1 ;
+	states
+		0,1;
+	profile
+		0;
+	usage
+		value;
+    end resource OKtoObserve
+
+resource ObsInProgress: state boolean
+    begin
+	parameters
+		value: boolean default to true ;
+	states
+		false, true;
+	profile
+		false;
+	usage
+		value;
+    end resource ObsInProgress
+
+activity type ObsOpportunity;
+
+activity type DefineOpportunities
+    begin
+	attributes
+		"Color" = "Dodger Blue";
+		"Pattern" = 13 ;
+		"Duration" = Duration ;
+		"Legend" = "VIEW PERIODS";
+	parameters
+		Duration: duration default to 2:00:00;
+		how_many: integer default to 10;
+ 	decomposition
+		i: integer default to 0;
+		t: time default to start;
+		while( i < how_many )
+			{
+			ObsOpportunity(Duration * random()) at t ;
+			t = t + 12:00:00 ;
+			i = i + 1 ;
+			}
+    end activity type DefineOpportunities
+
+activity type ObsOpportunity
+    begin
+	attributes
+		"Color" = "Orange Red" ;
+		"Pattern" = 56 ;
+		"Duration" = Duration ;
+		"Legend" = "VIEW PERIODS";
+	parameters
+		Duration: duration default to 2:00:00;
+	resource usage
+		if(is_frozen("OKtoObserve") == false)
+			{
+			use OKtoObserve( 1 ) ;
+			}
+		else
+			{
+			write_to_stdout("resource OKtoObserve is frozen...\n");
+			}
+    end activity type ObsOpportunity
+
+activity type Observation
+    begin
+	attributes
+		"Color" = "Aquamarine" ;
+		"Pattern" = 49 ;
+		"Duration" = Duration ;
+		"Legend" = "Pictures";
+		"Decomposition Suffix" = "One_Picture" ;
+	parameters
+		Duration: duration default to 4:00 ;
+		theColor: string default to "Aquamarine";
+	modeling
+		Color = theColor;
+
+		write_to_stdout("activity ", id, " using ObsInProgress\n");
+
+		use ObsInProgress(true) from start to finish ;
+    end activity type Observation
+
+activity type fake_parent
+    begin
+	attributes
+		"Legend" = "Fake Parents";
+		"Duration" = D;
+		"Color" = C;
+	parameters
+		D: duration default to 1:00:00;
+		C: string default to "Spring Green";
+    end activity type fake_parent
+
+activity type decompose_via_windows
+    begin
+	attributes
+		"Color" = "Violet Red";
+		"Duration" = 2T00:00:00;
+	parameters
+		how_long: duration default to 1T00:00:00;
+		min_requirement: duration default to 0:1:0;
+	expansion
+		windows: array default to [];
+		actual_duration: duration default to 0:0:0;
+
+		wait for 0:0:0;
+		get_windows(OKtoObserve.currentval() == 1) for [
+			"start" = start,
+			"min" = min_requirement,
+			"max" = how_long,
+			"actual" = actual_duration];
+		i: integer default to 0;
+		while(i < length_of(windows))
+			{
+
+			write_to_stdout(id, " creating green observation at ",
+				windows[i], "\n");
+			Observation(00:30:00, "Spring Green") at windows[i];
+			write_to_stdout(id, " creating red observation at ",
+				windows[i + 1], "\n");
+			Observation(00:30:00, "Orange Red") at windows[i + 1];
+			i = i + 2;
+			}
+		if(i > 0)
+			{
+			fake_parent(span, Color) at start;
+			}
+    end activity type decompose_via_windows

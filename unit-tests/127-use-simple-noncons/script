@@ -1,0 +1,13 @@
+APGEN script version "apgen-X-pre-july-27-Unknown build"
+OPENFILE 127-use-simple-noncons/input.aaf
+OPENFILE input/remodel.scr
+  # REMODEL
+NEWACTDISPLAY
+NEWHORIZON A1 FROM 2020-010T21:00:00.000 TO 2020-011T21:00:00.000
+NEWACTIVITY generic NAME generic ID generic TO 2020-010T21:57:21.509 LEGEND "Generic Activities"
+NEWACTIVITY generic NAME generic ID generic TO 2020-011T17:34:43.019 LEGEND "Generic Activities"
+NEWRESDISPLAY 0
+ADDRESOURCE non_cons_A A1R1
+REMODEL
+WRITETOL from_script.tol 2020-011T01:00:00.000 2020-011T01:01:40.000 "FORMAT  DEFAULT"
+#QUIT 0

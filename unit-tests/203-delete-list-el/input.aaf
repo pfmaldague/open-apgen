@@ -1,0 +1,17 @@
+apgen version "delete element"
+
+function delete_i(A, i)
+parameters
+	A: array default to [];
+	i: integer default to 0;
+	{
+	write_to_stdout("Before deleting A[", i, "]: A = ", A, "\n");
+	delete_element(A, i);
+	write_to_stdout("After deleting A[", i, "]: A = ", A, "\n");
+	return 0;
+	}
+
+global array B = ["DSS_1", "DSS_2", "DSS_3", "DSS_Wissler"];
+
+global integer dummy1 = delete_i(B, 0);
+global integer dummy2 = delete_i(B, 1);

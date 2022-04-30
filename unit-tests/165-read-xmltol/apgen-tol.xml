@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XML_TOL>
+  <ResourceMetadata>
+    <ResourceSpec>
+      <Name>Scalar</Name>
+      <DataType>integer</DataType>
+      <Units>N/A</Units>
+      <Interpolation>constant</Interpolation>
+      <Maximum/>
+      <Minimum/>
+      <Subsystem/>
+    </ResourceSpec>
+  </ResourceMetadata>
+  <TOLrecord type="ACT_START">
+    <TimeStamp>2020-039T09:42:07.823</TimeStamp>
+    <Instance>
+      <ID>James_Bond_007</ID>
+      <Name>Foo</Name>
+      <Type>useScalar</Type>
+      <Parent/>
+      <Visibility>visible</Visibility>
+      <Attributes>
+        <Attribute>
+          <Name>Color</Name>
+          <StringValue>Spring Green</StringValue>
+        </Attribute>
+        <Attribute>
+          <Name>span</Name>
+          <DurationValue milliseconds="3600001">01:00:00.001</DurationValue>
+        </Attribute>
+        <Attribute>
+          <Name>legend</Name>
+          <StringValue>scalars</StringValue>
+        </Attribute>
+        <Attribute>
+          <Name>misc</Name>
+          <ListValue>
+            <Element index="0">
+              <StringValue>enormous</StringValue>
+            </Element>
+          </ListValue>
+        </Attribute>
+        <Attribute>
+          <Name>plan</Name>
+          <StringValue>17-one-act-instance/input.aaf</StringValue>
+        </Attribute>
+        <Attribute>
+          <Name>sasf</Name>
+          <EmptyListValue/>
+        </Attribute>
+        <Attribute>
+          <Name>start</Name>
+          <TimeValue milliseconds="1581154927823">2020-039T09:42:07.823</TimeValue>
+        </Attribute>
+        <Attribute>
+          <Name>status</Name>
+          <BooleanValue>true</BooleanValue>
+        </Attribute>
+      </Attributes>
+      <Parameters/>
+    </Instance>
+  </TOLrecord>
+  <TOLrecord type="RES_VAL">
+    <TimeStamp>2020-039T09:42:07.823</TimeStamp>
+    <Resource>
+      <Name>Scalar</Name>
+      <IntegerValue>-12</IntegerValue>
+    </Resource>
+  </TOLrecord>
+  <TOLrecord type="ACT_END">
+    <TimeStamp>2020-039T10:42:07.824</TimeStamp>
+    <ActivityID>James_Bond_007</ActivityID>
+  </TOLrecord>
+  <TOLrecord type="RES_FINAL_VAL">
+    <TimeStamp>2020-039T10:42:07.824</TimeStamp>
+    <Resource>
+      <Name>Scalar</Name>
+      <IntegerValue>-12</IntegerValue>
+    </Resource>
+  </TOLrecord>
+</XML_TOL>

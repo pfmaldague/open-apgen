@@ -1,0 +1,171 @@
+apgen version "From Europa - Eclipses example; does not get plotted correctly in the GUI"
+
+global array Bodies = [
+	"JUPITER",
+	"EUROPA",
+	"CALLISTO"];
+
+resource Eclipse(Bodies): state string
+    begin
+    attributes
+	    "Subsystem" = "Geometry";
+    parameters
+        neededState: string default to "NONE";
+    states
+        "NONE",
+        "ANNULAR",
+	"PARTIAL",
+	"FULL";
+    profile
+        "NONE";
+    usage
+        neededState;
+end resource Eclipse
+
+function AnyEclipse()
+{
+	i: integer default to 0;
+	WorstEclipseType: string default to "NONE";
+	while ( i < length_of(Bodies) ){
+
+	    if ( Eclipse[Bodies[i]].currentval() != "NONE" ){
+
+		if ( WorstEclipseType == "NONE" ){
+			WorstEclipseType = Eclipse[Bodies[i]].currentval();
+		}
+		else if ( WorstEclipseType == "PARTIAL" && Eclipse[Bodies[i]].currentval() == "FULL" ){
+			WorstEclipseType = Eclipse[Bodies[i]].currentval();
+		}
+		else if ( WorstEclipseType == "ANNULAR" && Eclipse[Bodies[i]].currentval() == "FULL" ){
+			WorstEclipseType = Eclipse[Bodies[i]].currentval();
+		}
+	    }
+	    i = i + 1;
+	}
+	return WorstEclipseType;
+}
+
+resource Eclipses: state string
+    begin
+    attributes
+	    "Subsystem" = "Geometry";
+    parameters
+        neededState: string default to "NONE";
+    states
+        "NONE",
+        "ANNULAR",
+	"PARTIAL",
+	"FULL";
+    profile
+        AnyEclipse();
+end resource Eclipse
+
+activity type EnterEclipse
+    begin
+        attributes
+	    "Subsystem" = "OrbitalEvents";
+            "Legend" = "_Eclipses";
+            "Duration" = 00:10:00;
+	    "Description" = "Spacecraft Enter Eclipse";
+	parameters
+	    OccultingBody: string default to "" range Bodies;
+	    Type: string default to "FULL" range ["FULL","PARTIAL","ANNULAR"];
+	modeling
+	    set Eclipse[OccultingBody](Type) immediately;
+    end activity type EnterEclipse
+
+activity type ExitEclipse
+    begin
+        attributes
+	    "Subsystem" = "OrbitalEvents";
+            "Legend" = "_Eclipses";
+            "Duration" = 00:10:00;
+	    "Description" = "Spacecraft Exit Eclipse";
+	parameters
+	    OccultingBody: string default to "" range Bodies;
+	modeling
+	    set Eclipse[OccultingBody]("NONE") immediately;
+    end activity type ExitEclipse
+
+
+# Reminder:
+#	Bodies
+#	------
+#	"JUPITER"
+#	"EUROPA"
+#	"CALLISTO"
+#
+#	Types
+#	-----
+#       "NONE"
+#       "ANNULAR"
+#	"PARTIAL"
+#	"FULL"
+
+activity instance generic_1 of type generic
+    begin
+	attributes
+	    "Start" = 2022-009T22:00:00;
+	    "Color" = "Aquamarine";
+    end activity instance generic_1
+
+activity instance Jupiter_1 of type EnterEclipse
+    begin
+	attributes
+	    "Start" = 2022-010T00:00:00;
+	    "Color" = "Spring Green";
+	parameters
+	    ("JUPITER", "ANNULAR");
+    end activity instance Jupiter_1
+
+activity instance Jupiter_2 of type ExitEclipse
+    begin
+	attributes
+	    "Start" = 2022-010T01:00:00;
+	    "Color" = "Orange Red";
+	parameters
+	    ("JUPITER");
+    end activity instance Jupiter_2
+
+activity instance Europa_1 of type EnterEclipse
+    begin
+	attributes
+	    "Start" = 2022-010T00:45:00;
+	    "Color" = "Sky Blue";
+	parameters
+	    ("EUROPA", "FULL");
+    end activity instance Europa_1
+
+activity instance Europa_2 of type ExitEclipse
+    begin
+	attributes
+	    "Start" = 2022-010T02:00:00;
+	    "Color" = "Purple";
+	parameters
+	    ("EUROPA");
+    end activity instance Europa_2
+
+activity instance Callisto_1 of type EnterEclipse
+    begin
+	attributes
+	    "Start" = 2022-010T02:15:00;
+	    "Color" = "Yellow";
+	parameters
+	    ("CALLISTO", "PARTIAL");
+    end activity instance Callisto_1
+
+activity instance Callisto_2 of type ExitEclipse
+    begin
+	attributes
+	    "Start" = 2022-010T02:50:00;
+	    "Color" = "Violet Red";
+	parameters
+	    ("CALLISTO");
+    end activity instance Callisto_2
+
+activity instance generic_2 of type generic
+    begin
+	attributes
+	    "Start" = 2022-010T05:00:00;
+	    "Color" = "Purple";
+    end activity instance generic_2

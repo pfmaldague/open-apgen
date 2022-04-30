@@ -1,0 +1,143 @@
+apgen version "act-res-23.aaf"
+
+// global array C = [1.0, 10000.0, -1.0/10.0, 1.0/10.0, -1.0/1.0E4, 1.0E-2];
+global array C = [1.0, 2/1000, 1.0E-6, 1.0E-8, 1.0E-11, 2.2E-15];
+
+resource Scalar: consumable integer
+    begin
+	attributes
+		"Units" = "N/A";
+	parameters
+		x: integer default to 1;
+	profile
+		0;
+	usage
+		-x;
+    end resource Scalar
+
+activity type useScalar
+    begin
+	attributes
+		"Color" = "Spring Green";
+		"Duration" = 1:30:00.228;
+		"Legend" = "scalars";
+	parameters
+		a: integer default to 4;
+		b: string default to "horrible";
+	modeling
+		i: integer default to 0;
+		y: integer default to 0;
+		while(i < 20000) {
+			y = a * (
+				C[0]
+				- C[1] * (i / 10.0)
+				+ C[2] * ((i / 10.0) * (i / 10.0))
+				- C[3] * ((i / 10.0) * (i / 10.0) * (i / 10.0))
+				+ C[4] * ((i / 10.0) * (i / 10.0) * (i / 10.0) * (i / 10.0))
+				- C[5] * ((i / 10.0) * (i / 10.0) * (i / 10.0) * (i / 10.0) * (i / 10.0)));
+			use Scalar(y);
+			// write_to_stdout(now, " - using ", y, "\n");
+			wait for 00:00:10;
+			i = i + 1;
+		}
+    end activity type useScalar
+
+activity instance Foo of type useScalar id James_Bond_007
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-039T09:42:07.823;
+	parameters
+		(12, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useScalar id James_Bond_008
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-041T09:42:07.823;
+	parameters
+		(12, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useScalar id James_Bond_009
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-043T09:42:07.823;
+	parameters
+		(-3, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useScalar id James_Bond_010
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-045T09:42:07.823;
+	parameters
+		(-7, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useScalar id James_Bond_011
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-047T09:42:07.823;
+	parameters
+		(-2, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useScalar id James_Bond_012
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-049T09:42:07.823;
+	parameters
+		(-4, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useScalar id James_Bond_013
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-051T09:42:07.823;
+	parameters
+		(-2, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useScalar id James_Bond_014
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-053T09:42:07.823;
+	parameters
+		(3, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useScalar id James_Bond_015
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-055T09:42:07.823;
+	parameters
+		(-3, "Hello");
+    end activity instance Foo
+
+activity instance Foo of type useScalar id James_Bond_016
+    begin
+	attributes
+		"Misc." = ["enormous"];
+		"Duration" = 01:00:00.001;
+		"Start" = 2020-057T09:42:07.823;
+	parameters
+		(1, "Hello");
+    end activity instance Foo

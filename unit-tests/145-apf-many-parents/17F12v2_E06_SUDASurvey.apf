@@ -1,0 +1,1011 @@
+apgen version "apgen-9.9.4Interpval-Unknown build"
+
+
+# udef=EHM udef library; build date:  Tue Jul 31 12:55:20 PDT 2018 
+# user=wissler
+# date=2018-262T21:17:48.000
+# hostname=LMC-054743
+# n_apgen_files=104
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Epochs/Clipper_Epochs17F12v2.aaf 2018-059T22:28:23.000
+# apgen_file=./apgen/17F12v2_E06.apgen.aaf 2018-262T20:55:17.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Propulsion/EuropaTCMModel_globals_17F12v2.aaf 2018-059T22:28:23.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Radiation/17F12-S22_V2_Baseline_Environment_1MeVEqFluence_AtCell_Full.aaf 2018-031T19:42:09.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/General/Clipper_Reporting_resources.aaf 2018-262T20:55:04.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/General/Generic_Date_resources.aaf 2018-116T21:29:18.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/General/Generic_Control_resources.aaf 2018-059T22:28:24.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/General/Generic_MissionPhase_resources.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Thermal/Generic_ThermalModel_resources.aaf 2018-031T19:42:09.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Propulsion/Generic_PropulsionModel_resources.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Power/Generic_PowerModel_resources.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Geometry/Generic_Geometry_resources.aaf 2018-085T14:59:29.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Geometry/Generic_GeometryModel_resources.aaf 2018-172T15:38:52.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Geometry/EventCalculation_resources.aaf 2018-060T15:33:33.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/GroundStation/GroundStation_resources.aaf 2018-100T17:37:07.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Model/APGEN_PEL_Solar_resource.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Model/APGEN_PEL_Solar_model.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/CDH/Clipper_DataModel_resources.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/CDH/Generic_CDHModel_resources.aaf 2018-079T17:25:22.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/GNC/Generic_GNCModel_resources.aaf 2018-184T17:58:42.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/ICEMAG_resources.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/REASON_resources.aaf 2018-031T19:42:09.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/SUDA_resources.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/EISWAC_resources.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/EISNAC_resources.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/ETHEMIS_resources.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/MASPEX_resources.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/MISE_resources.aaf 2018-225T14:32:40.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/PIMS_resources.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/UVS_resources.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/GravityScience_resources.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Telecom/Generic_TelecomModel_resources.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Telecom/Generic_TelecomLinkModel_resources.aaf 2018-138T19:39:37.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/GNC/Clipper_GNCModel_resources.aaf 2018-060T15:33:33.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/GNC/Clipper_GNCModelAttitudeEffects_resources.aaf 2018-262T20:55:04.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/GNC/Generic_GNCModelAbstract_resources.aaf 2018-262T20:55:04.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/GNC/TCM_resources.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Geometry/Generic_GeometryControl_resources.aaf 2018-172T15:38:52.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Array/Generic_SolarArrayModel_resources.aaf 2018-194T16:59:37.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/MOS/Generic_MOS_resources.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/General/Generic_GUIDisplay_activities.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/General/Generic_Date_activities.aaf 2018-198T15:38:45.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Geometry/Generic_Geometry_activities.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Geometry/Clipper_Geometry_activities.aaf 2018-059T22:28:23.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Geometry/Clipper_OrbitalEvents_activities.aaf 2018-194T20:17:56.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Telecom/Generic_TelecomModel_activities.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/GroundStation/GroundStation_activities.aaf 2018-172T15:38:52.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/General/Generic_control_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Thermal/Generic_ThermalModel_activities.aaf 2018-107T17:45:21.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Power/Generic_PowerModel_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Model/APGEN_PEL_Solar_activities.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Propulsion/Generic_PropulsionModel_activities.aaf 2018-184T17:58:42.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/CDH/Clipper_DataModel_activities.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/CDH/Generic_CDHModel_activities.aaf 2018-079T17:25:22.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/CDH/Clipper_CDHModel_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Telecom/Generic_TelecomLink_activities.aaf 2018-059T22:28:23.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Array/Generic_SolarArrayModel_activities.aaf 2018-116T21:33:29.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/GravityScience_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/ICEMAG_activities.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/REASON_activities.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/MASPEX_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/MISE_activities.aaf 2018-198T15:38:45.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/GNC/Generic_GNCModel_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/GNC/Clipper_GNCModel_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Thermal/Clipper_Thermal_activities.aaf 2018-177T16:02:20.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/UVS_activities.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/EISWAC_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/EISNAC_activities.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/EIS_activities.aaf 2018-107T17:45:21.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/ETHEMIS_activities.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/SUDA_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/PIMS_activities.aaf 2018-262T20:55:04.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/GNC/Generic_TCMSub_activities.aaf 2018-107T17:45:21.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/GNC/Clipper_TCM_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Schedulers/Clipper_OrbitalEventsScheduler_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Schedulers/Clipper_AllocationScheduler_activities.aaf 2018-085T14:59:29.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Schedulers/Clipper_FlybyScheduler_activities.aaf 2018-262T20:55:04.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Schedulers/Clipper_SciencePlanner_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Schedulers/Clipper_InstrumentSchedulers_activities.aaf 2018-262T20:55:04.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Schedulers/Clipper_GravityScienceScheduler_activities.aaf 2018-115T19:13:33.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Schedulers/Generic_DownlinkScheduler_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Schedulers/Clipper_CompressionScheduler_activities.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Schedulers/Clipper_EngMaintSchedulers_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/GroundStation/GroundStation_scheduler_activities.aaf 2018-059T22:28:23.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Schedulers/Generic_CruiseScheduler_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Schedulers/Clipper_TCMScheduler_activities.aaf 2018-262T20:55:04.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/IC/Clipper_InitialConditions_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/MOS/Generic_MOS_activities.aaf 2018-059T22:28:24.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/Clipper_InstrumentCruise_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/Clipper_InstrumentDisposal_activities.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Constraints/Generic_Pointing_constraints.aaf 2018-107T17:45:21.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Constraints/Generic_SolarArrayModel_constraints.aaf 2018-184T17:58:42.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Generic/Constraints/Generic_DataModel_constraints.aaf 2018-197T19:31:53.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Constraints/Clipper_Instrument_constraints.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/SUDA_constraints.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/UVS_constraints.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/EISNAC_constraints.aaf 2018-137T14:55:28.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/ETHEMIS_constraints.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/MASPEX_constraints.aaf 2017-195T16:17:27.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/MISE_constraints.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/aaf/Clipper/Instruments/PIMS_constraints.aaf 2018-249T14:32:10.000
+# apgen_file=/opt/local/europa/OPS/seq/apf/EuropaPhases.apf 2018-059T22:28:23.000
+# apgen_file=./apgen/17F12v2_E06.apf 2018-262T20:55:17.000
+# apgen_file=New
+
+directive "Legend" = [ "Schedulers", 32 ];
+directive "Legend" = [ "___SUDA_Constraint", 32 ];
+directive "Legend" = [ "___SUDA_Behavior", 32 ];
+directive "Legend" = [ "Europa", 32 ];
+directive "Legend" = [ "___SUDA_Cmd", 32 ];
+
+# epoch Jupiter_Injection_Burn_Start = 2022-154T23:59:00.000;
+# epoch Jupiter_Injection_Burn_End = 2022-155T00:30:00.000;
+# epoch Spacecraft_Separation = 2022-155T00:40:00.000;
+# epoch TIP = 2022-155T00:40:00.000;
+# epoch Launch = 2022-154T23:58:50.815;
+# epoch Interplanetary_Cruise = 2022-155T23:58:50.815;
+# epoch Arrival = 2024-269T01:10:30.946;
+# epoch Tour = 2024-363T13:10:31.808;
+# epoch Disposal = 2028-262T02:02:45.818;
+# epoch EOM = 2028-265T01:00:07.818;
+# epoch Inner_Cruise = 2022-155T23:58:50.815;
+# epoch Outer_Cruise = 2022-302T08:13:15.052;
+# epoch Jupiter_Approach = 2024-269T01:10:31.464;
+# epoch Jupiter_Orbit_Capture = 2024-354T11:05:01.616;
+# epoch Transition_to_Europa_Campaign_1 = 2024-363T13:10:31.462;
+# epoch Europa_Campaign_1 = 2026-126T21:07:02.815;
+# epoch Transition_to_Europa_Campaign_2 = 2027-123T10:54:00.815;
+# epoch Europa_Campaign_2 = 2027-280T00:20:07.818;
+# epoch G01_Approach = 2025-192T14:20:38.816;
+# epoch G01_Nadir = 2025-194T12:20:38.816;
+# epoch G01_Departure = 2025-194T16:20:38.816;
+# epoch G01_Playback = 2025-196T14:20:38.816;
+# epoch G02_Approach = 2026-056T15:20:46.815;
+# epoch G02_Nadir = 2026-058T13:20:46.815;
+# epoch G02_Departure = 2026-058T17:20:46.815;
+# epoch G02_Playback = 2026-060T15:20:46.815;
+# epoch G03_Approach = 2026-092T09:48:50.814;
+# epoch G03_Nadir = 2026-094T07:48:50.814;
+# epoch G03_Departure = 2026-094T11:48:50.814;
+# epoch G03_Playback = 2026-096T09:48:50.814;
+# epoch G04_Approach = 2026-113T20:52:19.814;
+# epoch G04_Nadir = 2026-115T18:52:19.814;
+# epoch G04_Departure = 2026-115T22:52:19.814;
+# epoch G04_Playback = 2026-117T20:52:19.814;
+# epoch E01_Approach = 2026-126T21:07:02.815;
+# epoch E01_Nadir = 2026-128T19:07:02.815;
+# epoch E01_Departure = 2026-128T23:07:02.815;
+# epoch E01_Playback = 2026-130T21:07:02.815;
+# epoch E02_Approach = 2026-141T02:38:27.815;
+# epoch E02_Nadir = 2026-143T00:38:27.815;
+# epoch E02_Departure = 2026-143T04:38:27.815;
+# epoch E02_Playback = 2026-145T02:38:27.815;
+# epoch E03_Approach = 2026-155T07:33:58.815;
+# epoch E03_Nadir = 2026-157T05:33:58.815;
+# epoch E03_Departure = 2026-157T09:33:58.815;
+# epoch E03_Playback = 2026-159T07:33:58.815;
+# epoch E04_Approach = 2026-169T12:30:17.816;
+# epoch E04_Nadir = 2026-171T10:30:17.816;
+# epoch E04_Departure = 2026-171T14:30:17.816;
+# epoch E04_Playback = 2026-173T12:30:17.816;
+# epoch E05_Approach = 2026-183T17:28:15.816;
+# epoch E05_Nadir = 2026-185T15:28:15.816;
+# epoch E05_Departure = 2026-185T19:28:15.816;
+# epoch E05_Playback = 2026-187T17:28:15.816;
+# epoch E06_Approach = 2026-197T22:08:03.816;
+# epoch E06_Nadir = 2026-199T20:08:03.816;
+# epoch E06_Departure = 2026-200T00:08:03.816;
+# epoch E06_Playback = 2026-201T22:08:03.816;
+# epoch E07_Approach = 2026-223T03:43:27.817;
+# epoch E07_Nadir = 2026-225T01:43:27.817;
+# epoch E07_Departure = 2026-225T05:43:27.817;
+# epoch E07_Playback = 2026-227T03:43:27.817;
+# epoch E08_Approach = 2026-237T08:29:26.817;
+# epoch E08_Nadir = 2026-239T06:29:26.817;
+# epoch E08_Departure = 2026-239T10:29:26.817;
+# epoch E08_Playback = 2026-241T08:29:26.817;
+# epoch E09_Approach = 2026-251T13:25:38.817;
+# epoch E09_Nadir = 2026-253T11:25:38.818;
+# epoch E09_Departure = 2026-253T15:25:38.818;
+# epoch E09_Playback = 2026-255T13:25:38.818;
+# epoch E10_Approach = 2026-265T18:22:46.818;
+# epoch E10_Nadir = 2026-267T16:22:46.818;
+# epoch E10_Departure = 2026-267T20:22:46.818;
+# epoch E10_Playback = 2026-269T18:22:46.818;
+# epoch E11_Approach = 2026-279T23:20:40.818;
+# epoch E11_Nadir = 2026-281T21:20:40.818;
+# epoch E11_Departure = 2026-282T01:20:40.818;
+# epoch E11_Playback = 2026-283T23:20:40.818;
+# epoch E12_Approach = 2026-294T04:16:43.818;
+# epoch E12_Nadir = 2026-296T02:16:43.818;
+# epoch E12_Departure = 2026-296T06:16:43.818;
+# epoch E12_Playback = 2026-298T04:16:43.818;
+# epoch E13_Approach = 2026-308T09:15:03.817;
+# epoch E13_Nadir = 2026-310T07:15:03.817;
+# epoch E13_Departure = 2026-310T11:15:03.817;
+# epoch E13_Playback = 2026-312T09:15:03.817;
+# epoch E14_Approach = 2026-322T21:45:29.817;
+# epoch E14_Nadir = 2026-324T19:45:29.817;
+# epoch E14_Departure = 2026-324T23:45:29.817;
+# epoch E14_Playback = 2026-326T21:45:29.817;
+# epoch E15_Approach = 2026-340T10:59:12.817;
+# epoch E15_Nadir = 2026-342T08:59:12.817;
+# epoch E15_Departure = 2026-342T12:59:12.817;
+# epoch E15_Playback = 2026-344T10:59:12.817;
+# epoch E16_Approach = 2026-355T00:12:00.816;
+# epoch E16_Nadir = 2026-356T22:12:00.816;
+# epoch E16_Departure = 2026-357T02:12:00.816;
+# epoch E16_Playback = 2026-359T00:12:00.816;
+# epoch E17_Approach = 2027-007T13:30:08.816;
+# epoch E17_Nadir = 2027-009T11:30:08.816;
+# epoch E17_Departure = 2027-009T15:30:08.816;
+# epoch E17_Playback = 2027-011T13:30:08.816;
+# epoch E18_Approach = 2027-022T02:34:16.815;
+# epoch E18_Nadir = 2027-024T00:34:16.815;
+# epoch E18_Departure = 2027-024T04:34:16.815;
+# epoch E18_Playback = 2027-026T02:34:16.815;
+# epoch E19_Approach = 2027-039T16:13:40.815;
+# epoch E19_Nadir = 2027-041T14:13:40.815;
+# epoch E19_Departure = 2027-041T18:13:40.815;
+# epoch E19_Playback = 2027-043T16:13:40.815;
+# epoch E20_Approach = 2027-054T04:22:20.815;
+# epoch E20_Nadir = 2027-056T02:22:20.815;
+# epoch E20_Departure = 2027-056T06:22:20.815;
+# epoch E20_Playback = 2027-058T04:22:20.815;
+# epoch E21_Approach = 2027-068T09:16:35.815;
+# epoch E21_Nadir = 2027-070T07:16:35.814;
+# epoch E21_Departure = 2027-070T11:16:35.814;
+# epoch E21_Playback = 2027-072T09:16:35.814;
+# epoch E22_Approach = 2027-082T13:53:09.814;
+# epoch E22_Nadir = 2027-084T11:53:09.814;
+# epoch E22_Departure = 2027-084T15:53:09.814;
+# epoch E22_Playback = 2027-086T13:53:09.814;
+# epoch E23_Approach = 2027-107T10:02:51.814;
+# epoch E23_Nadir = 2027-109T08:02:51.814;
+# epoch E23_Departure = 2027-109T12:02:51.814;
+# epoch E23_Playback = 2027-111T10:02:51.814;
+# epoch E24_Approach = 2027-118T01:39:12.814;
+# epoch E24_Nadir = 2027-119T23:39:12.815;
+# epoch E24_Departure = 2027-120T03:39:12.815;
+# epoch E24_Playback = 2027-122T01:39:12.815;
+# epoch C01_Approach = 2027-123T10:54:00.815;
+# epoch C01_Nadir = 2027-125T08:54:00.815;
+# epoch C01_Departure = 2027-125T12:54:00.815;
+# epoch C01_Playback = 2027-127T10:54:00.815;
+# epoch C02_Approach = 2027-156T18:34:25.815;
+# epoch C02_Nadir = 2027-158T16:34:25.815;
+# epoch C02_Departure = 2027-158T20:34:25.815;
+# epoch C02_Playback = 2027-160T18:34:25.815;
+# epoch C03_Approach = 2027-173T09:53:57.816;
+# epoch C03_Nadir = 2027-175T07:53:57.816;
+# epoch C03_Departure = 2027-175T11:53:57.816;
+# epoch C03_Playback = 2027-177T09:53:57.816;
+# epoch C04_Approach = 2027-181T17:22:23.816;
+# epoch C04_Nadir = 2027-183T15:22:23.816;
+# epoch C04_Departure = 2027-183T19:22:23.816;
+# epoch C04_Playback = 2027-185T17:22:23.816;
+# epoch C05_Approach = 2027-190T01:12:28.816;
+# epoch C05_Nadir = 2027-191T23:12:28.816;
+# epoch C05_Departure = 2027-192T03:12:28.816;
+# epoch C05_Playback = 2027-194T01:12:28.816;
+# epoch C06_Approach = 2027-198T08:06:07.816;
+# epoch C06_Nadir = 2027-200T06:06:07.816;
+# epoch C06_Departure = 2027-200T10:06:07.816;
+# epoch C06_Playback = 2027-202T08:06:07.816;
+# epoch C07_Approach = 2027-231T16:08:52.817;
+# epoch C07_Nadir = 2027-233T14:08:52.817;
+# epoch C07_Departure = 2027-233T18:08:52.817;
+# epoch C07_Playback = 2027-235T16:08:52.817;
+# epoch C08_Approach = 2027-264T23:41:11.818;
+# epoch C08_Nadir = 2027-266T21:41:11.818;
+# epoch C08_Departure = 2027-267T01:41:11.818;
+# epoch C08_Playback = 2027-268T23:41:11.818;
+# epoch E25_Approach = 2027-280T00:20:07.818;
+# epoch E25_Nadir = 2027-281T22:20:07.818;
+# epoch E25_Departure = 2027-282T02:20:07.818;
+# epoch E25_Playback = 2027-284T00:20:07.818;
+# epoch E26_Approach = 2027-290T01:47:25.818;
+# epoch E26_Nadir = 2027-291T23:47:25.818;
+# epoch E26_Departure = 2027-292T03:47:25.818;
+# epoch E26_Playback = 2027-294T01:47:25.818;
+# epoch E27_Approach = 2027-314T22:01:58.817;
+# epoch E27_Nadir = 2027-316T20:01:58.817;
+# epoch E27_Departure = 2027-317T00:01:58.817;
+# epoch E27_Playback = 2027-318T22:01:58.817;
+# epoch E28_Approach = 2027-329T03:50:51.817;
+# epoch E28_Nadir = 2027-331T01:50:51.817;
+# epoch E28_Departure = 2027-331T05:50:51.817;
+# epoch E28_Playback = 2027-333T03:50:51.817;
+# epoch E29_Approach = 2027-343T09:05:50.817;
+# epoch E29_Nadir = 2027-345T07:05:50.817;
+# epoch E29_Departure = 2027-345T11:05:50.817;
+# epoch E29_Playback = 2027-347T09:05:50.817;
+# epoch E30_Approach = 2027-357T14:02:12.816;
+# epoch E30_Nadir = 2027-359T12:02:12.816;
+# epoch E30_Departure = 2027-359T16:02:12.816;
+# epoch E30_Playback = 2027-361T14:02:12.816;
+# epoch E31_Approach = 2028-006T19:01:24.816;
+# epoch E31_Nadir = 2028-008T17:01:24.816;
+# epoch E31_Departure = 2028-008T21:01:24.816;
+# epoch E31_Playback = 2028-010T19:01:24.816;
+# epoch E32_Approach = 2028-020T23:29:17.816;
+# epoch E32_Nadir = 2028-022T21:29:17.815;
+# epoch E32_Departure = 2028-023T01:29:17.815;
+# epoch E32_Playback = 2028-024T23:29:17.815;
+# epoch E33_Approach = 2028-035T04:28:57.815;
+# epoch E33_Nadir = 2028-037T02:28:57.815;
+# epoch E33_Departure = 2028-037T06:28:57.815;
+# epoch E33_Playback = 2028-039T04:28:57.815;
+# epoch E34_Approach = 2028-049T07:42:31.815;
+# epoch E34_Nadir = 2028-051T05:42:31.815;
+# epoch E34_Departure = 2028-051T09:42:31.815;
+# epoch E34_Playback = 2028-053T07:42:31.815;
+# epoch E35_Approach = 2028-073T21:30:09.814;
+# epoch E35_Nadir = 2028-075T19:30:09.814;
+# epoch E35_Departure = 2028-075T23:30:09.814;
+# epoch E35_Playback = 2028-077T21:30:09.814;
+# epoch E36_Approach = 2028-088T00:48:04.814;
+# epoch E36_Nadir = 2028-089T22:48:04.814;
+# epoch E36_Departure = 2028-090T02:48:04.814;
+# epoch E36_Playback = 2028-092T00:48:04.814;
+# epoch E37_Approach = 2028-102T05:45:07.814;
+# epoch E37_Nadir = 2028-104T03:45:07.814;
+# epoch E37_Departure = 2028-104T07:45:07.814;
+# epoch E37_Playback = 2028-106T05:45:07.814;
+# epoch E38_Approach = 2028-116T10:45:29.814;
+# epoch E38_Nadir = 2028-118T08:45:29.814;
+# epoch E38_Departure = 2028-118T12:45:29.814;
+# epoch E38_Playback = 2028-120T10:45:29.815;
+# epoch E39_Approach = 2028-130T15:44:54.815;
+# epoch E39_Nadir = 2028-132T13:44:54.815;
+# epoch E39_Departure = 2028-132T17:44:54.815;
+# epoch E39_Playback = 2028-134T15:44:54.815;
+# epoch E40_Approach = 2028-144T20:47:06.815;
+# epoch E40_Nadir = 2028-146T18:47:06.815;
+# epoch E40_Departure = 2028-146T22:47:06.815;
+# epoch E40_Playback = 2028-148T20:47:06.815;
+# epoch E41_Approach = 2028-159T01:43:24.815;
+# epoch E41_Nadir = 2028-160T23:43:24.815;
+# epoch E41_Departure = 2028-161T03:43:24.815;
+# epoch E41_Playback = 2028-163T01:43:24.815;
+# epoch E42_Approach = 2028-173T06:32:53.816;
+# epoch E42_Nadir = 2028-175T04:32:53.816;
+# epoch E42_Departure = 2028-175T08:32:53.816;
+# epoch E42_Playback = 2028-177T06:32:53.816;
+# epoch E43_Approach = 2028-187T11:23:11.816;
+# epoch E43_Nadir = 2028-189T09:23:11.816;
+# epoch E43_Departure = 2028-189T13:23:11.816;
+# epoch E43_Playback = 2028-191T11:23:11.816;
+# epoch E44_Approach = 2028-201T15:58:54.816;
+# epoch E44_Nadir = 2028-203T13:58:54.816;
+# epoch E44_Departure = 2028-203T17:58:54.816;
+# epoch E44_Playback = 2028-205T15:58:54.817;
+# epoch E45_Approach = 2028-215T20:48:15.817;
+# epoch E45_Nadir = 2028-217T18:48:15.817;
+# epoch E45_Departure = 2028-217T22:48:15.817;
+# epoch E45_Playback = 2028-219T20:48:15.817;
+# epoch E46_Approach = 2028-230T02:02:45.817;
+# epoch E46_Nadir = 2028-232T00:02:45.817;
+# epoch E46_Departure = 2028-232T04:02:45.817;
+# epoch E46_Playback = 2028-234T02:02:45.817;
+# epoch C09 = 2028-262T02:02:45.818;
+# epoch Capture_Orbit = 2024-357T23:05:01.581;
+# epoch PD = 2025-094T05:12:00.184;
+# epoch COT_1 = 2026-121T20:07:12.294;
+# epoch NR_1 = 2026-192T21:54:11.291;
+# epoch COT_2 = 2026-218T18:14:26.144;
+# epoch Petal_Rotation = 2026-317T15:11:59.223;
+# epoch PD_CU = 2027-048T22:50:24.023;
+# epoch Swith_Flip = 2027-124T17:00:19.264;
+# epoch CD = 2027-277T02:39:28.556;
+# epoch COT_3 = 2027-338T09:20:31.521;
+# epoch NR_2 = 2028-044T04:20:25.167;
+# epoch COT_4 = 2028-069T19:36:18.114;
+# epoch COT_5 = 2028-153T20:34:24.789;
+# epoch Flyby_00G00 = 2024-358T11:05:00.816;
+# epoch Flyby_01G01 = 2025-194T14:20:38.816;
+# epoch Flyby_04G02 = 2026-058T15:20:46.815;
+# epoch Flyby_05G03 = 2026-094T09:48:50.814;
+# epoch Flyby_06G04 = 2026-115T20:52:19.814;
+# epoch Flyby_07E01 = 2026-128T21:07:02.815;
+# epoch Flyby_08E02 = 2026-143T02:38:27.815;
+# epoch Flyby_09E03 = 2026-157T07:33:58.815;
+# epoch Flyby_10E04 = 2026-171T12:30:17.816;
+# epoch Flyby_11E05 = 2026-185T17:28:15.816;
+# epoch Flyby_12E06 = 2026-199T22:08:03.816;
+# epoch Flyby_14E07 = 2026-225T03:43:27.817;
+# epoch Flyby_15E08 = 2026-239T08:29:26.817;
+# epoch Flyby_16E09 = 2026-253T13:25:38.818;
+# epoch Flyby_17E10 = 2026-267T18:22:46.818;
+# epoch Flyby_18E11 = 2026-281T23:20:40.818;
+# epoch Flyby_19E12 = 2026-296T04:16:43.818;
+# epoch Flyby_20E13 = 2026-310T09:15:03.817;
+# epoch Flyby_21E14 = 2026-324T21:45:29.817;
+# epoch Flyby_22E15 = 2026-342T10:59:12.817;
+# epoch Flyby_23E16 = 2026-357T00:12:00.816;
+# epoch Flyby_24E17 = 2027-009T13:30:08.816;
+# epoch Flyby_25E18 = 2027-024T02:34:16.815;
+# epoch Flyby_26E19 = 2027-041T16:13:40.815;
+# epoch Flyby_27E20 = 2027-056T04:22:20.815;
+# epoch Flyby_28E21 = 2027-070T09:16:35.814;
+# epoch Flyby_29E22 = 2027-084T13:53:09.814;
+# epoch Flyby_31E23 = 2027-109T10:02:51.814;
+# epoch Flyby_32E24 = 2027-120T01:39:12.815;
+# epoch Flyby_33C01 = 2027-125T10:54:00.815;
+# epoch Flyby_36C02 = 2027-158T18:34:25.815;
+# epoch Flyby_37C03 = 2027-175T09:53:57.816;
+# epoch Flyby_38C04 = 2027-183T17:22:23.816;
+# epoch Flyby_39C05 = 2027-192T01:12:28.816;
+# epoch Flyby_39C06 = 2027-200T08:06:07.816;
+# epoch Flyby_42C07 = 2027-233T16:08:52.817;
+# epoch Flyby_45C08 = 2027-266T23:41:11.818;
+# epoch Flyby_47E25 = 2027-282T00:20:07.818;
+# epoch Flyby_48E26 = 2027-292T01:47:25.818;
+# epoch Flyby_50E27 = 2027-316T22:01:58.817;
+# epoch Flyby_51E28 = 2027-331T03:50:51.817;
+# epoch Flyby_52E29 = 2027-345T09:05:50.817;
+# epoch Flyby_53E30 = 2027-359T14:02:12.816;
+# epoch Flyby_54E31 = 2028-008T19:01:24.816;
+# epoch Flyby_55E32 = 2028-022T23:29:17.815;
+# epoch Flyby_56E33 = 2028-037T04:28:57.815;
+# epoch Flyby_57E34 = 2028-051T07:42:31.815;
+# epoch Flyby_59E35 = 2028-075T21:30:09.814;
+# epoch Flyby_60E36 = 2028-090T00:48:04.814;
+# epoch Flyby_61E37 = 2028-104T05:45:07.814;
+# epoch Flyby_62E38 = 2028-118T10:45:29.814;
+# epoch Flyby_63E39 = 2028-132T15:44:54.815;
+# epoch Flyby_64E40 = 2028-146T20:47:06.815;
+# epoch Flyby_65E41 = 2028-161T01:43:24.815;
+# epoch Flyby_66E42 = 2028-175T06:32:53.816;
+# epoch Flyby_67E43 = 2028-189T11:23:11.816;
+# epoch Flyby_68E44 = 2028-203T15:58:54.816;
+# epoch Flyby_69E45 = 2028-217T20:48:15.817;
+# epoch Flyby_70E46 = 2028-232T02:02:45.817;
+# epoch Flyby_72C09 = 2028-265T01:00:07.818;
+# epoch EpochStart = 2026-197T22:08:03.816;
+# epoch TCM1 = 2022-169T11:58:50.816;
+# epoch TCM2 = 2022-254T11:58:50.818;
+# epoch BrokenPlaneBurn = 2023-024T03:56:45.046;
+# epoch BPBCU = 2023-054T03:56:40.466;
+# epoch JOITRG1 = 2024-178T11:05:01.616;
+# epoch JOITRG2 = 2024-328T11:05:01.617;
+# epoch JOITRG3 = 2024-353T11:05:01.616;
+# epoch JOI = 2024-359T01:10:31.463;
+# epoch JOICU1 = 2024-362T13:10:31.463;
+# epoch JOICU2 = 2025-008T01:10:31.462;
+# epoch PRM = 2025-094T05:12:01.173;
+# epoch PRMCU1 = 2025-109T05:12:01.173;
+# epoch PRMCU2 = 2025-124T05:12:01.173;
+# epoch G1TRG = 2025-187T14:20:38.970;
+# epoch G1APR = 2025-191T14:20:38.970;
+# epoch G1CU = 2025-197T14:20:38.970;
+# epoch G2TRG = 2025-232T04:01:34.920;
+# epoch G2APR0 = 2026-043T15:20:47.810;
+# epoch G2APR = 2026-055T15:20:47.810;
+# epoch G2CU = 2026-061T15:20:47.810;
+# epoch G3TRG = 2026-075T17:54:46.734;
+# epoch G3APR = 2026-091T09:48:51.832;
+# epoch G3CU = 2026-097T09:48:51.832;
+# epoch G4TRG = 2026-104T06:08:17.685;
+# epoch G4APR = 2026-112T20:52:20.718;
+# epoch G4CU = 2026-118T20:52:20.718;
+# epoch E1TRG = 2026-121T20:07:13.288;
+# epoch E1APR = 2026-125T21:07:03.554;
+# epoch E1CU = 2026-131T21:07:03.554;
+# epoch E2TRG = 2026-135T22:06:47.944;
+# epoch E2APR = 2026-140T02:38:27.996;
+# epoch E2CU = 2026-146T02:38:27.996;
+# epoch E3TRG = 2026-150T04:43:58.620;
+# epoch E3APR = 2026-154T07:33:59.522;
+# epoch E3CU = 2026-160T07:33:59.522;
+# epoch E4TRG = 2026-164T09:59:25.577;
+# epoch E4APR = 2026-168T12:30:18.223;
+# epoch E4CU = 2026-174T12:30:18.224;
+# epoch E5TRG = 2026-178T16:08:19.097;
+# epoch E5APR = 2026-182T17:28:16.112;
+# epoch E5CU = 2026-188T17:28:16.112;
+# epoch E6TRG = 2026-192T22:53:08.643;
+# epoch E6APR = 2026-196T22:08:04.237;
+# epoch E7TRG = 2026-202T22:08:04.237;
+# epoch E7APR = 2026-222T03:43:28.699;
+# epoch E7CU = 2026-228T03:43:28.699;
+# epoch E8TRG = 2026-232T16:56:51.556;
+# epoch E8APR = 2026-236T08:29:26.875;
+# epoch E8CU = 2026-242T08:29:26.875;
+# epoch E9TRG = 2026-246T09:43:17.381;
+# epoch E9APR = 2026-250T13:25:39.355;
+# epoch E9CU = 2026-256T13:25:39.355;
+# epoch E10TRG = 2026-260T14:58:23.602;
+# epoch E10APR = 2026-264T18:22:46.786;
+# epoch E10CU = 2026-270T18:22:46.786;
+# epoch E11TRG = 2026-274T21:45:49.445;
+# epoch E11APR = 2026-278T23:20:41.304;
+# epoch E11CU = 2026-284T23:20:41.304;
+# epoch E12TRG = 2026-289T03:33:50.338;
+# epoch E12APR = 2026-293T04:16:44.539;
+# epoch E12CU = 2026-299T04:16:44.539;
+# epoch E13TRG = 2026-303T09:52:33.451;
+# epoch E13APR = 2026-307T09:15:03.941;
+# epoch E13CU = 2026-313T09:15:03.941;
+# epoch E14TRG = 2026-317T15:59:22.901;
+# epoch E14APR = 2026-321T21:45:30.609;
+# epoch E14CU = 2026-327T21:45:30.609;
+# epoch E15TRG = 2026-333T17:59:15.441;
+# epoch E15APR = 2026-339T10:59:12.906;
+# epoch E15CU = 2026-345T10:59:12.906;
+# epoch E16TRG = 2026-349T18:42:27.786;
+# epoch E16APR = 2026-354T00:12:01.549;
+# epoch E16CU = 2026-361T00:12:01.549;
+# epoch E17TRG = 2026-365T20:20:35.168;
+# epoch E17APR = 2027-006T13:30:09.181;
+# epoch E17CU = 2027-012T13:30:09.181;
+# epoch E18TRG = 2027-016T20:52:59.600;
+# epoch E18APR = 2027-021T02:34:17.436;
+# epoch E18CU = 2027-027T02:34:17.436;
+# epoch E19TRG = 2027-032T23:02:39.746;
+# epoch E19APR = 2027-038T16:13:41.628;
+# epoch E19CU = 2027-044T16:13:41.628;
+# epoch E20TRG = 2027-048T23:16:33.592;
+# epoch E20APR = 2027-053T04:22:21.237;
+# epoch E20CU = 2027-059T04:22:21.237;
+# epoch E21TRG = 2027-063T06:32:44.498;
+# epoch E21APR = 2027-067T09:16:36.559;
+# epoch E21CU = 2027-073T09:16:36.558;
+# epoch E22TRG = 2027-077T12:25:48.050;
+# epoch E22APR = 2027-081T13:53:10.024;
+# epoch E22CU = 2027-087T13:53:10.024;
+# epoch E23TRG = 2027-103T05:32:23.906;
+# epoch E23APR = 2027-106T10:02:51.899;
+# epoch E23CU = 2027-112T10:02:51.899;
+# epoch E24TRG = 2027-114T16:49:52.514;
+# epoch E24APR = 2027-117T01:39:13.154;
+# epoch C1TRG = 2027-123T01:39:13.154;
+# epoch C1CU = 2027-128T10:54:00.827;
+# epoch C2TRG = 2027-135T14:30:53.877;
+# epoch C2APR = 2027-155T18:34:26.191;
+# epoch C2CU = 2027-161T18:34:26.191;
+# epoch C3TRG = 2027-167T11:58:51.852;
+# epoch C3APR = 2027-172T09:53:58.035;
+# epoch C4TRG = 2027-178T09:53:58.035;
+# epoch C4APR = 2027-180T17:22:24.723;
+# epoch C4CU = 2027-186T17:22:24.723;
+# epoch C5CU = 2027-195T01:12:28.967;
+# epoch C6CU = 2027-205T08:06:08.404;
+# epoch C7TRG = 2027-223T04:18:30.811;
+# epoch C7APR = 2027-230T16:08:53.745;
+# epoch C7CU = 2027-236T16:08:53.745;
+# epoch C8TRG = 2027-257T12:55:46.901;
+# epoch C8APR = 2027-263T23:41:12.072;
+# epoch C8CU = 2027-269T23:41:12.072;
+# epoch E25TRG = 2027-277T02:39:29.515;
+# epoch E25APR = 2027-279T00:20:08.155;
+# epoch E25CU = 2027-285T00:20:08.155;
+# epoch E26APR = 2027-289T01:47:25.896;
+# epoch E26CU = 2027-295T01:47:25.896;
+# epoch E27TRG = 2027-310T21:40:34.949;
+# epoch E27APR = 2027-313T22:01:59.457;
+# epoch E27CU = 2027-319T22:01:59.457;
+# epoch E28TRG = 2027-324T03:45:45.038;
+# epoch E28APR = 2027-328T03:50:52.536;
+# epoch E28CU = 2027-334T03:50:52.535;
+# epoch E29TRG = 2027-338T09:22:54.993;
+# epoch E29APR = 2027-342T09:05:51.758;
+# epoch E29CU = 2027-348T09:05:51.757;
+# epoch E30TRG = 2027-352T14:17:00.724;
+# epoch E30APR = 2027-356T14:02:13.655;
+# epoch E30CU = 2027-362T14:02:13.655;
+# epoch E31TRG = 2028-001T17:42:13.242;
+# epoch E31APR = 2028-005T19:01:24.896;
+# epoch E31CU = 2028-011T19:01:24.896;
+# epoch E32TRG = 2028-015T21:04:43.328;
+# epoch E32APR = 2028-019T23:29:18.406;
+# epoch E32CU = 2028-025T23:29:18.406;
+# epoch E33TRG = 2028-030T00:31:24.233;
+# epoch E33APR = 2028-034T04:28:58.505;
+# epoch E33CU = 2028-040T04:28:58.505;
+# epoch E34TRG = 2028-044T04:20:26.153;
+# epoch E34APR = 2028-048T07:42:32.824;
+# epoch E34CU = 2028-054T07:42:32.824;
+# epoch E35TRG = 2028-069T19:36:19.144;
+# epoch E35APR = 2028-072T21:30:10.533;
+# epoch E35CU = 2028-078T21:30:10.533;
+# epoch E36TRG = 2028-083T01:07:49.374;
+# epoch E36APR = 2028-087T00:48:05.176;
+# epoch E36CU = 2028-093T00:48:05.176;
+# epoch E37TRG = 2028-097T05:10:43.499;
+# epoch E37APR = 2028-101T05:45:08.459;
+# epoch E37CU = 2028-107T05:45:08.459;
+# epoch E38TRG = 2028-111T08:26:07.547;
+# epoch E38APR = 2028-115T10:45:30.635;
+# epoch E38CU = 2028-121T10:45:30.635;
+# epoch E39TRG = 2028-125T11:53:41.416;
+# epoch E39APR = 2028-129T15:44:55.442;
+# epoch E39CU = 2028-135T15:44:55.442;
+# epoch E40TRG = 2028-139T15:50:17.196;
+# epoch E40APR = 2028-143T20:47:07.260;
+# epoch E40CU = 2028-149T20:47:07.260;
+# epoch E41TRG = 2028-153T20:34:25.817;
+# epoch E41APR = 2028-158T01:43:24.838;
+# epoch E41CU = 2028-164T01:43:24.838;
+# epoch E42TRG = 2028-168T01:57:26.633;
+# epoch E42APR = 2028-172T06:32:54.780;
+# epoch E42CU = 2028-178T06:32:54.781;
+# epoch E43TRG = 2028-182T08:08:05.734;
+# epoch E43APR = 2028-186T11:23:12.157;
+# epoch E43CU = 2028-192T11:23:12.157;
+# epoch E44TRG = 2028-196T14:16:53.034;
+# epoch E44APR = 2028-200T15:58:55.079;
+# epoch E44CU = 2028-206T15:58:55.079;
+# epoch E45TRG = 2028-210T20:28:36.330;
+# epoch E45APR = 2028-214T20:48:16.468;
+# epoch E45CU = 2028-220T20:48:16.468;
+# epoch E46TRG = 2028-225T02:12:14.135;
+# epoch E46APR = 2028-229T02:02:46.487;
+# epoch E46CU = 2028-235T02:02:46.488;
+# epoch C9TRG = 2028-239T17:42:28.881;
+# epoch C9APR = 2028-262T01:00:08.779;
+attributes
+directive attribute SenderType: array default to [] ;
+directive attribute SenderClass: array default to [] ;
+directive attribute SenderDSS: array default to [] ;
+directive attribute SenderAntenna: array default to [] ;
+directive attribute EventTime: array default to [] ;
+directive attribute Category: string default to "SCI" ? "Does this activity accomplish science, or engineering?" ;
+directive attribute APID_Bucket: string default to "Science" range ["Science", "Calibration", "OpticalNavigation", "N/A"] ? "General category of downlink priority:  Science or Calibration." ;
+directive attribute DPT_Rank: integer default to 0 ? "Desired priority for retention in flash memory overnight of this activity's data.  Lower numbers mean further from the chopping block." $ "none" ;
+end attributes
+
+activity instance ScheduleMaspexEuropaTorus of type generic id ScheduleMaspexEuropaTorus_1
+    begin
+	attributes
+	    "Color" = "Dodger Blue";
+	    "Duration" = 025T05:35:24.001;
+	    "Legend" = "Schedulers";
+	    "Pattern" = 3;
+	    "Plan" = "New";
+	    "Start" = 2026-197T22:08:03.816;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance ScheduleMaspexEuropaTorus
+
+activity instance ScheduleSUDASurvey of type generic id ScheduleSUDASurvey_1
+    begin
+	decomposed into SetSUDASurveyOpportunity, SetSUDASurveyOpportunity_537, 
+		SetSUDASurveyOpportunity_538, SetSUDASurveyOpportunity_539, SetSUDASurveyOpportunity_540, 
+		SUDA_Survey, SUDA_NanograinSurvey, SUDA_Survey_544, SUDA_NanograinSurvey_546;
+	attributes
+	    "Color" = "Dodger Blue";
+	    "Duration" = 025T05:35:24.001;
+	    "Legend" = "Schedulers";
+	    "Pattern" = 3;
+	    "Plan" = "New";
+	    "Start" = 2026-197T22:08:03.816;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance ScheduleSUDASurvey
+
+activity instance SetSUDASurveyOpportunity_NanograinParticle of type generic id SetSUDASurveyOpportunity
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Set SUDA Survey Opportunity";
+	    "Duration" = 00:29:25.136;
+	    "Legend" = "___SUDA_Constraint";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-197T23:06:59.768;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SetSUDASurveyOpportunity_NanograinParticle
+
+activity instance SetSUDASurveyOpportunity_NanograinParticle of type generic id SetSUDASurveyOpportunity_537
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Set SUDA Survey Opportunity";
+	    "Duration" = 01:00:00;
+	    "Legend" = "___SUDA_Constraint";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-198T01:02:35.650;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SetSUDASurveyOpportunity_NanograinParticle
+
+activity instance SUDA_Survey of type generic id SUDA_Survey
+    begin
+	decomposable into DisplayActivity, SetSUDAMode, SetSUDAMode_548, SetSUDAMode_549, 
+		SetSUDAMode_550;
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Survey";
+	    "Duration" = 15:20:00;
+	    "Legend" = "___SUDA_Behavior";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-200T23:49:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SUDA_Survey
+
+activity instance SUDA_Survey of type generic id DisplayActivity
+    begin
+	abstracted into SUDA_Survey;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Europa generic activity";
+	    "Duration" = 15:20:00;
+	    "Legend" = "___SUDA_Behavior";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-200T23:49:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "Europa";
+    end activity instance SUDA_Survey
+
+activity instance SetSUDAMode_BOOT of type generic id SetSUDAMode
+    begin
+	abstracted into SUDA_Survey;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-200T23:49:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SetSUDAMode_BOOT
+
+activity instance SetSUDAMode_IDLE of type generic id SetSUDAMode_548
+    begin
+	abstracted into SUDA_Survey;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-200T23:59:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SetSUDAMode_IDLE
+
+activity instance SetSUDASurveyOpportunity_NanograinParticle of type generic id SetSUDASurveyOpportunity_538
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Set SUDA Survey Opportunity";
+	    "Duration" = 15:00:00;
+	    "Legend" = "___SUDA_Constraint";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-201T00:09:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SetSUDASurveyOpportunity_NanograinParticle
+
+activity instance SetSUDAMode_SURVEY of type generic id SetSUDAMode_549
+    begin
+	abstracted into SUDA_Survey;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-201T00:09:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SetSUDAMode_SURVEY
+
+activity instance SUDA_NanograinSurvey of type generic id SUDA_NanograinSurvey
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Exogenic Nanograin Particle";
+	    "Duration" = 15:00:00;
+	    "Legend" = "___SUDA_Behavior";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-201T00:09:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SUDA_NanograinSurvey
+
+activity instance SetSUDAMode_SURVIVAL of type generic id SetSUDAMode_550
+    begin
+	abstracted into SUDA_Survey;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-201T15:09:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SetSUDAMode_SURVIVAL
+
+activity instance SetSUDASurveyOpportunity_NanograinParticle of type generic id SetSUDASurveyOpportunity_539
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Set SUDA Survey Opportunity";
+	    "Duration" = 14:49:00.372;
+	    "Legend" = "___SUDA_Constraint";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-202T02:09:34.414;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SetSUDASurveyOpportunity_NanograinParticle
+
+activity instance SUDA_Survey of type generic id SUDA_Survey_544
+    begin
+	decomposable into DisplayActivity_545, SetSUDAMode_551, SetSUDAMode_552, SetSUDAMode_553, 
+		SetSUDAMode_554;
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Survey";
+	    "Duration" = 23:20:00;
+	    "Legend" = "___SUDA_Behavior";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-213T05:11:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SUDA_Survey
+
+activity instance SUDA_Survey of type generic id DisplayActivity_545
+    begin
+	abstracted into SUDA_Survey_544;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Europa generic activity";
+	    "Duration" = 23:20:00;
+	    "Legend" = "___SUDA_Behavior";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-213T05:11:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "Europa";
+    end activity instance SUDA_Survey
+
+activity instance SetSUDAMode_BOOT of type generic id SetSUDAMode_551
+    begin
+	abstracted into SUDA_Survey_544;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-213T05:11:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SetSUDAMode_BOOT
+
+activity instance SetSUDAMode_IDLE of type generic id SetSUDAMode_552
+    begin
+	abstracted into SUDA_Survey_544;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-213T05:21:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SetSUDAMode_IDLE
+
+activity instance SetSUDASurveyOpportunity_NanograinParticle of type generic id SetSUDASurveyOpportunity_540
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "Set SUDA Survey Opportunity";
+	    "Duration" = 23:00:00;
+	    "Legend" = "___SUDA_Constraint";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-213T05:31:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SetSUDASurveyOpportunity_NanograinParticle
+
+activity instance SetSUDAMode_SURVEY of type generic id SetSUDAMode_553
+    begin
+	abstracted into SUDA_Survey_544;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-213T05:31:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SetSUDAMode_SURVEY
+
+activity instance SUDA_NanograinSurvey of type generic id SUDA_NanograinSurvey_546
+    begin
+	abstractable into ScheduleSUDASurvey_1;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Exogenic Nanograin Particle";
+	    "Duration" = 23:00:00;
+	    "Legend" = "___SUDA_Behavior";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-213T05:31:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SUDA_NanograinSurvey
+
+activity instance SetSUDAMode_SURVIVAL of type generic id SetSUDAMode_554
+    begin
+	abstracted into SUDA_Survey_544;
+	attributes
+	    "Color" = "Spring Green";
+	    "Description" = "SUDA Mode Change";
+	    "Duration" = 00:00:01;
+	    "Legend" = "___SUDA_Cmd";
+	    "Pattern" = 0;
+	    "Plan" = "New";
+	    "Start" = 2026-214T04:31:14.566;
+	    "Status" = "scheduled";
+	    "Subsystem" = "SUDA";
+	parameters
+	    (
+	    );
+    end activity instance SetSUDAMode_SURVIVAL
+

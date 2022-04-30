@@ -1,0 +1,9 @@
+APGEN script version "apgen-X.7.19-Custom - Wed Mar 3 11:47:56 PST 2021"
+OPENFILE 215-expansion-func/input.aaf
+OPENFILE 215-expansion-func/input.apf
+BUILD
+SCHEDULEACTIVITY ID decompose_via_windows
+NEWRESDISPLAY 0
+ADDRESOURCE OKtoObserve A1R1
+ADDRESOURCE ObsInProgress A1R1
+NEWHORIZON A1 FROM 2013-271T00:12:54.319 TO 2013-272T00:12:54.319

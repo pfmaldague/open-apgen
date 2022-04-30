@@ -1,0 +1,21 @@
+apgen version "faster"
+
+function A(i)
+    parameters
+	i: integer default to 0;
+    {
+	i = i + 2;
+	return i;
+}
+
+function send_to_user(s)
+    parameters
+	s: string default to "";
+    {
+	write_to_stdout("send_to_user: ", s, "\n");
+	return 1;
+}
+
+global integer B = A(4);
+global integer C = to_string(B) + "... yes, it's a string";
+global integer dummy = send_to_user(C);
