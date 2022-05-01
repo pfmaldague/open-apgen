@@ -13,7 +13,6 @@
 #include	"IO_ApgenDataOptions.H"
 #include	"IO_write.H"
 #include	"Legends.H"		// for ACTVERUNIT etc.
-#include	"Multiterator.H"
 #include	"RES_def.H"		// for evaluation strategy
 #include	"RES_exec.H"
 #include	"EventImpl.H"		// for predEventPLD
