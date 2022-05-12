@@ -161,7 +161,7 @@ public:
 	Node			*copy() { return NULL; }
 
 	static Cstring&		thePendingLayout();
-	static tlist<alpha_string, Cnode0<alpha_string, layout_stuff> > list_of_tagged_layout_lists;
+	static tlist<alpha_string, Cntnr<alpha_string, layout_stuff> > list_of_tagged_layout_lists;
 };
 
 #endif /*RD_SYS_H*/

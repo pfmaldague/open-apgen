@@ -437,12 +437,12 @@ void model_res_miter::add_thread(
 	Tthread*	new_thread = new Tthread(relptr<leadingClass>(ic, prio), ic);
 
 
-	thread_names << new Cnode0<alpha_void, Cstring>(
+	thread_names << new Cntnr<alpha_void, Cstring>(
 		new_thread->payload->get_void_list(), thread_name);
 
 	initialize_iterator(*ic);
 
-	thread_indices << new Cnode0<alpha_void, int>(
+	thread_indices << new Cntnr<alpha_void, int>(
 					(void*)&lc,
 					pointers_to_threads.get_length());
 	pointers_to_threads << new threadptr((void*)&lc, new_thread);
@@ -454,9 +454,9 @@ void model_res_miter::add_thread(
 //
 safe_vector_info* model_res_miter::save_safe_nodes() {
 
-	slist<alpha_void, Cnode0<alpha_void, Tthread*> >::iterator
+	slist<alpha_void, Cntnr<alpha_void, Tthread*> >::iterator
 						iter(pointers_to_threads);
-	Cnode0<alpha_void, Tthread*>*	ptr;
+	Cntnr<alpha_void, Tthread*>*	ptr;
 	vector<value_node*>*		vec = new vector<value_node*>;
 	slist<
 	  alpha_time,
@@ -513,7 +513,7 @@ safe_vector_info* model_res_miter::save_safe_nodes() {
 	//
 	//  typedef slist<prio_time, value_node, Rsource*>	baseListClass;
 	//  typedef baseListClass::leading_iter			leadingClass;
-	//  typedef Cnode0<relptr<leadingClass>, leadingClass*>	Tthread;
+	//  typedef Cntnr<relptr<leadingClass>, leadingClass*>	Tthread;
 	// 
 	while((ptr = iter())) {
 
@@ -545,10 +545,10 @@ safe_vector_info* model_res_miter::save_safe_nodes() {
 
 void
 model_res_miter::remove_thread(const slist<prio_time, value_node, Rsource*>& lc) {
-	Cnode0<alpha_void, Tthread*>*	old_ptr = pointers_to_threads.find(&lc);
+	Cntnr<alpha_void, Tthread*>*	old_ptr = pointers_to_threads.find(&lc);
 	leadingClass*			iter_to_delete = old_ptr->payload->payload;
 	Tthread*			old_thread = old_ptr->payload;
-	Cnode0<alpha_void, Cstring>*	nameptr
+	Cntnr<alpha_void, Cstring>*	nameptr
 		= thread_names.find(old_thread->payload->get_void_list());
 
 	delete nameptr;

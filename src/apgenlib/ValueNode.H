@@ -1,12 +1,13 @@
 #ifndef _RSOURCE_BASE_H_
 #define _RSOURCE_BASE_H_
 
-#include <APbasic.H>
-#include <APdata.H>
-#include <alphatime.H>
-#include <multitemplate.H>
-#include <multilist.H>
-#include <smartptr.H>
+#include "APbasic.H"
+#include "APdata.H"
+#include "alphatime.H"
+#include "multitemplate.H"
+#include "multilist.H"
+#include "smartptr.H"
+#include "linkers.H"
 
 class RCsource;
 class Rsource;
@@ -21,17 +22,17 @@ class Constraint;
 	 *    RES_sys::addResource()
 	 *    RES_sys::configure_graphics()
 	 */
-class unattached_value_node: public Dnode0<alpha_time, unattached_value_node, Rsource*> {
+class unattached_value_node: public baseC<alpha_time, unattached_value_node, Rsource*> {
 public:
 	unattached_value_node(
 			const TypedValue&	cumul_val,
 			apgen::DATA_TYPE	t,
 			CTime_base		time)
-		: Dnode0<alpha_time, unattached_value_node, Rsource*>(time),
+		: baseC<alpha_time, unattached_value_node, Rsource*>(time),
 			val(cumul_val, t) {}
 protected:
 	unattached_value_node(const unattached_value_node& ua)
-		: Dnode0<alpha_time, unattached_value_node, Rsource*>(ua),
+		: baseC<alpha_time, unattached_value_node, Rsource*>(ua),
 			val(ua.val) {}
 public:
 	virtual ~unattached_value_node() {
@@ -141,10 +142,10 @@ public:
 	}
 };
 
-typedef Cnode0<alpha_void, unattached_value_node*> unattached_ptr;
+typedef Cntnr<alpha_void, unattached_value_node*> unattached_ptr;
 
 class value_node;
-class value_node1;
+class value_node_w_linker;
 
 //
 // Abstract class for all value node payloads
@@ -614,25 +615,25 @@ public:
 //
 // payload is a res_value_base (no linker)
 //
-class value_node: public Dnode0<prio_time, value_node, Rsource*> {
+class value_node: public baseC<prio_time, value_node, Rsource*> {
 protected:
 
 	//
 	// NOTE: the factories will have to set the payload pointer
 	//
 	value_node(const CTime_base& t, long modelOrder, res_value_base* arv)
-		: Dnode0<prio_time, value_node, Rsource*>(prio_time(t, modelOrder)),
+		: baseC<prio_time, value_node, Rsource*>(prio_time(t, modelOrder)),
 			payload(arv) {}
 
 	//
 	// mandated by Node - do not use!
 	//
 	value_node(const value_node& a)
-		: Dnode0<prio_time, value_node, Rsource*>(a.Key),
+		: baseC<prio_time, value_node, Rsource*>(a.Key),
 			payload(a.payload) {}
 public:
 
-	typedef Dnode0<prio_time, value_node, Rsource*> Dbase;
+	typedef baseC<prio_time, value_node, Rsource*> Dbase;
 
 	virtual ~value_node() {
 
@@ -680,7 +681,7 @@ public:
 					long			modelOrder,
 					Rsource&		r);
 
-	static value_node1*	stateFactory(
+	static value_node_w_linker*	stateFactory(
 					const CTime_base&	t,
 					const TypedValue&	orig_val,
 					long			modelOrder,
@@ -688,7 +689,7 @@ public:
 					apgen::RES_VAL_TYPE	T,
 					Rsource&		r);
 
-	static value_node1*	stateFactory(
+	static value_node_w_linker*	stateFactory(
 					const CTime_base&	t,
 					value_node* VN,
 					long			modelOrder,
@@ -696,14 +697,14 @@ public:
 					apgen::RES_VAL_TYPE	T,
 					Rsource&		r);
 
-	static value_node1*	numericFloatFactory(
+	static value_node_w_linker*	numericFloatFactory(
 					const CTime_base&	t,
 					double			new_consumption,
 					long			modelOrder,
 			               	Rsource&		r,
 					apgen::RES_VAL_TYPE	rvt);
 
-	static value_node1*	numericFloatFactory(
+	static value_node_w_linker*	numericFloatFactory(
 					const CTime_base&	t,
 					double			new_consumption,
 					value_node* ncv,
@@ -711,14 +712,14 @@ public:
 		       	         	Rsource&		r,
 					apgen::RES_VAL_TYPE	rvt);
 
-	static value_node1*	numericIntFactory(
+	static value_node_w_linker*	numericIntFactory(
 					const CTime_base&	t,
 					true_long		new_consumption,
 					long			modelOrder,
 			               	Rsource&		r,
 					apgen::RES_VAL_TYPE	rvt);
 
-	static value_node1*	numericIntFactory(
+	static value_node_w_linker*	numericIntFactory(
 					const CTime_base&	t,
 					true_long		new_consumption,
 					value_node* ncv,
@@ -787,23 +788,23 @@ public:
 //
 // payload is a res_val_w_linker
 //
-class value_node1: public value_node {
+class value_node_w_linker: public value_node {
 private:
 
 	//
 	// NOTE: the factories will have to set the payload pointer
 	//
-	value_node1(const CTime_base& t, long modelOrder, res_value_base* arv)
+	value_node_w_linker(const CTime_base& t, long modelOrder, res_value_base* arv)
 		: value_node(t, modelOrder, arv) {}
 
 	//
 	// mandated by Node - do not use!
 	//
-	value_node1(const value_node& a)
+	value_node_w_linker(const value_node& a)
 		: value_node(a) {}
 public:
 
-	virtual ~value_node1() {
+	virtual ~value_node_w_linker() {
 
 		//
 		// no longer necessary because we inherit from backptr:
@@ -821,18 +822,18 @@ public:
 		payload = NULL;
 	}
 
-	value_node1*			copy() override {
-		return new value_node1(*this);
+	value_node_w_linker*			copy() override {
+		return new value_node_w_linker(*this);
 	}
-	value_node1*			get_this() override {
+	value_node_w_linker*			get_this() override {
 		return this;
 	}
-	const value_node1*		get_this() const override {
+	const value_node_w_linker*		get_this() const override {
 		return this;
 	}
 	
   //
-  // Methods that override those of Dnode0 to support linker behavior 
+  // Methods that override those of baseC to support linker behavior 
   //
 
   virtual void			reset_links() override {
@@ -843,11 +844,11 @@ public:
   }
 
 				//
-				// base method is in Dnode0; this one is not
+				// base method is in baseC; this one is not
 				// marked override because the return is
 				// different
 				//
-  virtual value_node1*		rotate();
+  virtual value_node_w_linker*		rotate();
 
 				// made virtual so a derived class can disable by throwing
   virtual void			temporarily_remove_from_list() override {

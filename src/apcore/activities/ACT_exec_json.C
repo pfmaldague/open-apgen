@@ -19,7 +19,7 @@ extern "C" {
 	#define AUTO_PTR_TEMPL unique_ptr
 #endif
 
-typedef Cnode0<alpha_string, json_object*>	subsysNode;
+typedef Cntnr<alpha_string, json_object*>	subsysNode;
 
 apgen::RETURN_STATUS
 exec_agent::WriteActInteractionsToJsonStrings(

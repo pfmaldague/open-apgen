@@ -7,7 +7,7 @@
 //
 
 #include "slist.H"
-#include "linkers.H"
+// #include "linkers.H"
 
 // template <class keyClass, class Node, class ownerData>
 // class tlist;
@@ -1843,10 +1843,11 @@ tlist<keyClass, nbase, ownerData>::check(
 //
 
 //
-// Dnode0 is suitable as a base class for a Final class.
+// baseC (baseContainer) is suitable as a base class for a Final class.
+//        =====
 //
 template <class keyClass, class Final, class ownerData = short>
-class Dnode0 {
+class baseC {
   public:
 
 // DATA
@@ -1865,7 +1866,7 @@ class Dnode0 {
 // ... and do not forget the virtual destructor implementation in the Final class!
 
 // CONSTRUCTORS
-  /* constructor */		Dnode0()
+  /* constructor */		baseC()
 					: next(NULL),
 					previous(NULL),
 					list(NULL),
@@ -1873,14 +1874,14 @@ class Dnode0 {
 					indicator(TreeDir::BALANCED) {
 						Links[TreeDir::RIGHT_DIR] = NULL;
 						Links[TreeDir::LEFT_DIR] = NULL; }
-  /* comparison with Key */	Dnode0(const keyClass& a)
+  /* comparison with Key */	baseC(const keyClass& a)
 					: Key(a),
 					next(NULL),
 					previous(NULL),
 					list(NULL),
 					saved_list(NULL),
 					indicator(TreeDir::BALANCED) {}
-  /* copy constructor */	Dnode0(const Dnode0& Ap)
+  /* copy constructor */	baseC(const baseC& Ap)
 					: Key(Ap.Key),
 					next(NULL),
 					previous(NULL),
@@ -1888,7 +1889,7 @@ class Dnode0 {
 					saved_list(NULL),
 					indicator(TreeDir::BALANCED) {}
 
-  virtual			~Dnode0() {
+  virtual			~baseC() {
 					/* We can't do this - casting does not
 					 * work as intended. Move the code to
 					 * the Final class.
@@ -1912,7 +1913,7 @@ class Dnode0 {
   bool				has_a_list() const { return list != NULL; }
   virtual void			make_root_of(slist<keyClass, Final, ownerData>*);
   Final*			next_node() const { return next; }
-  Dnode0&			operator = (const Dnode0&) { return *this; }
+  baseC&			operator = (const baseC&) { return *this; }
   virtual backptr<Final>*	Pointers() { return NULL; }
   virtual Final*		preceding_node() const;
   virtual Final*		previous_node() const { return previous;}
@@ -2014,17 +2015,17 @@ class Dnode0 {
   }
   virtual void		subtract_cons_from_ancestors(Final* stop_here = NULL) {
   }
-};	// end of Dnode0 class
+};	// end of baseC class
 
 template <class keyClass, class Final, class ownerData>
 void
-Dnode0<keyClass, Final, ownerData>::make_root_of(slist<keyClass, Final, ownerData>* l) {
+baseC<keyClass, Final, ownerData>::make_root_of(slist<keyClass, Final, ownerData>* l) {
 	l->make_root(get_this());
 }
 
 template <class keyClass, class Final, class ownerData>
 Final*
-Dnode0<keyClass, Final, ownerData>::preceding_node() const {
+baseC<keyClass, Final, ownerData>::preceding_node() const {
 	slist<keyClass, Final, ownerData>* L = list;
 
 	if(!L) return NULL;
@@ -2033,7 +2034,7 @@ Dnode0<keyClass, Final, ownerData>::preceding_node() const {
 
 template <class keyClass, class Final, class ownerData>
 Final*
-Dnode0<keyClass, Final, ownerData>::following_node() const {
+baseC<keyClass, Final, ownerData>::following_node() const {
 	slist<keyClass, Final, ownerData>* L = list;
 
 	if(!L) return NULL;
@@ -2042,7 +2043,7 @@ Dnode0<keyClass, Final, ownerData>::following_node() const {
 
 template <class keyClass, class Final, class ownerData>
 Final*
-Dnode0<keyClass, Final, ownerData>::rotate() {
+baseC<keyClass, Final, ownerData>::rotate() {
 	TreeDir::Dir	t_direction, u_direction;
 	Final* new_root;
 
@@ -2068,23 +2069,23 @@ Dnode0<keyClass, Final, ownerData>::rotate() {
 }
 
 //
-// a version of Tnode without a linker
+// a node without a payload
 //
 template <class keyClass, class ownerData = short>
-class Tnode0 {
+class keyNode {
   public:
 
 // DATA
   TreeDir::Dir			indicator;
-  Tnode0*			Links[2]; // index will always be LEFT_DIR or RIGHT_DIR
-  slist<keyClass, Tnode0, ownerData>* list;
-  Tnode0*			next;
-  Tnode0*			previous;
-  slist<keyClass, Tnode0, ownerData>* saved_list; // to support temporary removal and reinsertion
+  keyNode*			Links[2]; // index will always be LEFT_DIR or RIGHT_DIR
+  slist<keyClass, keyNode, ownerData>* list;
+  keyNode*			next;
+  keyNode*			previous;
+  slist<keyClass, keyNode, ownerData>* saved_list; // to support temporary removal and reinsertion
   keyClass			Key;
 
 // CONSTRUCTORS
-  /* constructor */		Tnode0()
+  /* constructor */		keyNode()
 					: next(NULL),
 					previous(NULL),
 					list(NULL),
@@ -2093,14 +2094,14 @@ class Tnode0 {
 	Links[TreeDir::RIGHT_DIR] = NULL;
 	Links[TreeDir::LEFT_DIR] = NULL;
   }
-  /* comparison with Key */	Tnode0(const keyClass& a)
+  /* comparison with Key */	keyNode(const keyClass& a)
 					: Key(a),
 					next(NULL),
 					previous(NULL),
 					list(NULL),
 					saved_list(NULL),
 					indicator(TreeDir::BALANCED) {}
-  /* copy constructor */	Tnode0(const Tnode0& Ap)
+  /* copy constructor */	keyNode(const keyNode& Ap)
 					: Key(Ap.Key),
 					next(NULL),
 					previous(NULL),
@@ -2108,7 +2109,7 @@ class Tnode0 {
 					saved_list(NULL),
 					indicator(TreeDir::BALANCED) {}
 
-  virtual			~Tnode0() {
+  virtual			~keyNode() {
 	if(list) {
 		list->remove_node(this);
 		list = NULL;
@@ -2117,10 +2118,10 @@ class Tnode0 {
 
 // METHODS
 
-  virtual Tnode0*		copy() {
-	return new Tnode0(*this);
+  virtual keyNode*		copy() {
+	return new keyNode(*this);
   }
-  virtual Tnode0*		following_node() const;
+  virtual keyNode*		following_node() const;
   TreeDir::Dir			get_indicator() const {
 	return indicator;
   }
@@ -2130,36 +2131,36 @@ class Tnode0 {
   virtual unsigned long&	get_2nd_key() {
 	return Key.get_2nd_key();
   }
-  Tnode0*			get_left() const {
+  keyNode*			get_left() const {
 	return Links[TreeDir::LEFT_DIR];
   }
-  Tnode0*			get_link(TreeDir::Dir which) const {
+  keyNode*			get_link(TreeDir::Dir which) const {
 	return Links[which];
   }
   int				get_pathlength(int& length);
-  Tnode0*			get_right() const {
+  keyNode*			get_right() const {
 	return Links[TreeDir::RIGHT_DIR];
   }
   virtual const keyClass&	getKey() const {
 	return Key;
   }
-  bool				is_in_list(const slist<keyClass, Tnode0, ownerData>& l) const {
+  bool				is_in_list(const slist<keyClass, keyNode, ownerData>& l) const {
 	return list == &l;
   }
   bool				has_a_list() const {
 	return list != NULL;
   }
-  void				make_root_of(slist<keyClass, Tnode0, ownerData>*);
-  Tnode0*			next_node() const {
+  void				make_root_of(slist<keyClass, keyNode, ownerData>*);
+  keyNode*			next_node() const {
 	return next;
   }
-  Tnode0&			operator = (const Tnode0&) { return *this;
+  keyNode&			operator = (const keyNode&) { return *this;
   }
-  virtual backptr<Tnode0>*	Pointers() {
+  virtual backptr<keyNode>*	Pointers() {
 	return NULL;
   }
-  virtual Tnode0*		preceding_node() const;
-  virtual Tnode0*		previous_node() const {
+  virtual keyNode*		preceding_node() const;
+  virtual keyNode*		previous_node() const {
 	return previous;}
   void				reset_links() {
 	indicator = TreeDir::BALANCED;
@@ -2167,7 +2168,7 @@ class Tnode0 {
 	Links[TreeDir::LEFT_DIR] = NULL;
   }
 
-  Tnode0*			rotate();
+  keyNode*			rotate();
 				// made virtual so a derived class can disable by throwing
   virtual void			temporarily_remove_from_list() {
 	if(saved_list != NULL || list == NULL) {
@@ -2195,15 +2196,15 @@ class Tnode0 {
   virtual void		add_cons_to_ancestors() {
   }
   virtual void		attach(		TreeDir::Dir right_or_left,
-					Tnode0* node_to_attach,
+					keyNode* node_to_attach,
 					TreeDir::cons_adjust) {
 	Links[right_or_left] = node_to_attach;
   }
-  virtual void		attach_left(	Tnode0* node_to_attach,
+  virtual void		attach_left(	keyNode* node_to_attach,
 					TreeDir::cons_adjust CA) {
 	attach(TreeDir::LEFT_DIR, node_to_attach, CA);
   }
-  virtual void		attach_right(	Tnode0* node_to_attach,
+  virtual void		attach_right(	keyNode* node_to_attach,
 					TreeDir::cons_adjust CA) {
 	attach(TreeDir::RIGHT_DIR, node_to_attach, CA);
   }
@@ -2231,7 +2232,7 @@ class Tnode0 {
   virtual valueHolder	get_r_cons() const {
 	return valueHolder(0L);
   }
-  virtual Tnode0*		get_parent() const {
+  virtual keyNode*		get_parent() const {
 	return NULL;
   }
   virtual void		init_cons() {
@@ -2241,41 +2242,41 @@ class Tnode0 {
   }
   virtual void		set_i_cons(const valueHolder* vh) {
   }
-  virtual void		set_parent(Tnode0* Par) {
+  virtual void		set_parent(keyNode* Par) {
   }
-  virtual void		subtract_cons_from_ancestors(Tnode0* stop_here = NULL) {
+  virtual void		subtract_cons_from_ancestors(keyNode* stop_here = NULL) {
   }
-};	// end of Tnode0 class
+};	// end of keyNode class
 
 template <class keyClass, class ownerData>
 void
-Tnode0<keyClass, ownerData>::make_root_of(slist<keyClass, Tnode0<keyClass, ownerData>, ownerData>* l) {
+keyNode<keyClass, ownerData>::make_root_of(slist<keyClass, keyNode<keyClass, ownerData>, ownerData>* l) {
 	l->make_root(this);
 }
 
 template <class keyClass, class ownerData>
-Tnode0<keyClass, ownerData>*
-Tnode0<keyClass, ownerData>::preceding_node() const {
-	slist<keyClass, Tnode0<keyClass, ownerData>, ownerData>* L = list;
+keyNode<keyClass, ownerData>*
+keyNode<keyClass, ownerData>::preceding_node() const {
+	slist<keyClass, keyNode<keyClass, ownerData>, ownerData>* L = list;
 
 	if(!L) return NULL;
 	return L->find_adjacent_left(this);
 }
 
 template <class keyClass, class ownerData>
-Tnode0<keyClass, ownerData>*
-Tnode0<keyClass, ownerData>::following_node() const {
-	slist<keyClass, Tnode0<keyClass, ownerData>, ownerData>* L = list;
+keyNode<keyClass, ownerData>*
+keyNode<keyClass, ownerData>::following_node() const {
+	slist<keyClass, keyNode<keyClass, ownerData>, ownerData>* L = list;
 
 	if(!L) return NULL;
 	return L->find_adjacent_right(this);
 }
 
 template <class keyClass, class ownerData>
-Tnode0<keyClass, ownerData>*
-Tnode0<keyClass, ownerData>::rotate() {
+keyNode<keyClass, ownerData>*
+keyNode<keyClass, ownerData>::rotate() {
 	TreeDir::Dir	t_direction, u_direction;
-	Tnode0* new_root;
+	keyNode* new_root;
 
 	if(indicator == TreeDir::BALANCED) {
 		return NULL;
@@ -2299,30 +2300,31 @@ Tnode0<keyClass, ownerData>::rotate() {
 }
 
 //
-// A version of Cnode without a linker
+// Cntnr (Container): a simplified version of baseC which is its own Final class
+//        = ==  = =
 //
 template <class keyClass, class PLD, class ownerData = short>
-class Cnode0: public Dnode0<keyClass, Cnode0<keyClass, PLD, ownerData>, ownerData> {
-	typedef Dnode0<keyClass, Cnode0<keyClass, PLD, ownerData>, ownerData> dbase;
+class Cntnr: public baseC<keyClass, Cntnr<keyClass, PLD, ownerData>, ownerData> {
+	typedef baseC<keyClass, Cntnr<keyClass, PLD, ownerData>, ownerData> dbase;
 public:
-	Cnode0() {}
-	Cnode0(const keyClass& x) : dbase(x) {}
-	Cnode0(const keyClass& x, const PLD& y) : dbase(x), payload(y) {}
-	Cnode0(const Cnode0& c) : dbase(c), payload(c.payload) {}
-	~Cnode0() {
+	Cntnr() {}
+	Cntnr(const keyClass& x) : dbase(x) {}
+	Cntnr(const keyClass& x, const PLD& y) : dbase(x), payload(y) {}
+	Cntnr(const Cntnr& c) : dbase(c), payload(c.payload) {}
+	~Cntnr() {
 		if(dbase::list) {
 			dbase::list->remove_node(this);
 			dbase::list = NULL;
 		}
 	}
 
-	Cnode0*	copy() {
-		return new Cnode0(*this);
+	Cntnr*	copy() {
+		return new Cntnr(*this);
 	}
-	Cnode0*	get_this() {
+	Cntnr*	get_this() {
 		return this;
 	}
-	const Cnode0*	get_this() const {
+	const Cntnr*	get_this() const {
 		return this;
 	}
 

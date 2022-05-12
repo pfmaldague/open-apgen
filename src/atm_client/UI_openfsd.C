@@ -24,7 +24,7 @@ Cstring			pendingInputFile ;
 			// in action_request.C:
 extern strinttlist&	FileNamesWithInstancesAndOrNonLayoutDirectives();
 
-static tlist<alpha_void, Cnode0<alpha_void, CTime_base> > ourPrivateList;
+static tlist<alpha_void, Cntnr<alpha_void, CTime_base> > ourPrivateList;
 
                         // in UI_motif_widget.C:
 extern resource_data    ResourceData ;
@@ -113,8 +113,8 @@ void open_anyway_CB( const Cstring & toggle_button_text ) {
 		pendingInputFile.undefine() ; }
 
 void restore_durations_CB(const Cstring &toggle_button_text) {
-	slist<alpha_void, Cnode0<alpha_void, CTime_base> >::iterator	suspects(ourPrivateList);
-	Cnode0<alpha_void, CTime_base>*					ptp;
+	slist<alpha_void, Cntnr<alpha_void, CTime_base> >::iterator	suspects(ourPrivateList);
+	Cntnr<alpha_void, CTime_base>*					ptp;
 	const char*							which_button;
 
 	if(ACT_exec::recompute_durations) {
@@ -197,8 +197,8 @@ void UI_openfsd::openFSDOk( Widget , XtPointer , XtPointer cbs ) {
 
 void UI_openfsd::pop_the_discrepancy_panel() {
 	List								buttons;
-	Cnode0<alpha_void, CTime_base>*					ptp ;
-	slist<alpha_void, Cnode0<alpha_void, CTime_base> >::iterator	theCopies(ourPrivateList) ;
+	Cntnr<alpha_void, CTime_base>*					ptp ;
+	slist<alpha_void, Cntnr<alpha_void, CTime_base> >::iterator	theCopies(ourPrivateList) ;
 
 	if(disabled) {
 		ACT_exec::ACT_subsystem().execAgent()->act_instances_with_discrepant_durations.clear();

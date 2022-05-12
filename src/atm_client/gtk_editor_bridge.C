@@ -87,7 +87,7 @@ extern int		consult_act_req_for_range(
 // Special purpose function to support InSight
 //
 void		update_parameters_from_panel(
-			slist<alpha_int, Cnode0<alpha_int, TypedValue> >& new_params);
+			slist<alpha_int, Cntnr<alpha_int, TypedValue> >& new_params);
 
 
 #ifdef OBSOLETE
@@ -1840,7 +1840,7 @@ int	parameter_list_parser(
 		const char* paramlist,
 		char** any_errors) {
 	Cstring		text(paramlist);
-	slist<alpha_int, Cnode0<alpha_int, parsedExp> > expressions;
+	slist<alpha_int, Cntnr<alpha_int, parsedExp> > expressions;
 
 	*any_errors = NULL;
 	try {
@@ -1853,15 +1853,15 @@ int	parameter_list_parser(
 		*any_errors = strdup(*tmp);
 		return -1;
 	}
-	slist<alpha_int, Cnode0<alpha_int, parsedExp> >::iterator	iter(expressions);
-	Cnode0<alpha_int, parsedExp>*					c;
+	slist<alpha_int, Cntnr<alpha_int, parsedExp> >::iterator	iter(expressions);
+	Cntnr<alpha_int, parsedExp>*					c;
 	int								i = 0;
-	slist<alpha_int, Cnode0<alpha_int, TypedValue> >			values;
+	slist<alpha_int, Cntnr<alpha_int, TypedValue> >			values;
 	while((c = iter())) {
 		try {
 			TypedValue	V;
 			fileReader::EvaluateSelf(c->payload, V);
-			values << new Cnode0<alpha_int, TypedValue>(i, V);
+			values << new Cntnr<alpha_int, TypedValue>(i, V);
 		}
 		catch(eval_error Err) {
 			Cstring tmp("error parsing parameter ");
@@ -1891,7 +1891,7 @@ int	parameter_list_parser(
 // request of the InSight mission
 //
 void update_parameters_from_panel(
-		slist<alpha_int, Cnode0<alpha_int, TypedValue> >& new_params) {
+		slist<alpha_int, Cntnr<alpha_int, TypedValue> >& new_params) {
 
     //
     // reference to a vector<ISL>
@@ -1957,8 +1957,8 @@ void update_parameters_from_panel(
 		throw(eval_error(err));
 	}
 
-	slist<alpha_int, Cnode0<alpha_int, TypedValue> >::iterator	new_iter(new_params);
-	Cnode0<alpha_int, TypedValue>*					c;
+	slist<alpha_int, Cntnr<alpha_int, TypedValue> >::iterator	new_iter(new_params);
+	Cntnr<alpha_int, TypedValue>*					c;
 
 	for(int ip = 0; ip < numParameters; ip++) {
 		const Cstring	paramName = constructor.get_varinfo()[constructor.paramindex[ip]].first;

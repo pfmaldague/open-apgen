@@ -12,7 +12,7 @@ class resource;
 template<class V>
 class history {
 public:
-	typedef Cnode0<alpha_time, V, resource*> flexnode;
+	typedef Cntnr<alpha_time, V, resource*> flexnode;
 
 	history()
 	    : values(true) {

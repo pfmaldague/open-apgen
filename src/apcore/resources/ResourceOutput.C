@@ -21,7 +21,7 @@
 //
 void Rsource::expand_list_of_resource_names(
 	    vector<string>					   resource_names,
-	    tlist<alpha_string, Cnode0<alpha_string, Rsource*> >&  all_included_res) {
+	    tlist<alpha_string, Cntnr<alpha_string, Rsource*> >&  all_included_res) {
     
     stringtlist	selected_resources;
     Rsource*	resource;
@@ -65,7 +65,7 @@ void Rsource::expand_list_of_resource_names(
     // through their profile. We need to check the resource data members
     // that capture these dependencies.
     //
-    tlist<alpha_string, Cnode0<alpha_string, RCsource*> > containers_required_by_dependencies;
+    tlist<alpha_string, Cntnr<alpha_string, RCsource*> > containers_required_by_dependencies;
     stringtlist					 	  containers_already_checked;
 
 
@@ -89,7 +89,7 @@ void Rsource::expand_list_of_resource_names(
 		// We may already have included this resource from dependencies
 		//
 		if(!all_included_res.find(resource->name)) {
-		    all_included_res << new Cnode0<alpha_string, Rsource*>(resource->name, resource);
+		    all_included_res << new Cntnr<alpha_string, Rsource*>(resource->name, resource);
 		}
 		container = resource->get_container();
 	
@@ -99,10 +99,10 @@ void Rsource::expand_list_of_resource_names(
 		    //
 		    // check that all prerequisites are included
 		    //
-		    tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& deps(
+		    tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& deps(
 					container->payload->ptrs_to_containers_used_in_profile);
-		    slist<alpha_void, Cnode0<alpha_void, RCsource*> >::iterator it(deps);
-		    Cnode0<alpha_void, RCsource*>* cres;
+		    slist<alpha_void, Cntnr<alpha_void, RCsource*> >::iterator it(deps);
+		    Cntnr<alpha_void, RCsource*>* cres;
 	
 		    while((cres = it())) {
 			RCsource* prerequisite_container = cres->payload;
@@ -111,7 +111,7 @@ void Rsource::expand_list_of_resource_names(
 			    //
 			    // This container was not included
 			    //
-			    containers_required_by_dependencies << new Cnode0<alpha_string, RCsource*>(
+			    containers_required_by_dependencies << new Cntnr<alpha_string, RCsource*>(
 							prerequisite_container->get_key(),
 							prerequisite_container);
 			}
@@ -124,7 +124,7 @@ void Rsource::expand_list_of_resource_names(
 			for(int i = 0; i < vec.size(); i++) {
 			    Rsource*	dependent_resource = vec[i];
 			    if(!all_included_res.find(dependent_resource->name)) {
-				all_included_res << new Cnode0<alpha_string, Rsource*>(
+				all_included_res << new Cntnr<alpha_string, Rsource*>(
 					dependent_resource->name,
 					dependent_resource);
 			    }

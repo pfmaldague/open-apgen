@@ -233,7 +233,7 @@ public:
 			/* advances time pointers until none of them point to
 			 * something in the list (assumed to contain
 			 * bpointernodes). Returns the current node. */
-	Time_node*	remove_nodes(tlist<alpha_void, Cnode0<alpha_void, value_node*> >&);
+	Time_node*	remove_nodes(tlist<alpha_void, Cntnr<alpha_void, value_node*> >&);
 	void		checkAll();
 
 			// Does what it says

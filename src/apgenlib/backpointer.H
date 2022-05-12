@@ -45,22 +45,22 @@ public:
 	backptr() {}
 	~backptr() { delete_pointers_to_this(); }
 
-	class ptr2p2b: public Dnode0<alpha_void, ptr2p2b> {
+	class ptr2p2b: public baseC<alpha_void, ptr2p2b> {
 	public:
 		ptr2p2b() {}
 		ptr2p2b(const ptr2p2b& P)
-			: Dnode0<alpha_void, ptr2p2b>(P),
+			: baseC<alpha_void, ptr2p2b>(P),
 				payload(P.payload) {}
 		ptr2p2b(p2b<BackP>* const bp)
-			: Dnode0<alpha_void, ptr2p2b>((void*) bp),
+			: baseC<alpha_void, ptr2p2b>((void*) bp),
 				payload(bp) {}
 		~ptr2p2b() {
-			if(Dnode0<alpha_void, ptr2p2b>::list) {
-				Dnode0<alpha_void, ptr2p2b>::list->remove_node(this);
+			if(baseC<alpha_void, ptr2p2b>::list) {
+				baseC<alpha_void, ptr2p2b>::list->remove_node(this);
 			}
 		}
 
-					// implement pure virtual Dnode0 methods:
+					// implement pure virtual baseC methods:
 		ptr2p2b*		copy() { return new ptr2p2b(*this); }
   		ptr2p2b*		get_this() { return this; }
   		const ptr2p2b*		get_this() const { return this; }
@@ -185,10 +185,10 @@ void backptr<BackP>::delete_pointers_to_this() {
 
 /* Backpointer that is also a Dnode. */
 template <class keyClass, class PLD, class owner = short>
-class BPnode: public Dnode0<keyClass, BPnode<keyClass, PLD, owner>, owner> {
+class BPnode: public baseC<keyClass, BPnode<keyClass, PLD, owner>, owner> {
 public:
 
-  typedef Dnode0<keyClass, BPnode, owner> nbase;
+  typedef baseC<keyClass, BPnode, owner> nbase;
 
   BPnode*			copy() { return new BPnode(*this); }
   BPnode*			get_this() { return this; }
@@ -196,7 +196,7 @@ public:
 
   backptr<BPnode>		myBP;
 
-				// method that is virtual in Dnode0:
+				// method that is virtual in baseC:
   virtual backptr<BPnode>*	Pointers() { return &myBP; }
 
   /* main constructor */	BPnode(const keyClass& a, const PLD& p) : nbase(a), payload(p) {}
@@ -213,12 +213,12 @@ public:
 
 /* Template-based version of bpointernode. */
 template <class keyClass, class masterObj, class owner = short>
-class BPptr:	public Dnode0<keyClass, BPptr<keyClass, masterObj, owner>, owner>,
+class BPptr:	public baseC<keyClass, BPptr<keyClass, masterObj, owner>, owner>,
 		public p2b<masterObj>
 		{
 public:
 
-  typedef Dnode0<keyClass, BPptr<keyClass, masterObj, owner>, owner> nbase;
+  typedef baseC<keyClass, BPptr<keyClass, masterObj, owner>, owner> nbase;
   typedef p2b<masterObj> bpbase;
 
   /* constructor */		BPptr() {}
@@ -278,11 +278,11 @@ public:
 
 /* Like BPptr but with room for a non-trivial payload */
 template <class keyClass, class masterObj, class PLD>
-class BPptr2:	public Dnode0<keyClass, BPptr2<keyClass, masterObj, PLD> >,
+class BPptr2:	public baseC<keyClass, BPptr2<keyClass, masterObj, PLD> >,
 		public p2b<masterObj> {
 public:
 
-  typedef Dnode0<keyClass, BPptr2<keyClass, masterObj, PLD> > nbase;
+  typedef baseC<keyClass, BPptr2<keyClass, masterObj, PLD> > nbase;
   typedef p2b<masterObj> bpbase;
 
   /* void */		BPptr2() {}

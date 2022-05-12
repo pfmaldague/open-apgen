@@ -69,8 +69,8 @@ tlist<alpha_string, precomp_container>& precomp_containers() {
 
 single_precomp_res*	single_precomp_res::UnderConsolidation = NULL;
 
-tlist<alpha_string, Cnode0<alpha_string, apgen::METHOD_TYPE> >&		methods() {
-	static tlist<alpha_string, Cnode0<alpha_string, apgen::METHOD_TYPE> >	T;
+tlist<alpha_string, Cntnr<alpha_string, apgen::METHOD_TYPE> >&		methods() {
+	static tlist<alpha_string, Cntnr<alpha_string, apgen::METHOD_TYPE> >	T;
 	return T;
 }
 
@@ -106,14 +106,14 @@ Cstring&	current_resource() {
 
 tlist<
 	alpha_string,
-	Cnode0<
+	Cntnr<
 		alpha_string,
 		smart_ptr<pEsys::FunctionDefinition>
 	      >
      >& functions_declared_but_not_implemented() {
 	static tlist<
 			alpha_string,
-			Cnode0<
+			Cntnr<
 				alpha_string,
 				smart_ptr<pEsys::FunctionDefinition>
 			      >
@@ -769,7 +769,7 @@ TypedValue single_precomp_res::Evaluate(
     // just provide the earliest/latest value available.
     //
     double	*state_1, *state_2;
-    Cnode0<alpha_time, aafReader::state2>* first_endpoint = NULL;
+    Cntnr<alpha_time, aafReader::state2>* first_endpoint = NULL;
 
     //
     // Handle out-of-range cases first

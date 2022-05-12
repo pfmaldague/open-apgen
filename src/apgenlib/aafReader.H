@@ -82,7 +82,7 @@ public:
     double	s[2];
 };
 
-typedef tlist<alpha_time, Cnode0<alpha_time, state2> > state_series;
+typedef tlist<alpha_time, Cntnr<alpha_time, state2> > state_series;
 
 //
 // The precomputed resource class. It contains everything
@@ -92,13 +92,13 @@ typedef tlist<alpha_time, Cnode0<alpha_time, state2> > state_series;
 // is not an array, its index is arbitrary; the container
 // only contains one resource.
 //
-class single_precomp_res: public Dnode0<alpha_string, single_precomp_res> {
+class single_precomp_res: public baseC<alpha_string, single_precomp_res> {
 public:
-    single_precomp_res() : Dnode0<alpha_string, single_precomp_res>() {}
+    single_precomp_res() : baseC<alpha_string, single_precomp_res>() {}
     single_precomp_res(const Cstring& s)
-	: Dnode0<alpha_string, single_precomp_res>(s) {}
+	: baseC<alpha_string, single_precomp_res>(s) {}
     single_precomp_res(const single_precomp_res& R)
-	: Dnode0<alpha_string, single_precomp_res>(R),
+	: baseC<alpha_string, single_precomp_res>(R),
 		payload(R.payload) {}
     ~single_precomp_res() = default;
 
@@ -131,7 +131,7 @@ public:
 // the adaptation.
 //
 typedef tlist<alpha_string, single_precomp_res>	precomp_res_list;
-typedef Cnode0<alpha_string, precomp_res_list>	precomp_container;
+typedef Cntnr<alpha_string, precomp_res_list>	precomp_container;
 
 //
 // Precomputed containers are indexed by the name of the
@@ -152,7 +152,7 @@ stringtlist&		internal_functions();
 // For methods defined in AAFs. This list is cumulative, just
 // like functions().
 //
-tlist<alpha_string, Cnode0<alpha_string, apgen::METHOD_TYPE> >&	methods();
+tlist<alpha_string, Cntnr<alpha_string, apgen::METHOD_TYPE> >&	methods();
 
 pairtlist&		global_items();
 slist<alpha_string, bsymbolnode>& directives();
@@ -173,7 +173,7 @@ stringtlist&		resources();
 Cstring&		current_resource();
 
 tlist < alpha_string,
-	Cnode0<
+	Cntnr<
 		alpha_string,
 		smart_ptr<pEsys::FunctionDefinition>
 	     >

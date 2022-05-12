@@ -416,7 +416,7 @@ public:
 	int		norm_count;
 };
 
-typedef Cnode0<alpha_string, resCurve> resCurveNode;
+typedef Cntnr<alpha_string, resCurve> resCurveNode;
 
 
 /*	MW_continuous is an object that contains a simple plot

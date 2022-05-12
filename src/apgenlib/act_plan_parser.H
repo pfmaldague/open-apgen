@@ -57,7 +57,7 @@ public:
     ~process_act_inst_call_argsPLD() {}
 };
 
-typedef Cnode0<alpha_int, process_act_inst_call_argsPLD> pai_args_node;
+typedef Cntnr<alpha_int, process_act_inst_call_argsPLD> pai_args_node;
 
 class resourceConsumptionInfoPLD {
 public:
@@ -70,7 +70,7 @@ public:
     ~resourceConsumptionInfoPLD() {}
 };
 
-typedef Cnode0<alpha_void, resourceConsumptionInfoPLD> resourceConsumptionInfo;
+typedef Cntnr<alpha_void, resourceConsumptionInfoPLD> resourceConsumptionInfo;
 
 //
 // Implemented in xml_reader.C:
@@ -89,7 +89,7 @@ parse_incon(
 
     try {
 	pai_args_node*							pain;
-	tlist<alpha_string, Cnode0<alpha_string, pai_args_node*> >	painById;
+	tlist<alpha_string, Cntnr<alpha_string, pai_args_node*> >	painById;
 	int								i = 0;
 	bool								isAct, isRes, isCon;
 

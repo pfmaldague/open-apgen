@@ -283,11 +283,11 @@ iterateOverTOLevents(
     CTime_base			lastProcessedEventTime;
     CTime_base			prev_time;
     bool			thereWasAtLeastOneEvent = false;
-    tlist<alpha_string, Cnode0<alpha_string, ActivityInstance*> > pendingActivityEnds;
-    tlist<alpha_string, Cnode0<alpha_string, ActivityInstance*> > endlessActivityStarts;
+    tlist<alpha_string, Cntnr<alpha_string, ActivityInstance*> > pendingActivityEnds;
+    tlist<alpha_string, Cntnr<alpha_string, ActivityInstance*> > endlessActivityStarts;
     Rsource*			resource;
     int				record_count = 0;
-    Cnode0<alpha_string, ActivityInstance*>* ptr;
+    Cntnr<alpha_string, ActivityInstance*>* ptr;
 
     /****************************************
      *				            *
@@ -302,9 +302,9 @@ iterateOverTOLevents(
     value_node*			resEvent;
     value_node*			prev_res_event = NULL;
     con_violation*		vio;
-    Cnode0<alpha_int, con_violation*>*
+    Cntnr<alpha_int, con_violation*>*
 				active_con = NULL;
-    tlist<alpha_int, Cnode0<alpha_int, con_violation*> >
+    tlist<alpha_int, Cntnr<alpha_int, con_violation*> >
 	   			active_violations(true);
     tlist<alpha_time, con_violation>
 	   			unreleased_violations(true);
@@ -540,7 +540,7 @@ iterateOverTOLevents(
 		    }
 		} else {
 		    active_violations
-			<< new Cnode0<alpha_int, con_violation*>
+			<< new Cntnr<alpha_int, con_violation*>
 				(vio->ID, vio);
 		}
 	    }
@@ -779,7 +779,7 @@ iterateOverTOLevents(
 		    delete ptr;
 		} else {
 		    endlessActivityStarts <<
-			new Cnode0<alpha_string, ActivityInstance*>(
+			new Cntnr<alpha_string, ActivityInstance*>(
 					request->get_unique_id(),
 					request);
 		}
@@ -816,7 +816,7 @@ iterateOverTOLevents(
 			delete active_con;
 		    }
 		} else {
-		    active_violations << new Cnode0<alpha_int, con_violation*>
+		    active_violations << new Cntnr<alpha_int, con_violation*>
 							(vio->ID, vio);
 		}
 	    }
@@ -947,7 +947,7 @@ iterateOverTOLevents(
 			delete ptr;
 		    } else {
 			pendingActivityEnds <<
-			    new Cnode0<alpha_string, ActivityInstance*>(
+			    new Cntnr<alpha_string, ActivityInstance*>(
 				      request->get_unique_id(),
 				      request);
 		    }

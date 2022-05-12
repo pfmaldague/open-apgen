@@ -708,7 +708,7 @@ public:
     //
     // Migrated here from the old AbstractResource class:
     //
-    // static tlist<alpha_string, Cnode0<alpha_string, behaving_object*> >&
+    // static tlist<alpha_string, Cntnr<alpha_string, behaving_object*> >&
     // 							abstract_resources();
 
     //

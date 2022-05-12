@@ -45,10 +45,10 @@ template <class listClass, class nodeClass, class keyClass>
 class Interator: public Miterator_base<listClass, nodeClass> {
 public:
   typedef typename listClass::iterator		iterClass;
-  typedef Cnode0<int_relptr<iterClass>, iterClass*>	Tthread;
+  typedef Cntnr<int_relptr<iterClass>, iterClass*>	Tthread;
   typedef tlist<int_relptr<iterClass>, Tthread>	Tthreadtlist;
   typedef slist<int_relptr<iterClass>, Tthread>	Tthreadslist;
-  typedef Cnode0<alpha_void, Tthread*>		threadptr;
+  typedef Cntnr<alpha_void, Tthread*>		threadptr;
   typedef slist<alpha_void, threadptr>		threadptrslist;
   typedef tlist<alpha_void, threadptr>		threadptrtlist;
 
@@ -162,7 +162,7 @@ public:
   long int	initializationInt;
 
   threadptrtlist					pointers_to_threads;	// need to delete pointee when clearing
-  tlist<alpha_void, Cnode0<alpha_void, Cstring> >	thread_names;		// used to store the strings associated with each thread
+  tlist<alpha_void, Cntnr<alpha_void, Cstring> >	thread_names;		// used to store the strings associated with each thread
 
   // made public for debugging:
   // private:
@@ -332,8 +332,8 @@ Interator<listClass, nodeClass, keyClass>::Interator(
 	//
 	// Reminder:
 	//
-  	// typedef Cnode0<int_relptr<iterClass>, iterClass*>	Tthread;
-  	// typedef Cnode0<alpha_void, Tthread*>		threadptr;
+  	// typedef Cntnr<int_relptr<iterClass>, iterClass*>	Tthread;
+  	// typedef Cntnr<alpha_void, Tthread*>		threadptr;
   	//
 	threadptr*				tptr;
 
@@ -372,7 +372,7 @@ Interator<listClass, nodeClass, keyClass>::Interator(
 
 template <class listClass, class nodeClass, class keyClass>
 void Interator<listClass, nodeClass, keyClass>::dump_one(
-		Cnode0<int_relptr<iterClass>, iterClass*>* n,
+		Cntnr<int_relptr<iterClass>, iterClass*>* n,
 		stringstream& s,
 		int k) {
 	int i;
@@ -484,9 +484,9 @@ Interator<listClass, nodeClass, keyClass>::add_thread(
 
 	lc.register_miterator(*this);
 
-	thread_names << new Cnode0<alpha_void, Cstring>(new_thread->payload->get_void_list(), thread_name);
+	thread_names << new Cntnr<alpha_void, Cstring>(new_thread->payload->get_void_list(), thread_name);
 	ic->go_to_beginning();
-	pointers_to_threads << new Cnode0<alpha_void, Tthread*>(
+	pointers_to_threads << new Cntnr<alpha_void, Tthread*>(
 						new_thread->payload->get_void_list(),
 						new_thread);
 }
@@ -494,12 +494,12 @@ Interator<listClass, nodeClass, keyClass>::add_thread(
 template <class listClass, class nodeClass, class keyClass>
 void
 Interator<listClass, nodeClass, keyClass>::remove_thread(const listClass& lc) {
-	Cnode0<alpha_void, Tthread*>*	old_ptr = pointers_to_threads.find(&lc);
+	Cntnr<alpha_void, Tthread*>*	old_ptr = pointers_to_threads.find(&lc);
 	assert(old_ptr);
 	iterClass*			iter_to_delete = old_ptr->payload->payload;
 	Tthread*			old_thread = old_ptr->payload;
 	assert(old_thread);
-	Cnode0<alpha_void, Cstring>*	nameptr = thread_names.find(old_thread->payload->get_void_list());
+	Cntnr<alpha_void, Cstring>*	nameptr = thread_names.find(old_thread->payload->get_void_list());
 	assert(nameptr);
 
 	delete nameptr;

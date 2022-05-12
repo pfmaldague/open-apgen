@@ -481,9 +481,9 @@ apgen::RETURN_STATUS ACT_exec::WriteResourcesToJsonStrings(
 void ACT_exec::generate_time_events() {
 	status_aware_iterator visible_acts(eval_intfc::get_act_lists().get_scheduled_active_iterator());
 	status_aware_iterator decomposed_acts(eval_intfc::get_act_lists().get_decomposed_iterator());
-	tlist<alpha_time, Cnode0<alpha_time, ActivityInstance*> > AllActs(true);
-	slist<alpha_time, Cnode0<alpha_time, ActivityInstance*> >::iterator all_acts(AllActs);
-	Cnode0<alpha_time, ActivityInstance*>*	time_ptr;
+	tlist<alpha_time, Cntnr<alpha_time, ActivityInstance*> > AllActs(true);
+	slist<alpha_time, Cntnr<alpha_time, ActivityInstance*> >::iterator all_acts(AllActs);
+	Cntnr<alpha_time, ActivityInstance*>*	time_ptr;
 	ActivityInstance*			request;
 	int					number_of_c_instances_initialized = 0;
 	Cstring					errs;
@@ -522,7 +522,7 @@ void ACT_exec::generate_time_events() {
 #endif /* OBSOLETE */
 
 		}
-		AllActs << new Cnode0<alpha_time, ActivityInstance*>(request->getetime(), request);
+		AllActs << new Cntnr<alpha_time, ActivityInstance*>(request->getetime(), request);
 		request->hierarchy().recursively_get_time_ptrs_to_nonexclusive_descendants(AllActs);
 	    }
 	}
@@ -548,7 +548,7 @@ void ACT_exec::generate_time_events() {
 					<< Err.msg;
 			    throw(eval_error(errs));
 			}
-			AllActs << new Cnode0<alpha_time, ActivityInstance*>(
+			AllActs << new Cntnr<alpha_time, ActivityInstance*>(
 					request->getetime(),
 						request);
 		    } else
@@ -562,7 +562,7 @@ void ACT_exec::generate_time_events() {
 			// duplication with the previous while loop -
 			// these are UP activities!
 			//
-			AllActs << new Cnode0<alpha_time, ActivityInstance*>(
+			AllActs << new Cntnr<alpha_time, ActivityInstance*>(
 						request->getetime(),
 						request);
 		    }
@@ -1412,11 +1412,11 @@ int ACT_exec::SendActivitiesToClient(
     // to obtain a predictable activity instance ordering, we will use the
     // activity instances' unique IDs as a secondary key
     //
-    tlist<alpha_string, Cnode0<alpha_string, ActivityInstance*> >
+    tlist<alpha_string, Cntnr<alpha_string, ActivityInstance*> >
 					Consistent(true);
-    tlist<alpha_string, Cnode0<alpha_string, ActivityInstance*> >::iterator
+    tlist<alpha_string, Cntnr<alpha_string, ActivityInstance*> >::iterator
 					consistent(Consistent);
-    Cnode0<alpha_string, ActivityInstance*>*
+    Cntnr<alpha_string, ActivityInstance*>*
 					c;
     CTime_base				T;
     bool				first_time = true;
@@ -1428,13 +1428,13 @@ int ACT_exec::SendActivitiesToClient(
 	    act_request = t->getKey().mC;
 	    if(first_time) {
 		T = act_request->getetime();
-		Consistent << new Cnode0<alpha_string, ActivityInstance*>(
+		Consistent << new Cntnr<alpha_string, ActivityInstance*>(
 			act_request->get_unique_id(), act_request);
 		first_time = false;
 	    } else if(act_request->getetime() > T) {
 		must_process_list = true;
 	    } else {
-		Consistent << new Cnode0<alpha_string, ActivityInstance*>(
+		Consistent << new Cntnr<alpha_string, ActivityInstance*>(
 			act_request->get_unique_id(), act_request);
 	    }
 	} else {
@@ -1480,7 +1480,7 @@ int ACT_exec::SendActivitiesToClient(
 	    Consistent.clear();
 	    if(t) {
 		T = act_request->getetime();
-		Consistent << new Cnode0<alpha_string, ActivityInstance*>(
+		Consistent << new Cntnr<alpha_string, ActivityInstance*>(
 				act_request->get_unique_id(),
 				act_request);
 	    } else {
@@ -1521,14 +1521,14 @@ apgen::RETURN_STATUS ACT_exec::sel_remove(
 	slist<alpha_void, dumb_actptr>		ParentsWithDeletedOffspring;
 	slist<alpha_void, dumb_actptr>::iterator	parents_to_reveal(ParentsWithDeletedOffspring);
 	dumb_actptr					*ptr, *parent_ptr;
-	Cnode0<alpha_void, dumb_actptr*>*		bptr;
+	Cntnr<alpha_void, dumb_actptr*>*		bptr;
 	slist<alpha_void, dumb_actptr>::iterator	selected_activities(selection_copy);
 			// NOTE: used to be bcopy, but linux objects to
 			// this (also a function name):
 	tlist<alpha_void, dumb_actptr>		b_copy;
 	tlist<alpha_void, dumb_actptr>::iterator	theCopies(b_copy);
-	tlist<alpha_void, Cnode0<alpha_void, dumb_actptr*> >	bactivities_with_a_selected_ancestor;
-	tlist<alpha_void, Cnode0<alpha_void, dumb_actptr*> >::iterator activities_with_a_selected_ancestor(bactivities_with_a_selected_ancestor);
+	tlist<alpha_void, Cntnr<alpha_void, dumb_actptr*> >	bactivities_with_a_selected_ancestor;
+	tlist<alpha_void, Cntnr<alpha_void, dumb_actptr*> >::iterator activities_with_a_selected_ancestor(bactivities_with_a_selected_ancestor);
 	tlist<alpha_void, dumb_actptr>		list_of_activities_with_their_descendants;
 
 	eval_intfc::get_act_lists().clear_clipboard();
@@ -1620,7 +1620,7 @@ apgen::RETURN_STATUS ACT_exec::sel_remove(
 		if(	b_copy.find(ptr->payload)
 			&& !bactivities_with_a_selected_ancestor.find((void *) ptr)
 		  ) {
-			bactivities_with_a_selected_ancestor << new Cnode0<alpha_void, dumb_actptr*>(actreqnode, ptr);
+			bactivities_with_a_selected_ancestor << new Cntnr<alpha_void, dumb_actptr*>(actreqnode, ptr);
 		}
 	}
 	while((bptr = activities_with_a_selected_ancestor())) {

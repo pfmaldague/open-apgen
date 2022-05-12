@@ -67,11 +67,11 @@ value_node* window_finder::initializer(
 }
 
 void CleanupSchedulingStructures() {
-	slist<alpha_void, Cnode0<alpha_void, RCsource*> >::iterator RES(
+	slist<alpha_void, Cntnr<alpha_void, RCsource*> >::iterator RES(
 			EventLoop::containersToWatchForWaitUntil());
 
 	//
-	// The following list is a tlist of Cnode0<alpha_void, RCsource*>;
+	// The following list is a tlist of Cntnr<alpha_void, RCsource*>;
 	// no special action required.
 	//
 	EventLoop::containersToWatchForWaitUntil().clear();
@@ -90,9 +90,9 @@ void CleanupSchedulingStructures() {
 	// the queue(s).
 	//
 
-	Cnode0<alpha_int, instruction_node*>* c;
+	Cntnr<alpha_int, instruction_node*>* c;
 
-	slist<alpha_int, Cnode0<alpha_int, instruction_node*> >::iterator
+	slist<alpha_int, Cntnr<alpha_int, instruction_node*> >::iterator
 		iter_waiting1(eval_intfc::actsOrResWaitingOnSignals());
 	while((c = iter_waiting1())) {
 		c->payload->unwind();
@@ -100,7 +100,7 @@ void CleanupSchedulingStructures() {
 	}
 	eval_intfc::actsOrResWaitingOnSignals().clear();
 
-	slist<alpha_int, Cnode0<alpha_int, instruction_node*> >::iterator
+	slist<alpha_int, Cntnr<alpha_int, instruction_node*> >::iterator
 		iter_waiting2(eval_intfc::actsOrResWaitingOnCond());
 	while((c = iter_waiting2())) {
 		c->payload->unwind();

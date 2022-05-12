@@ -996,9 +996,9 @@ void UI_mainwindow::resourceDefButtonActivateCallback(Widget, callback_stuff * c
 #ifdef GUI
     if(GUI_Flag) {
     UI_mainwindow	*obj = (UI_mainwindow *) client_data->data;
-    Cnode0<alpha_void, Rsource*>*					ptr;
-    tlist<alpha_void, Cnode0<alpha_void, Rsource*> >		theListOfResources;
-    slist<alpha_void, Cnode0<alpha_void, Rsource*> >::iterator	theResources(theListOfResources);
+    Cntnr<alpha_void, Rsource*>*					ptr;
+    tlist<alpha_void, Cntnr<alpha_void, Rsource*> >		theListOfResources;
+    slist<alpha_void, Cntnr<alpha_void, Rsource*> >::iterator	theResources(theListOfResources);
     Rsource		*res;
 
     if(!resource_popup) {

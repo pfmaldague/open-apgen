@@ -116,7 +116,7 @@ void trailing_miter::adopt_a_new_model_iterator(
 	while((ptr = iter())) {
 		trailer*			T = ptr->payload;
 		baseListClass::safe_iter*	ic = T->payload;
-		Cnode0<alpha_void, int>*	m_index
+		Cntnr<alpha_void, int>*	m_index
 			= model_miter->thread_indices.find(ic->L);
 		if(!m_index) {
 			Cstring errs;
@@ -154,7 +154,7 @@ void trailing_miter::add_thread(
 		bool		store
 		) {
 
-	thread_names << new Cnode0<alpha_void, Cstring>(
+	thread_names << new Cntnr<alpha_void, Cstring>(
 		(void*)&new_thread, its_name);
 
 	//
@@ -171,7 +171,7 @@ void trailing_miter::add_thread(
 	// the important lists had been added) before the trailing thread
 	// was started.
 	//
-	Cnode0<alpha_void, int>* m_index
+	Cntnr<alpha_void, int>* m_index
 		= model_miter->thread_indices.find((void*)&new_thread);
 	if(!m_index) {
 		Cstring errs;

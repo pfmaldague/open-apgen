@@ -378,7 +378,7 @@ void hierarchy_member::recursively_get_ptrs_to_all_descendants(
 }
 
 void	hierarchy_member::recursively_get_time_ptrs_to_nonexclusive_descendants(
-		tlist<alpha_time, Cnode0<alpha_time, ActivityInstance*> >& L) {
+		tlist<alpha_time, Cntnr<alpha_time, ActivityInstance*> >& L) {
 	smart_actptr*					ptr;
 	ActivityInstance*				req;
 	slist<alpha_void, smart_actptr>::iterator	children(subactivities);
@@ -390,7 +390,7 @@ void	hierarchy_member::recursively_get_time_ptrs_to_nonexclusive_descendants(
 	  ) {
 		while((ptr = children())) {
 			req = ptr->BP;
-			L << new Cnode0<alpha_time, ActivityInstance*>(req->getetime(), req);
+			L << new Cntnr<alpha_time, ActivityInstance*>(req->getetime(), req);
 			req->hierarchy().recursively_get_time_ptrs_to_nonexclusive_descendants(L);
 		}
 	}

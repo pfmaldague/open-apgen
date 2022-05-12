@@ -26,7 +26,7 @@ void handle_a_resource_event(
     TypedValue	after;
     int		resindex = resource->output_index[thread_index];
 
-    Cnode0<alpha_void, RCsource*>* ptr_to_dep;
+    Cntnr<alpha_void, RCsource*>* ptr_to_dep;
     bool			interpolated
 		= resource->properties[(int)Rsource::Property::has_interpolation];
 
@@ -151,7 +151,7 @@ void handle_a_resource_event(
 				pair<Rsource*, TypedValue>(resource, after));
     }
 
-    slist<alpha_void, Cnode0<alpha_void, RCsource*> >::iterator
+    slist<alpha_void, Cntnr<alpha_void, RCsource*> >::iterator
 	dep_iter(resource->parent_container.payload->containers_whose_profile_invokes_this);
 
     assert(after.get_type() != apgen::DATA_TYPE::UNINITIALIZED);
@@ -717,7 +717,7 @@ writeTOLbody(
 	throw(eval_error(err));
     }
 
-    tlist<alpha_string, Cnode0<alpha_string, Rsource*> >  all_included_res;
+    tlist<alpha_string, Cntnr<alpha_string, Rsource*> >  all_included_res;
 
     Rsource::expand_list_of_resource_names(
 			resources,
@@ -777,9 +777,9 @@ writeTOLbody(
     //
     dual_purpose_iterator theResIterator(Thread);
 
-    Cnode0<alpha_string, Rsource*>*	cres;
+    Cntnr<alpha_string, Rsource*>*	cres;
     slist<alpha_string,
-	Cnode0<alpha_string, Rsource*> >::iterator
+	Cntnr<alpha_string, Rsource*> >::iterator
 					all_res(all_included_res);
     Rsource*				resource;
 

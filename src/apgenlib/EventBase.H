@@ -61,17 +61,17 @@ public:
 	//
 	// UUUUU This should be in the resource subsystem:
 	//
-	static tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& resources_with_no_dependencies();
-	static tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& resources_nothing_depends_on();
+	static tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& resources_with_no_dependencies();
+	static tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& resources_nothing_depends_on();
 };
 
 //
-// Does not work with Cnode0, which should be a final class. The only derived class is initialEvent.
+// Does not work with Cntnr, which should be a final class. The only derived class is initialEvent.
 //
 // NOTE: payload is pure virtual. Do not use constructors; factories are provided for that purpose.
 //	 The factories create payloads that are instances of the (concrete) interp_event class.
 //
-class mEvent: public Dnode0<alpha_time, mEvent, eval_intfc*> {
+class mEvent: public baseC<alpha_time, mEvent, eval_intfc*> {
 private:
 	eventPLD*			Payload;
 public:

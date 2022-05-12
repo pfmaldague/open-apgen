@@ -25,13 +25,13 @@ extern thread_local int thread_index;
 //
 // NOTE: could use BPnode instead of defining methods explicitly
 //
-class RESptr: public Dnode0<alpha_void, RESptr>, public p2b<Rsource> {
+class RESptr: public baseC<alpha_void, RESptr>, public p2b<Rsource> {
 public:
 	long		_i;
 	Rsource*	payload;
-	RESptr() : Dnode0<alpha_void, RESptr>(0L), payload(NULL), _i(0L) {}
-	RESptr(const RESptr& r) : Dnode0<alpha_void, RESptr>(r), payload(r.payload), _i(0L), p2b<Rsource>(r) {}
-	RESptr(Rsource* r, long k) : Dnode0<alpha_void, RESptr>(r), payload(r), _i(k), p2b<Rsource>(r) {}
+	RESptr() : baseC<alpha_void, RESptr>(0L), payload(NULL), _i(0L) {}
+	RESptr(const RESptr& r) : baseC<alpha_void, RESptr>(r), payload(r.payload), _i(0L), p2b<Rsource>(r) {}
+	RESptr(Rsource* r, long k) : baseC<alpha_void, RESptr>(r), payload(r), _i(k), p2b<Rsource>(r) {}
 	~RESptr();
 
 	RESptr*				copy() { return new RESptr(*this); }
@@ -39,10 +39,10 @@ public:
 	const RESptr*			get_this() const { return this; }
 	const Cstring&			get_key() const; // { return payload->get_key(); }
 	long				get_res_index() const { return _i; }
-	virtual void			remove(bool S) { if(S) Dnode0<alpha_void, RESptr>::temporarily_remove_from_list();
+	virtual void			remove(bool S) { if(S) baseC<alpha_void, RESptr>::temporarily_remove_from_list();
 							else if(list) list->remove_node(this); }
 	virtual bool			reacts_to_time_events() const { return false; }
-	virtual void			re_insert() { Dnode0<alpha_void, RESptr>::re_insert_in_list(); }
+	virtual void			re_insert() { baseC<alpha_void, RESptr>::re_insert_in_list(); }
 	virtual const char*		className() const { return "RESptr"; }
 	virtual void*			voidThis() { return this; }
 };
@@ -113,9 +113,9 @@ public:
 	// Used in consolidation
 	//
 	virtual apgen::RETURN_STATUS	complete_dependency_list(
-						tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& dependents,
-						tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& ok_list,
-						tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& resource_chain,
+						tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& dependents,
+						tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& ok_list,
+						tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& resource_chain,
 						Cstring& any_errors) = 0;
 
 	bool				is_associative() {
@@ -137,9 +137,9 @@ public:
 	//
 	// Dependency documentation
 	//
-	tlist<alpha_void, Cnode0<alpha_void, RCsource*> >	ptrs_to_containers_used_in_profile;
+	tlist<alpha_void, Cntnr<alpha_void, RCsource*> >	ptrs_to_containers_used_in_profile;
 	stringtlist						names_of_containers_used_in_profile;
-	tlist<alpha_void, Cnode0<alpha_void, RCsource*> >	containers_whose_profile_invokes_this;
+	tlist<alpha_void, Cntnr<alpha_void, RCsource*> >	containers_whose_profile_invokes_this;
 
 	apgen::DATA_TYPE		datatype;
 
@@ -150,20 +150,20 @@ public:
 // The "resource container": Contains one (scalar)
 // or several (arrayed) resource(s)
 //
-class RCsource: public Dnode0<alpha_string, RCsource> {
+class RCsource: public baseC<alpha_string, RCsource> {
 public:
-	typedef Cnode0<alpha_string, RCsource*>	container_tag;
+	typedef Cntnr<alpha_string, RCsource*>	container_tag;
 	typedef tlist<alpha_string, container_tag> container_tags;
 	typedef slist<alpha_string, container_tag> container_tagss;
 
-	typedef Cnode0<alpha_void, RCsource*>	container_ptr;
+	typedef Cntnr<alpha_void, RCsource*>	container_ptr;
 	typedef tlist<alpha_void, container_ptr> container_ptrs;
 	typedef slist<alpha_void, container_ptr> container_ptrss;
 
 	RCsource(
 			const Cstring& A,
 			resContPLD* rcp)
-		: Dnode0<alpha_string,RCsource>(A),
+		: baseC<alpha_string,RCsource>(A),
 			use_method_count(0),
 			payload(rcp) {
 		if(payload) {
@@ -199,9 +199,9 @@ public:
 	// consolidation support
 	//
 	virtual apgen::RETURN_STATUS	complete_dependency_list(
-			tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& dependents,
-			tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& ok_list,
-			tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& resource_chain,
+			tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& dependents,
+			tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& ok_list,
+			tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& resource_chain,
 			Cstring&	any_errors) {
 		return payload->complete_dependency_list(
 				dependents,
@@ -254,13 +254,13 @@ public:
 	// Constraint support
 	//
 	void			add_constraint(Constraint* cons);
-	tlist<alpha_void, Cnode0<alpha_void, Constraint*> > any_constraints;
+	tlist<alpha_void, Cntnr<alpha_void, Constraint*> > any_constraints;
 
 	//
 	// Static / Factory section
 	//
 	static tlist<alpha_string, RCsource>&	resource_containers();
-	static tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& initialization_list();
+	static tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& initialization_list();
 };
 
 //
@@ -661,7 +661,7 @@ public:
 
 		for(int i = 0; i < thread_intfc::MITER_THREADS; i++) {
 		    active_miterators[i]
-			= new slist<alpha_void, Cnode0<alpha_void, miterator_data> >;
+			= new slist<alpha_void, Cntnr<alpha_void, miterator_data> >;
 		}
 		properties.resize((int)Property::how_many_properties);
 	}
@@ -683,7 +683,7 @@ public:
 	//
 	// "get" methods
 	//
-	tlist<alpha_time, Cnode0<alpha_time, parsedExp> >& getTheProfile() {
+	tlist<alpha_time, Cntnr<alpha_time, parsedExp> >& getTheProfile() {
 		return theProfile;
 	}
 
@@ -725,7 +725,7 @@ public:
 	}
 
 	EvalTiming::Strategy		get_strategy() {
-		Cnode0<alpha_void, miterator_data>* N;
+		Cntnr<alpha_void, miterator_data>* N;
 		if(!(N = active_miterators[thread_index]->last_node())) {
 
 			//
@@ -750,7 +750,7 @@ public:
 	// "set" methods
 	//
 	void			set_strategy(EvalTiming::Strategy s) {
-		Cnode0<alpha_void, miterator_data>* N;
+		Cntnr<alpha_void, miterator_data>* N;
 		if(!(N = active_miterators[thread_index]->last_node())) {
 			Cstring errs;
 			errs << "Resource " << name
@@ -858,7 +858,7 @@ public:
 			slist<prio_time, value_node, Rsource*>::iterator* I) {
 
 		(*active_miterators[thread_index])
-			<< new Cnode0<alpha_void, miterator_data>(
+			<< new Cntnr<alpha_void, miterator_data>(
 				(void*)M,
 				miterator_data(*M, I));
 	}
@@ -879,7 +879,7 @@ public:
 				slist<prio_time, value_node, Rsource*>,
 				value_node>* N) {
 
-		Cnode0<alpha_void, miterator_data>* last
+		Cntnr<alpha_void, miterator_data>* last
 			= active_miterators[thread_index]->last_node();
 		if(N != &last->payload.miter) {
 			Cstring errs;
@@ -938,7 +938,7 @@ public:
 						bool is_default) = 0;
 	virtual void			addToTheProfile(
 						tlist<	alpha_time,
-							Cnode0<alpha_time, parsedExp> >& prof) = 0;
+							Cntnr<alpha_time, parsedExp> >& prof) = 0;
 
 	//
 	// Debugging support
@@ -1074,7 +1074,7 @@ public:
 		how_many_properties	= 12
 	};
 
-	tlist<alpha_time, Cnode0<alpha_time, parsedExp> > theProfile;
+	tlist<alpha_time, Cntnr<alpha_time, parsedExp> > theProfile;
 
 	//
 	// Convenient; this vector is made visible to adapters via the
@@ -1100,7 +1100,7 @@ public:
 	// is done, theTriggers is unregistered from the various resource
 	// histories, and potential_triggers resumes its role.
 	//
-	slist<alpha_void, Cnode0<alpha_void, miterator_data> >*
+	slist<alpha_void, Cntnr<alpha_void, miterator_data> >*
 					active_miterators[4];
 
 	//
@@ -1159,7 +1159,7 @@ public:
 	// next, and so on.
 	//
 	static void			get_all_resources_in_dependency_order(
-			tlist<alpha_string, Cnode0<alpha_string, Rsource*> >& here);
+			tlist<alpha_string, Cntnr<alpha_string, Rsource*> >& here);
 
 	//
 	// static "query" methods
@@ -1176,7 +1176,7 @@ public:
 	//
 	static void			expand_list_of_resource_names(
 	    vector<string>					   resource_names,
-	    tlist<alpha_string, Cnode0<alpha_string, Rsource*> >&  all_included_res);
+	    tlist<alpha_string, Cntnr<alpha_string, Rsource*> >&  all_included_res);
 };
 
 class simple_res_iter {

@@ -37,12 +37,12 @@ void Resource::consolidate_one_list_of_states(
 void Resource::consolidate_one_profile(
 		RCsource* container,
 		ProfileList& profile_exp,
-		tlist<alpha_time, Cnode0<alpha_time, parsedExp> >& profile_list,
+		tlist<alpha_time, Cntnr<alpha_time, parsedExp> >& profile_list,
 		int dent) {
 	CTime_base		time_tag(0, 0, false);
 	vector<parsedExp>&	V = profile_exp.expressions;
 
-	profile_list << new Cnode0<alpha_time, parsedExp>(
+	profile_list << new Cntnr<alpha_time, parsedExp>(
 				time_tag,
 				profile_exp.Expression);
 	for(int i = 0; i < V.size(); i++) {
@@ -74,7 +74,7 @@ void Resource::consolidate_one_profile(
 			//
 			// (i + 2) is the index of the profile value
 			//
-			profile_list << new Cnode0<alpha_time, parsedExp>(
+			profile_list << new Cntnr<alpha_time, parsedExp>(
 				time_tag,
 				V[i + 2]);
 		}
@@ -1729,13 +1729,13 @@ void Resource::consolidate_implementation_phase(int dent) {
 		LabeledProfiles*	labeledProfiles = dynamic_cast<LabeledProfiles*>(
 						rd->opt_profile_section->expressions[0].object());
 		map<Cstring, int>&	flat_map = container_type->SubclassFlatMap;
-		vector<tlist<alpha_time, Cnode0<alpha_time, parsedExp> > >
+		vector<tlist<alpha_time, Cntnr<alpha_time, parsedExp> > >
 						vector_of_profile_lists;
 		int			default_index = -1;
 		map<Cstring, int>	map_of_labels;
 
 		if(aProfile) {
-		    tlist<alpha_time, Cnode0<alpha_time, parsedExp> > profile_list(true);
+		    tlist<alpha_time, Cntnr<alpha_time, parsedExp> > profile_list(true);
 		    try {
 			consolidate_one_profile(
 					container,
@@ -1789,7 +1789,7 @@ void Resource::consolidate_implementation_phase(int dent) {
 		    // Now we evaluate the profiles
 		    //
 		    for(int i = 0; i < labels.size(); i++) {
-			tlist<alpha_time, Cnode0<alpha_time, parsedExp> > profile_list(true);
+			tlist<alpha_time, Cntnr<alpha_time, parsedExp> > profile_list(true);
 			try {
 			    consolidate_one_profile(
 					container,
@@ -1844,18 +1844,18 @@ void Resource::consolidate_implementation_phase(int dent) {
 			index_to_use = iter->second;
 		    }
 	
-		    tlist<alpha_time, Cnode0<alpha_time, parsedExp> >& list_to_use
+		    tlist<alpha_time, Cntnr<alpha_time, parsedExp> >& list_to_use
 				= vector_of_profile_lists[index_to_use];
-		    tlist<alpha_time, Cnode0<alpha_time, parsedExp> > clean_profile(true);
-		    slist<alpha_time, Cnode0<alpha_time, parsedExp> >::iterator prof_it(list_to_use);
-		    Cnode0<alpha_time, parsedExp>* one_profile;
+		    tlist<alpha_time, Cntnr<alpha_time, parsedExp> > clean_profile(true);
+		    slist<alpha_time, Cntnr<alpha_time, parsedExp> >::iterator prof_it(list_to_use);
+		    Cntnr<alpha_time, parsedExp>* one_profile;
 	
 		    Behavior*	beh = container_type->SubclassTypes[j];
 		    aafReader::push_current_task(beh->tasks[0]);
 		    while((one_profile = prof_it())) {
 			parsedExp deep_copy(one_profile->payload->copy());
 			aafReader::consolidate_expression(deep_copy, dent + 2);
-			clean_profile << new Cnode0<alpha_time, parsedExp>(
+			clean_profile << new Cntnr<alpha_time, parsedExp>(
 				one_profile->getKey(),
 				deep_copy);
 		    }
@@ -1906,9 +1906,9 @@ void Resource::consolidate_implementation_phase(int dent) {
 			// Define a simple profile list with
 			// one element in it (the default):
 			//
-			tlist<alpha_time, Cnode0<alpha_time, parsedExp> > profile_list(true);
+			tlist<alpha_time, Cntnr<alpha_time, parsedExp> > profile_list(true);
 			parsedExp deep_copy(theDefault->copy());
-			profile_list << new Cnode0<alpha_time, parsedExp>(
+			profile_list << new Cntnr<alpha_time, parsedExp>(
 					CTime_base(),
 					deep_copy);
 			simple_resources[j]->addToTheProfile(profile_list);
@@ -2017,9 +2017,9 @@ void Resource::consolidate_implementation_phase(int dent) {
 			// Define a simple profile list with
 			// one element in it (the default):
 			//
-			tlist<alpha_time, Cnode0<alpha_time, parsedExp> > profile_list(true);
+			tlist<alpha_time, Cntnr<alpha_time, parsedExp> > profile_list(true);
 			parsedExp deep_copy(vector_of_defaults[index_to_use]->copy());
-			profile_list << new Cnode0<alpha_time, parsedExp>(
+			profile_list << new Cntnr<alpha_time, parsedExp>(
 						CTime_base(),
 						deep_copy);
 			simple_resources[j]->addToTheProfile(profile_list);
@@ -3711,7 +3711,7 @@ void AbstractUsage::consolidate(int dent) {
     // globally scoped behaving_object. A behaving_object should
     // only be created in support of executing a task.
     //
-    // Cnode0<alpha_string, behaving_object*>* abs_ptr =
+    // Cntnr<alpha_string, behaving_object*>* abs_ptr =
     // 		behaving_object::abstract_resources().find(resource_name);
 
     //

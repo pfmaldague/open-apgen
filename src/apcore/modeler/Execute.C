@@ -1127,4 +1127,4 @@ void payloadToStream(aoString &Stream, const char *prefix, const char *keyword, 
 	Stream << " ";
 }
 
-template class slist<alpha_void, Cnode0<alpha_void, usage_event*, short>, short>;
+template class slist<alpha_void, Cntnr<alpha_void, usage_event*, short>, short>;

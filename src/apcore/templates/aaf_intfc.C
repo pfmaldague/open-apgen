@@ -27,8 +27,8 @@ tlist<alpha_string, bfuncnode>& aaf_intfc::internalAndUdefFunctions() {
 	return F;
 }
 
-tlist<alpha_string, Cnode0<alpha_string, ActivityInstance*> >&	aaf_intfc::actIDs() {
-	static tlist<alpha_string, Cnode0<alpha_string, ActivityInstance*> > B;
+tlist<alpha_string, Cntnr<alpha_string, ActivityInstance*> >&	aaf_intfc::actIDs() {
+	static tlist<alpha_string, Cntnr<alpha_string, ActivityInstance*> > B;
 	return B;
 }
 

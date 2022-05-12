@@ -741,7 +741,7 @@ void snapToEventClient::HandleEvent(const string& type, const TypedValuePtrVect&
 
 void snap_to_act(const Cstring &which_button) {
 	MOVE_ACTIVITYrequest	*action_req;
-	Cnode0<alpha_string, ActivityInstance*>* theTag;
+	Cntnr<alpha_string, ActivityInstance*>* theTag;
 	CTime_base		from, to;
 	stringslist		list_of_one_id;
 	Cstring			existing_legend;

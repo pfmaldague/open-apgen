@@ -35,7 +35,7 @@ parse_act_plan(
 
     try {
 	pai_args_node*							pain;
-	tlist<alpha_string, Cnode0<alpha_string, pai_args_node*> >	painById;
+	tlist<alpha_string, Cntnr<alpha_string, pai_args_node*> >	painById;
 	int								i = 0;
 	bool								isAct, isRes, isCon;
 
@@ -62,7 +62,7 @@ parse_act_plan(
 
 		context << new emptySymbol("getting ID");
 		pain->payload.ID_for_this_file = parser.act_get_id();
-		painById << new Cnode0<alpha_string, pai_args_node*>(
+		painById << new Cntnr<alpha_string, pai_args_node*>(
 			pain->payload.ID_for_this_file,
 			pain);
 
@@ -340,7 +340,7 @@ parse_act_plan(
 
 	while((pain = pai_iter())) {
 	    if((eparent = pain->payload.theAbstractableAncestors.first_node())) {
-		Cnode0<alpha_string, pai_args_node*>*	ap = painById.find(eparent->get_key());
+		Cntnr<alpha_string, pai_args_node*>*	ap = painById.find(eparent->get_key());
 		if(!ap) {
 			Cstring errs("Parent of act. ");
 			errs << pain->payload.ID_for_this_file << " had ID "
@@ -351,7 +351,7 @@ parse_act_plan(
 		ap->payload->payload.theDecomposedChildren
 			<< new emptySymbol(pain->payload.ID_for_this_file);
 	    } else if((eparent = pain->payload.theAbstractedAncestors.first_node())) {
-		Cnode0<alpha_string, pai_args_node*>*	ap = painById.find(eparent->get_key());
+		Cntnr<alpha_string, pai_args_node*>*	ap = painById.find(eparent->get_key());
 		if(!ap) {
 			Cstring errs("Parent of act. ");
 			errs << pain->payload.ID_for_this_file << " had ID "

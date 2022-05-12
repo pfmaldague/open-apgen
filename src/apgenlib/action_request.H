@@ -65,7 +65,7 @@ public:
 	~level_handler();
 };
 
-class Action_request : public Dnode0<alpha_string, Action_request, OPEN_FILErequest*> {
+class Action_request : public baseC<alpha_string, Action_request, OPEN_FILErequest*> {
 private:
 	Cstring Modifier;
 protected:
@@ -162,7 +162,7 @@ public:
 
 	void				add_id_to_list(
 						const Cstring&);
-	Cnode0<alpha_string, ActivityInstance*>*
+	Cntnr<alpha_string, ActivityInstance*>*
 					find_tag_from_real_or_symbolic_id(
 						const Cstring& s);
 	static int			script_execution_level;
@@ -1134,7 +1134,7 @@ public:
 	}
 	void		process_middle(TypedValue*); };
 
-typedef Cnode0<alpha_string, Action_request::save_option> optionNode;
+typedef Cntnr<alpha_string, Action_request::save_option> optionNode;
 
 class SAVE_FILErequest : public Action_request {
 	Cstring			file_name;
