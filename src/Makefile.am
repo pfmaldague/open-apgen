@@ -93,6 +93,8 @@ nobase_include_HEADERS = \
 	apgenlib/lex_intfc.H \
 	apgenlib/libcrest_dto.h \
 	apgenlib/libcrest.h \
+	apgenlib/linkers.H \
+	apgenlib/Miterator.H \
 	apgenlib/multilist.H \
 	apgenlib/multitemplate.H \
 	apgenlib/Multiterator.H \
@@ -112,6 +114,7 @@ nobase_include_HEADERS = \
 	apgenlib/res_multiterator.H \
 	apgenlib/Scheduler.H \
 	apgenlib/Strategy.H \
+	apgenlib/slist.H \
 	apgenlib/smartptr.H \
 	apgenlib/srComboBox.h \
 	apgenlib/srComboBoxP.h \
@@ -250,6 +253,8 @@ nobase_include_HEADERS = \
 	apgenlib/Legends.H \
 	apgenlib/libcrest_dto.h \
 	apgenlib/libcrest.h \
+	apgenlib/linkers.H \
+	apgenlib/Miterator.H \
 	apgenlib/multilist.H \
 	apgenlib/multitemplate.H \
 	apgenlib/Multiterator.H \
@@ -269,6 +274,7 @@ nobase_include_HEADERS = \
 	apgenlib/res_multiterator.H \
 	apgenlib/Scheduler.H \
 	apgenlib/Strategy.H \
+	apgenlib/slist.H \
 	apgenlib/smartptr.H \
 	apgenlib/srComboBox.h \
 	apgenlib/srComboBoxP.h \
