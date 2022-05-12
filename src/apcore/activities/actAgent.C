@@ -304,9 +304,9 @@ void actAgent::transfer_to_stream(
 				Stream << "\tabstractable into " << mySource->get_parent()->get_unique_id() << ";\n";
 		}
 		Cstring					attribute_nickname;
-		tlist<alpha_string, Cnode0<alpha_string, int> >		correct_order(true);
-		slist<alpha_string, Cnode0<alpha_string, int> >::iterator CorrectOrder(correct_order);
-		Cnode0<alpha_string, int>*		tag;
+		tlist<alpha_string, Cntnr<alpha_string, int> >		correct_order(true);
+		slist<alpha_string, Cntnr<alpha_string, int> >::iterator CorrectOrder(correct_order);
+		Cntnr<alpha_string, int>*		tag;
 		bool					first_attribute = true;
 		behaving_base*				obj = mySource->Object.object();
 
@@ -348,7 +348,7 @@ void actAgent::transfer_to_stream(
 			if(iter != aafReader::nickname_to_activity_string().end()
 			   && include_this_attr_based_on_its_value
 			  ) {
-				correct_order << new Cnode0<alpha_string, int>(iter->second, iatt);
+				correct_order << new Cntnr<alpha_string, int>(iter->second, iatt);
 			}
 		}
 
@@ -484,9 +484,9 @@ void actAgent::transfer_to_stream(
 	    Stream << ",";
 
 	    Stream << "attributes=(";
-	    tlist<alpha_string, Cnode0<alpha_string, int> >	correct_order(true);
-	    slist<alpha_string, Cnode0<alpha_string, int> >::iterator CorrectOrder(correct_order);
-	    Cnode0<alpha_string, int>*				tag;
+	    tlist<alpha_string, Cntnr<alpha_string, int> >	correct_order(true);
+	    slist<alpha_string, Cntnr<alpha_string, int> >::iterator CorrectOrder(correct_order);
+	    Cntnr<alpha_string, int>*				tag;
 	    behaving_base*					obj = mySource->Object.object();
 
 
@@ -542,7 +542,7 @@ void actAgent::transfer_to_stream(
 		if(	it3 != aafReader::nickname_to_activity_string().end()
 			&& include_this_attr_based_on_its_value
 		  ) {
-		    correct_order << new Cnode0<alpha_string, int>(it3->second, iatt);
+		    correct_order << new Cntnr<alpha_string, int>(it3->second, iatt);
 		}
 	    }
 	    bool first = true;
@@ -680,9 +680,9 @@ void actAgent::export_symbols(
 		stringslist&			Children,
 		apgen::act_visibility_state&	V,
 		Cstring&			Subsystem) const {
-    tlist<alpha_string, Cnode0<alpha_string, int> >			correct_order(true);
-    tlist<alpha_string, Cnode0<alpha_string, int> >::iterator	CorrectOrder(correct_order);
-    Cnode0<alpha_string, int>*					tag;
+    tlist<alpha_string, Cntnr<alpha_string, int> >			correct_order(true);
+    tlist<alpha_string, Cntnr<alpha_string, int> >::iterator	CorrectOrder(correct_order);
+    Cntnr<alpha_string, int>*					tag;
     List			rangevals;
     int			i;
     behaving_base*		obj = mySource->Object.object();
@@ -732,7 +732,7 @@ void actAgent::export_symbols(
 		&& (attr_is_span_or_start_or_status
 		    || activity_type_defines_this_attr)
 		&& attribute_value_is_known) {
-		correct_order << new Cnode0<alpha_string, int>(iter->second, iatt);
+		correct_order << new Cntnr<alpha_string, int>(iter->second, iatt);
 	}
     }
 

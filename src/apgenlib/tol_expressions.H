@@ -49,7 +49,7 @@ class Record;
 }
 
 typedef smart_ptr<tol::pE>		tolExp;
-typedef Cnode0<alpha_int, tolExp>	tolNode;
+typedef Cntnr<alpha_int, tolExp>	tolNode;
 typedef slist<alpha_int, tolNode>	tolList;
 
 //

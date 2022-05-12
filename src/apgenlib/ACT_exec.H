@@ -27,7 +27,7 @@ class LegendObject;
 class IO_APFWriteOptions;
 class IO_ActivityInstance;
 class instance_tag_PLD;
-typedef Cnode0<alpha_string, instance_tag_PLD> instance_tag;
+typedef Cntnr<alpha_string, instance_tag_PLD> instance_tag;
 
 // several implementations will be provided in the future:
 class exec_agent {
@@ -115,7 +115,7 @@ public:
 				// blist of pointer_to_pointers with copy of old durations for instances
 				// whose duration does not agree with type formula
 				//
-	tlist<alpha_void, Cnode0<alpha_void, CTime_base> > act_instances_with_discrepant_durations;
+	tlist<alpha_void, Cntnr<alpha_void, CTime_base> > act_instances_with_discrepant_durations;
 
 	ACT_exec*		mySource;
 	tlist<alpha_void, smart_actptr>	TypelessActivities;

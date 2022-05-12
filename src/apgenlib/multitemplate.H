@@ -91,10 +91,10 @@ template <class listClass, class nodeClass, class iterClass = typename listClass
 class Miterator: public Miterator_base<listClass, nodeClass> {
 public:
 
-  typedef Cnode0<relptr<iterClass>, iterClass*>	Tthread;
+  typedef Cntnr<relptr<iterClass>, iterClass*>	Tthread;
   typedef tlist<relptr<iterClass>, Tthread>	Tthreadtlist;
   typedef slist<relptr<iterClass>, Tthread>	Tthreadslist;
-  typedef Cnode0<alpha_void, Tthread*>		threadptr;
+  typedef Cntnr<alpha_void, Tthread*>		threadptr;
   typedef slist<alpha_void, threadptr>		threadptrslist;
   typedef tlist<alpha_void, threadptr>		threadptrtlist;
 
@@ -214,7 +214,7 @@ public:
   //
   // used to store the strings associated with each thread
   //
-  tlist<alpha_void, Cnode0<alpha_void, Cstring> > thread_names;
+  tlist<alpha_void, Cntnr<alpha_void, Cstring> > thread_names;
 
   // made public for debugging:
   // private:
@@ -419,8 +419,8 @@ Miterator<listClass, nodeClass, iterClass>::Miterator(
 	//
 	// Reminder:
 	//
-  	// typedef Cnode0<relptr<iterClass>, iterClass*>	Tthread;
-  	// typedef Cnode0<alpha_void, Tthread*>			threadptr;
+  	// typedef Cntnr<relptr<iterClass>, iterClass*>	Tthread;
+  	// typedef Cntnr<alpha_void, Tthread*>			threadptr;
   	//
 	threadptr*				tptr;
 
@@ -459,7 +459,7 @@ Miterator<listClass, nodeClass, iterClass>::Miterator(
 
 template <class listClass, class nodeClass, class iterClass>
 void Miterator<listClass, nodeClass, iterClass>::dump_one(
-		Cnode0<relptr<iterClass>, iterClass*>* n,
+		Cntnr<relptr<iterClass>, iterClass*>* n,
 		stringstream& s,
 		int k) {
 	int i;
@@ -584,11 +584,11 @@ Miterator<listClass, nodeClass, iterClass>::add_thread(
 
 	lc.register_miterator(*this);
 
-	thread_names << new Cnode0<alpha_void, Cstring>(
+	thread_names << new Cntnr<alpha_void, Cstring>(
 				(void*)&lc,
 				thread_name);
 	ic->go_to_beginning();
-	pointers_to_threads << new Cnode0<alpha_void, Tthread*>(
+	pointers_to_threads << new Cntnr<alpha_void, Tthread*>(
 						(void*)&lc,
 						new_thread);
 }
@@ -596,12 +596,12 @@ Miterator<listClass, nodeClass, iterClass>::add_thread(
 template <class listClass, class nodeClass, class iterClass>
 void
 Miterator<listClass, nodeClass, iterClass>::remove_thread(const listClass& lc) {
-	Cnode0<alpha_void, Tthread*>*	old_ptr = pointers_to_threads.find(&lc);
+	Cntnr<alpha_void, Tthread*>*	old_ptr = pointers_to_threads.find(&lc);
 	assert(old_ptr);
 	iterClass*			iter_to_delete = old_ptr->payload->payload;
 	Tthread*			old_thread = old_ptr->payload;
 	assert(old_thread);
-	Cnode0<alpha_void, Cstring>*	nameptr = thread_names.find(old_thread->payload->get_void_list());
+	Cntnr<alpha_void, Cstring>*	nameptr = thread_names.find(old_thread->payload->get_void_list());
 	assert(nameptr);
 
 	delete nameptr;

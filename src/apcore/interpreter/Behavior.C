@@ -154,15 +154,15 @@ global_behaving_object*& behaving_object::GlobalObject() {
     }
 }
 
-// tlist<alpha_string, Cnode0<alpha_string, behaving_object*> >&
+// tlist<alpha_string, Cntnr<alpha_string, behaving_object*> >&
 // 				behaving_object::abstract_resources() {
-//     static tlist<alpha_string, Cnode0<alpha_string, behaving_object*> > a;
+//     static tlist<alpha_string, Cntnr<alpha_string, behaving_object*> > a;
 //     return a;
 // }
 
 void	report_profile_info() {
 
-    tlist<alpha_int, Cnode0<alpha_int, const task*> > ordered(true);
+    tlist<alpha_int, Cntnr<alpha_int, const task*> > ordered(true);
 
     map<Cstring, map<Cstring, int> >::const_iterator realm_iter
 	= Behavior::ClassRealms().find("abstract resource");
@@ -193,9 +193,9 @@ void	report_profile_info() {
 	const task*	use_task = abs_res_type->tasks[1];
 	double cputime = use_task->cpu_time();
 	long int microseconds = (long int) (cputime * 1.0E+6);
-	ordered << new Cnode0<alpha_int, const task*>(microseconds, use_task);
+	ordered << new Cntnr<alpha_int, const task*>(microseconds, use_task);
     }
-    Cnode0<alpha_int, const task*>* ptr2;
+    Cntnr<alpha_int, const task*>* ptr2;
     double cumul_time = 0.0;
     for(ptr2 = ordered.last_node(); ptr2; ptr2 = ptr2->previous_node()) {
 	long int num_called = ptr2->payload->calls();

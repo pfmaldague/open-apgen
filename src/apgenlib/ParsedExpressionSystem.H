@@ -14,13 +14,13 @@
 #include <smartptr.H>
 
 typedef smart_ptr<pEsys::pE>		parsedExp;
-typedef Cnode0<alpha_string, parsedExp>	bsymbolnode;
+typedef Cntnr<alpha_string, parsedExp>	bsymbolnode;
 
 #include <ExecutionContext.H>
 
 class ActivityInstance;
 class res_info_for_constraintPLD;
-typedef Cnode0<alpha_string, res_info_for_constraintPLD> Res_node;
+typedef Cntnr<alpha_string, res_info_for_constraintPLD> Res_node;
 // class AbstractResource;
 class usage_event;
 class exec_status;
@@ -147,8 +147,8 @@ public:
 	// new_objects:
 	//
 	pE*	smart_copy(
-		    tlist<alpha_void, Cnode0<alpha_void, pE*> >& new_objects) {
-		Cnode0<alpha_void, pE*>* newobjptr
+		    tlist<alpha_void, Cntnr<alpha_void, pE*> >& new_objects) {
+		Cntnr<alpha_void, pE*>* newobjptr
 				= new_objects.find(this);
 		pE* newobj;
 
@@ -159,7 +159,7 @@ public:
 		if(newobjptr) {
 			newobj = newobjptr->payload;
 		} else {
-			new_objects << new Cnode0<alpha_void, pE*>(
+			new_objects << new Cntnr<alpha_void, pE*>(
 				this,
 				(newobj = copy())
 				);
@@ -6131,7 +6131,7 @@ public:
     stringtlist		global_qualified_symbols;
     PassiveCons*	current_constraint;
     stringtlist		functions;
-    slist<alpha_string, Cnode0<alpha_string, FunctionCall*> > function_stack;
+    slist<alpha_string, Cntnr<alpha_string, FunctionCall*> > function_stack;
 
     constraint_analyzer()
 		: current_constraint(NULL),
@@ -6166,7 +6166,7 @@ public:
 		}
 		functions << new emptySymbol(name);
 	    }
-	    function_stack << new Cnode0<alpha_string, FunctionCall*>(name, fc);
+	    function_stack << new Cntnr<alpha_string, FunctionCall*>(name, fc);
 	} else if(sym && (name = sym->getData()) != "error" && name != "warning") {
 	    if(sym->my_level == 0 && !global_symbols.find(name)) {
 		global_symbols << new emptySymbol(name);

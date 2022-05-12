@@ -250,10 +250,10 @@ public:
   typedef multilist<prio_time, value_node, Rsource*> listClass;
   typedef slist<prio_time, value_node, Rsource*> baseListClass;
   typedef baseListClass::iterator		iterClass;
-  typedef Cnode0<relptr<iterClass>, iterClass*>	Tthread;
+  typedef Cntnr<relptr<iterClass>, iterClass*>	Tthread;
   typedef tlist<relptr<iterClass>, Tthread>	Tthreadtlist;
   typedef slist<relptr<iterClass>, Tthread>	Tthreadslist;
-  typedef Cnode0<alpha_void, Tthread*>		threadptr;
+  typedef Cntnr<alpha_void, Tthread*>		threadptr;
   typedef slist<alpha_void, threadptr>		threadptrslist;
   typedef tlist<alpha_void, threadptr>		threadptrtlist;
 
@@ -392,7 +392,7 @@ public:
 	//
 	// used to store the strings associated with each thread
 	//
-  tlist<alpha_void, Cnode0<alpha_void, Cstring> > thread_names;
+  tlist<alpha_void, Cntnr<alpha_void, Cstring> > thread_names;
 
   // made public for debugging:
   // private:
@@ -425,10 +425,10 @@ public:
   //
   typedef baseListClass::curval_iter		iterClass;
 
-  typedef Cnode0<relptr<iterClass>, iterClass*>	Tthread;
+  typedef Cntnr<relptr<iterClass>, iterClass*>	Tthread;
   typedef tlist<relptr<iterClass>, Tthread>	Tthreadtlist;
   typedef slist<relptr<iterClass>, Tthread>	Tthreadslist;
-  typedef Cnode0<alpha_void, Tthread*>		threadptr;
+  typedef Cntnr<alpha_void, Tthread*>		threadptr;
   typedef slist<alpha_void, threadptr>		threadptrslist;
   typedef tlist<alpha_void, threadptr>		threadptrtlist;
 
@@ -611,7 +611,7 @@ public:
 	//
 	// used to store the strings associated with each thread
 	//
-  tlist<alpha_void, Cnode0<alpha_void, Cstring> > thread_names;
+  tlist<alpha_void, Cntnr<alpha_void, Cstring> > thread_names;
 
   // made public for debugging:
   // private:
@@ -637,10 +637,10 @@ public:
   typedef multilist<prio_time, value_node, Rsource*>	listClass;
   typedef slist<prio_time, value_node, Rsource*>	baseListClass;
   typedef baseListClass::leading_iter			leadingClass;
-  typedef Cnode0<relptr<leadingClass>, leadingClass*>	Tthread;
+  typedef Cntnr<relptr<leadingClass>, leadingClass*>	Tthread;
   typedef tlist<relptr<leadingClass>, Tthread>		Tthreadtlist;
   typedef slist<relptr<leadingClass>, Tthread>		Tthreadslist;
-  typedef Cnode0<alpha_void, Tthread*>			threadptr;
+  typedef Cntnr<alpha_void, Tthread*>			threadptr;
   typedef slist<alpha_void, threadptr>			threadptrslist;
   typedef tlist<alpha_void, threadptr>			threadptrtlist;
 
@@ -728,14 +728,14 @@ public:
   //
   // DATA
   //
-  tlist<alpha_void, Cnode0<alpha_void, Cstring> > thread_names;
+  tlist<alpha_void, Cntnr<alpha_void, Cstring> > thread_names;
 
   			//
 			// Given (void*)baseListClass, provides Tthread*
 			//
   threadptrtlist	pointers_to_threads;
 
-  tlist<alpha_void, Cnode0<alpha_void, int> > thread_indices;
+  tlist<alpha_void, Cntnr<alpha_void, int> > thread_indices;
 
   			//
 			// tlist of Tthreads
@@ -764,10 +764,10 @@ public:
   typedef baseListClass::leading_iter	leadingClass;
   typedef baseListClass::safe_iter	safeClass;
 
-  typedef Cnode0<relptr<safeClass>, safeClass*>	trailer;
+  typedef Cntnr<relptr<safeClass>, safeClass*>	trailer;
   typedef tlist<relptr<safeClass>, trailer>	trailertlist;
   typedef slist<relptr<safeClass>, trailer>	trailerslist;
-  typedef Cnode0<alpha_void, trailer*>		trailerptr;
+  typedef Cntnr<alpha_void, trailer*>		trailerptr;
   typedef slist<alpha_void, trailerptr>		trailerptrslist;
   typedef tlist<alpha_void, trailerptr>		trailerptrtlist;
 

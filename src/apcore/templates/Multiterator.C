@@ -162,7 +162,7 @@ Time_node *Multiterator::next() {
 	dead_threads << tt;
 	return to_return; }
 
-Time_node* Multiterator::remove_nodes(tlist<alpha_void, Cnode0<alpha_void, value_node*> >& sel) {
+Time_node* Multiterator::remove_nodes(tlist<alpha_void, Cntnr<alpha_void, value_node*> >& sel) {
 	tol_thread*	tt;
 	Time_node*	u;
 	List_iterator	titer(active_threads);

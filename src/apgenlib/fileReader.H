@@ -48,7 +48,7 @@ public:
 	Cstring				req_name;
 };
 
-typedef Cnode0<alpha_string, instance_tag_PLD> instance_tag;
+typedef Cntnr<alpha_string, instance_tag_PLD> instance_tag;
 
 class instance_pointer_PLD {
 public:
@@ -63,10 +63,10 @@ public:
 		: act(pn.act), invisibility(pn.invisibility) {}
 	~instance_pointer_PLD() {} };
 
-typedef Cnode0<alpha_void, instance_pointer_PLD> instance_pointer;
+typedef Cntnr<alpha_void, instance_pointer_PLD> instance_pointer;
 
 class fileParser;
-typedef Cnode0<alpha_int, fileParser>	parserNode;
+typedef Cntnr<alpha_int, fileParser>	parserNode;
 
 class fileParser {
 public:
@@ -179,7 +179,7 @@ public:
 					pEsys::Program*	prog);
 	static void		CompileExpressionList(
 					const Cstring&	Text,
-					slist<alpha_int, Cnode0<alpha_int, parsedExp> >& exps);
+					slist<alpha_int, Cntnr<alpha_int, parsedExp> >& exps);
 	static void		Evaluate(
 					parsedExp&		S,
 					behaving_element&	MA,
@@ -214,7 +214,7 @@ public:
 	static Cstring		handle_environment(const Cstring&	s);
 				// singleton pattern:
 	static fileReader&	theFileReader();
-	static slist<alpha_int, Cnode0<alpha_int, parsedExp> >& expressionList();
+	static slist<alpha_int, Cntnr<alpha_int, parsedExp> >& expressionList();
 };
 
 #endif /* _fileReader_H */

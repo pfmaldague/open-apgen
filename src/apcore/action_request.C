@@ -141,10 +141,10 @@ level_handler::~level_handler() {
 	Action_request::script_execution_level--;
 }
 
-Cnode0<alpha_string, ActivityInstance*>*	Action_request::find_tag_from_real_or_symbolic_id(
+Cntnr<alpha_string, ActivityInstance*>*	Action_request::find_tag_from_real_or_symbolic_id(
 		const Cstring& s) {
 	Cstring				id_to_use(s);
-	Cnode0<alpha_string, ActivityInstance*>*	the_tag;
+	Cntnr<alpha_string, ActivityInstance*>*	the_tag;
 
 	if(id_to_use[0] == '@') {
 		// symbolic ID
@@ -2571,7 +2571,7 @@ void NEW_ACTIVITYrequest::process_middle(TypedValue* ret_val) {
 	//notify the client of this id
 	add_id_to_list(act_id);
 	if(ret_val) {
-		Cnode0<alpha_string, ActivityInstance*>*	theTag = aaf_intfc::actIDs().find(id);
+		Cntnr<alpha_string, ActivityInstance*>*	theTag = aaf_intfc::actIDs().find(id);
 		*ret_val = *(theTag->payload); }
 
 	return;
@@ -2711,7 +2711,7 @@ NEW_ACTIVITIESrequest::process_middle(TypedValue* ret_val) {
 		Cstring		temp_error;
 
 		while((N = iter())) {
-			Cnode0<alpha_string, ActivityInstance*>*	theTag = aaf_intfc::actIDs().find(N->get_key());
+			Cntnr<alpha_string, ActivityInstance*>*	theTag = aaf_intfc::actIDs().find(N->get_key());
 
 			add_id_to_list(N->get_key());
 			V = *(theTag->payload);
@@ -2862,7 +2862,7 @@ void EDIT_ACTIVITYrequest::to_script(Cstring& s) const {
 
 void EDIT_ACTIVITYrequest::process_middle(TypedValue* ret_val) {
 	Cstring			err_msg;		// (not returned yet)
-	Cnode0<alpha_string, ActivityInstance*>*	tagnode = NULL;	// points to request
+	Cntnr<alpha_string, ActivityInstance*>*	tagnode = NULL;	// points to request
 	ActivityInstance*	request = NULL;	// ID'd activity request
 	long			colorinx, i;
 	TypedValue		tval;
@@ -3484,7 +3484,7 @@ apgen::RETURN_STATUS ACTIVITY_LISTrequest::extract_pointers(bool& selection_cont
 	if(list_of_act_names.get_length()) {
 		stringslist::iterator		copy2(list_of_act_names);
 		emptySymbol*			sn;
-		Cnode0<alpha_string, ActivityInstance*>*	tag;
+		Cntnr<alpha_string, ActivityInstance*>*	tag;
 
 		list_of_act_pointers.clear();
 		while((sn = copy2())) {
@@ -4007,7 +4007,7 @@ UI_ACTIVITYrequest::process_middle(TypedValue*) {
 	//lets violate DB layering mandate for now
 
 	//get the activity
-	Cnode0<alpha_string, ActivityInstance*>*	theTag;
+	Cntnr<alpha_string, ActivityInstance*>*	theTag;
 	Cstring any_errors;
 
 	try {
@@ -4315,7 +4315,7 @@ const Cstring &GROUP_ACTIVITIESrequest::get_command_text() {
 void GROUP_ACTIVITIESrequest::process_middle(TypedValue*) {
 	dumb_actptr*				ptr;
 	slist<alpha_void, dumb_actptr>::iterator thePs(list_of_act_pointers);
-	Cnode0<alpha_string, ActivityInstance*>*	tag1 = NULL;
+	Cntnr<alpha_string, ActivityInstance*>*	tag1 = NULL;
 	ActivityInstance*			the_parent, *the_child;
 
 	try {
@@ -6129,12 +6129,12 @@ const Cstring& FREEZErequest::get_command_text() {
 }
 
 void FREEZErequest::process_middle(TypedValue*) {
-	tlist<alpha_string, Cnode0<alpha_string, Rsource*> >  res_ptrs;
+	tlist<alpha_string, Cntnr<alpha_string, Rsource*> >  res_ptrs;
 	Rsource::expand_list_of_resource_names(
 	    resources,
 	    res_ptrs);
-	Cnode0<alpha_string, Rsource*>* N;
-	slist<alpha_string, Cnode0<alpha_string, Rsource*> >::iterator iter(res_ptrs);
+	Cntnr<alpha_string, Rsource*>* N;
+	slist<alpha_string, Cntnr<alpha_string, Rsource*> >::iterator iter(res_ptrs);
 	while((N = iter())) {
 		N->payload->get_history().Freeze();
 	}
@@ -6165,12 +6165,12 @@ const Cstring& UNFREEZErequest::get_command_text() {
 }
 
 void UNFREEZErequest::process_middle(TypedValue*) {
-	tlist<alpha_string, Cnode0<alpha_string, Rsource*> >  res_ptrs;
+	tlist<alpha_string, Cntnr<alpha_string, Rsource*> >  res_ptrs;
 	Rsource::expand_list_of_resource_names(
 	    resources,
 	    res_ptrs);
-	Cnode0<alpha_string, Rsource*>* N;
-	slist<alpha_string, Cnode0<alpha_string, Rsource*> >::iterator iter(res_ptrs);
+	Cntnr<alpha_string, Rsource*>* N;
+	slist<alpha_string, Cntnr<alpha_string, Rsource*> >::iterator iter(res_ptrs);
 	while((N = iter())) {
 		N->payload->get_history().Unfreeze();
 	}

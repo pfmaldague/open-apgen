@@ -177,9 +177,9 @@ public:
 	// to detect circular dependencies.
 	//
 	virtual apgen::RETURN_STATUS complete_dependency_list(
-				tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& dependents,
-				tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& ok_list,
-				tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& resource_chain,
+				tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& dependents,
+				tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& ok_list,
+				tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& resource_chain,
 				Cstring &any_errors);
 };
 
@@ -263,7 +263,7 @@ public:
 	}
 
 	void			addToTheProfile(
-					tlist<alpha_time, Cnode0<alpha_time, parsedExp> >& l) {
+					tlist<alpha_time, Cntnr<alpha_time, parsedExp> >& l) {
 		theProfile = l;
 	}
 	
@@ -393,7 +393,7 @@ public:
 	TypedValue		currentval;
 	TypedValue		setval;	// only relevant if currently = STATE_STATE_SET
 	apgen::DATA_TYPE	datatype;
-	tlist<alpha_time, Cnode0<alpha_time, stateNodePLD> > end_uses;
+	tlist<alpha_time, Cntnr<alpha_time, stateNodePLD> > end_uses;
 
 	/* We need to capture the following data:
 	 *

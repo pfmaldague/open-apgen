@@ -42,11 +42,11 @@ static CTime_base random_time() {
 	std::cout << "\t" << sec.to_string() << " - " << currentPriority << "\n";
 	return sec; }
 
-typedef Cnode0<alpha_time, Cstring>					Tstring;
+typedef Cntnr<alpha_time, Cstring>					Tstring;
 typedef slist<alpha_time, Tstring>::iterator				ac_iter;
-typedef Cnode0<relptr<ac_iter>, ac_iter*>				t_thread;
-typedef slist<relptr<ac_iter>, Cnode0<relptr<ac_iter>, ac_iter*> >	t_threadslist;
-typedef tlist<relptr<ac_iter>, Cnode0<relptr<ac_iter>, ac_iter*> >	t_threadtlist;
+typedef Cntnr<relptr<ac_iter>, ac_iter*>				t_thread;
+typedef slist<relptr<ac_iter>, Cntnr<relptr<ac_iter>, ac_iter*> >	t_threadslist;
+typedef tlist<relptr<ac_iter>, Cntnr<relptr<ac_iter>, ac_iter*> >	t_threadtlist;
 
 static void traverse_one(t_thread* n) {
 	if(!n) return;
@@ -94,7 +94,7 @@ static void	fill_list(tlist<alpha_time, Tstring>& theList) {
 
 	for(i = 0; i < 1000; i++) {
 		sprintf(buf, "%d", i);
-		theList << new Cnode0<alpha_time, Cstring>(random_time(), buf); } }
+		theList << new Cntnr<alpha_time, Cstring>(random_time(), buf); } }
 
 static int test1() {
 	// We start by defining a few tlists of time nodes

@@ -43,8 +43,8 @@ int test_intervals(int argc, char* argv[]) {
 	char*		t;
 	CTime_base	T;
 	long int	num_lists = 0;
-	slist<alpha_int, Cnode0<alpha_int, slist<alpha_time, Cnode0<alpha_time, int> > > >	M;
-	slist<alpha_time, Cnode0<alpha_time, int> >						L;
+	slist<alpha_int, Cntnr<alpha_int, slist<alpha_time, Cntnr<alpha_time, int> > > >	M;
+	slist<alpha_time, Cntnr<alpha_time, int> >						L;
 
 	if(argc <= 8) {
 		return usage(argv[0]);
@@ -80,7 +80,7 @@ int test_intervals(int argc, char* argv[]) {
 							break;
 						}
 						// save time values into an list
-						M << new Cnode0<alpha_int, slist<alpha_time, Cnode0<alpha_time, int> > >(num_lists, L);
+						M << new Cntnr<alpha_int, slist<alpha_time, Cntnr<alpha_time, int> > >(num_lists, L);
 						L.clear();
 						num_lists++;
 					}
@@ -116,7 +116,7 @@ int test_intervals(int argc, char* argv[]) {
 						break;
 					}
 					is_time_value = true;
-					L << new Cnode0<alpha_time, int>(T, 0);
+					L << new Cntnr<alpha_time, int>(T, 0);
 					break;
 				}
 			} else if(state == 5 && *c == '\0') {
@@ -127,7 +127,7 @@ int test_intervals(int argc, char* argv[]) {
 						cout << "Given times must increase within each list\n";
 						break;
 					}
-					L << new Cnode0<alpha_time, int>(T, 0);
+					L << new Cntnr<alpha_time, int>(T, 0);
 					break;
 			} else {
 				return usage(argv[0]);
@@ -150,7 +150,7 @@ int test_intervals(int argc, char* argv[]) {
 				"The number of times must be even within each list.\n";
 		} else {
 		// save time values into an list
-		M << new Cnode0<alpha_int, slist<alpha_time, Cnode0<alpha_time, int> > >(num_lists, L);
+		M << new Cntnr<alpha_int, slist<alpha_time, Cntnr<alpha_time, int> > >(num_lists, L);
 		}
 	}
 
@@ -160,9 +160,9 @@ int test_intervals(int argc, char* argv[]) {
 	}
 
 	// now we can conduct the test
-	slist<alpha_time, Cnode0<alpha_time, int> >&					A(M.first_node()->payload);
-	slist<alpha_time, Cnode0<alpha_time, int> >&					B(M.last_node()->payload);
-	Miterator<slist<alpha_time, Cnode0<alpha_time, int> >, Cnode0<alpha_time, int> > miter("miterator");
+	slist<alpha_time, Cntnr<alpha_time, int> >&					A(M.first_node()->payload);
+	slist<alpha_time, Cntnr<alpha_time, int> >&					B(M.last_node()->payload);
+	Miterator<slist<alpha_time, Cntnr<alpha_time, int> >, Cntnr<alpha_time, int> > miter("miterator");
 
 	assert(A.get_length() > 0);
 	assert(B.get_length() > 0);
@@ -177,7 +177,7 @@ int test_intervals(int argc, char* argv[]) {
 
 	assert(miter.peek() != NULL);
 
-	Cnode0<alpha_time, int>*		curnode = NULL;
+	Cntnr<alpha_time, int>*		curnode = NULL;
 	bool				wasInA = false;
 	bool				wasInB = false;
 	bool				wasInC = false;

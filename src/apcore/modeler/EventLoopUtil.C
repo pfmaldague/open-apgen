@@ -453,8 +453,8 @@ bool	EventLoop::try_signals_first(
 		pEsys::execStack&	found_this_one) {
 	instruction_node*			i_n;
 	static const char*			error_id;
-	Cnode0<alpha_int, instruction_node*>*	aptr;
-	Cnode0<alpha_int, instruction_node*>*	aptr2;
+	Cntnr<alpha_int, instruction_node*>*	aptr;
+	Cntnr<alpha_int, instruction_node*>*	aptr2;
 	bool					something_happened = false;
 
 	for(	aptr = eval_intfc::actsOrResWaitingOnSignals().first_node();
@@ -516,8 +516,8 @@ bool EventLoop::try_conditions_next(
 		pEsys::execStack&	found_this_one) {
 	instruction_node*			i_n;
 	static const char*			error_id;
-	Cnode0<alpha_int, instruction_node*>*	aptr;
-	Cnode0<alpha_int, instruction_node*>*	aptr2;
+	Cntnr<alpha_int, instruction_node*>*	aptr;
+	Cntnr<alpha_int, instruction_node*>*	aptr2;
 	CTime_base				requested_duration(0, 0, true);
 	bool					something_happened = false;
 	time_saver				ts;
@@ -803,9 +803,9 @@ void EventLoop::advance_now_to(
 	// certain that we have nothing else to do NOW
 	//
 	value_node*				old_event;
-	tlist<alpha_void, Cnode0<alpha_void, value_node*> > ptrs;
-	slist<alpha_void, Cnode0<alpha_void, value_node*> >::iterator piter(ptrs);
-	Cnode0<alpha_void, value_node*>*	ptr;
+	tlist<alpha_void, Cntnr<alpha_void, value_node*> > ptrs;
+	slist<alpha_void, Cntnr<alpha_void, value_node*> >::iterator piter(ptrs);
+	Cntnr<alpha_void, value_node*>*	ptr;
 	value_node*				on; // other node
 	TypedValue*				modeling_only_value;
 
@@ -819,10 +819,10 @@ void EventLoop::advance_now_to(
 
 		    if(!ptrs.find((void*)old_event)) {
 
-			ptrs << new Cnode0<alpha_void, value_node*>(old_event, old_event);
+			ptrs << new Cntnr<alpha_void, value_node*>(old_event, old_event);
 			if((on = old_event->get_other())) {
 				assert(!ptrs.find(on));
-				ptrs << new Cnode0<alpha_void, value_node*>(on, on);
+				ptrs << new Cntnr<alpha_void, value_node*>(on, on);
 			}
 		    }
 		}

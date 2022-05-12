@@ -120,11 +120,11 @@ public:
  * 		masterObj has a const method called get_key() that returns a const Cstring reference
  */
 template <class masterObj, class PLD, class owner = short>
-class TMptr:	public Dnode0<timeptr<masterObj>, TMptr<masterObj, PLD, owner>, owner>,
+class TMptr:	public baseC<timeptr<masterObj>, TMptr<masterObj, PLD, owner>, owner>,
 		public p2b<masterObj> {
 public:
 
-  typedef Dnode0<timeptr<masterObj>, TMptr<masterObj, PLD, owner>, owner> nbase;
+  typedef baseC<timeptr<masterObj>, TMptr<masterObj, PLD, owner>, owner> nbase;
   typedef p2b<masterObj> bpbase;
 
   // don't use
@@ -199,11 +199,11 @@ public:
  * 		masterObj has a const method called get_key() that returns a const Cstring reference
  */
 template <class masterObj, class owner = short>
-class Tptr:	public Dnode0<timeptr<masterObj>, Tptr<masterObj, owner>, owner>,
+class Tptr:	public baseC<timeptr<masterObj>, Tptr<masterObj, owner>, owner>,
 		public p2b<masterObj> {
 public:
 
-  typedef Dnode0<timeptr<masterObj>, Tptr<masterObj, owner>, owner> nbase;
+  typedef baseC<timeptr<masterObj>, Tptr<masterObj, owner>, owner> nbase;
   typedef p2b<masterObj> bpbase;
 
   // don't use

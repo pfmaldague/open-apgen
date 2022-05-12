@@ -48,9 +48,9 @@ void model_intfc::purge() {
 	//
 	RCsource::resource_containers().clear();
 
-	// slist<alpha_string, Cnode0<alpha_string, behaving_object*> >::iterator
+	// slist<alpha_string, Cntnr<alpha_string, behaving_object*> >::iterator
 	// 	it3(behaving_object::abstract_resources());
-	// Cnode0<alpha_string, behaving_object*>* N;
+	// Cntnr<alpha_string, behaving_object*>* N;
 	// while((N = it3())) {
 	// 	delete N->payload;
 	// }
@@ -63,14 +63,14 @@ apgen::RETURN_STATUS RES_exec::checkForEmptyArrayedResources(
 		Cstring& any_errors) {
 	slist<alpha_string, RCsource>::iterator	theContainers(RCsource::resource_containers());
 	RCsource*							a_container;
-	slist<alpha_void, Cnode0<alpha_void, RCsource*> >		theDoomedOnes;
-	slist<alpha_void, Cnode0<alpha_void, RCsource*> >::iterator	Doom(theDoomedOnes);
-	Cnode0<alpha_void, RCsource*>*					doomed;
+	slist<alpha_void, Cntnr<alpha_void, RCsource*> >		theDoomedOnes;
+	slist<alpha_void, Cntnr<alpha_void, RCsource*> >::iterator	Doom(theDoomedOnes);
+	Cntnr<alpha_void, RCsource*>*					doomed;
 
 	while((a_container = theContainers())) {
 		if(!a_container->payload->Object->array_elements.size()) {
 			any_errors << "Arrayed resource \"" << a_container->get_key() << "\" has no indices.\n";
-			theDoomedOnes << new Cnode0<alpha_void, RCsource*>(a_container, a_container);
+			theDoomedOnes << new Cntnr<alpha_void, RCsource*>(a_container, a_container);
 		}
 	}
 	while((doomed = Doom())) {
@@ -232,7 +232,7 @@ void model_intfc::PurgeSchedulingEvents() {
 }
 
 void Rsource::get_all_resources_in_dependency_order(
-			tlist<alpha_string, Cnode0<alpha_string, Rsource*> >&
+			tlist<alpha_string, Cntnr<alpha_string, Rsource*> >&
 				all_requested_res) {
 	RCsource::container_ptrss::iterator	containers(RCsource::initialization_list());
 	RCsource::container_ptr*		rcptr;
@@ -242,7 +242,7 @@ void Rsource::get_all_resources_in_dependency_order(
 		theContainer = rcptr->payload;
 		vector<Rsource*>& vec = theContainer->payload->Object->array_elements;
 		for(int i = 0; i < vec.size(); i++) {
-			all_requested_res << new Cnode0<alpha_string, Rsource*>(
+			all_requested_res << new Cntnr<alpha_string, Rsource*>(
 						vec[i]->name, vec[i]);
 		}
 	}
@@ -342,13 +342,13 @@ bool	model_intfc::HasEvents() {
  *
  */
 apgen::RETURN_STATUS Rcontainer::complete_dependency_list(
-		tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& list_of_dependents_to_be_completed,
-		tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& list_of_good_parents,
-		tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& list_of_parents,
+		tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& list_of_dependents_to_be_completed,
+		tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& list_of_good_parents,
+		tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& list_of_parents,
 		Cstring &any_errors) {
-	Cnode0<alpha_void, RCsource*>*			ptr_to_new_dependent;
-	Cnode0<alpha_void, RCsource*>*			temp_parent;
-	slist<alpha_void, Cnode0<alpha_void, RCsource*> > direct_dependents(
+	Cntnr<alpha_void, RCsource*>*			ptr_to_new_dependent;
+	Cntnr<alpha_void, RCsource*>*			temp_parent;
+	slist<alpha_void, Cntnr<alpha_void, RCsource*> > direct_dependents(
 						containers_whose_profile_invokes_this);
 	Cstring						rmessage;
 	// static int					indentation = 0;
@@ -382,7 +382,7 @@ apgen::RETURN_STATUS Rcontainer::complete_dependency_list(
 
 		/* The list_of_parents is basically a set of resources which MAY NOT
 		 * include any extended dependents of this. */
-		list_of_parents << (temp_parent = new Cnode0<alpha_void, RCsource*>(new_dependent, new_dependent));
+		list_of_parents << (temp_parent = new Cntnr<alpha_void, RCsource*>(new_dependent, new_dependent));
 
 		/* The call will
 		 *	- add the new_dependent's dependents to containers_whose_profile_invokes_this
@@ -405,15 +405,15 @@ apgen::RETURN_STATUS Rcontainer::complete_dependency_list(
 		// cerr << "After completing the dependency list, " << new_dependent->get_key() << " now has "
 		// 	<< new_dependent->payload->containers_whose_profile_invokes_this.get_length()
 		// 	<< " direct or indirect dependent(s).\n";
-		slist<alpha_void, Cnode0<alpha_void, RCsource*> >::iterator
+		slist<alpha_void, Cntnr<alpha_void, RCsource*> >::iterator
 			l1(new_dependent->payload->containers_whose_profile_invokes_this);
-		Cnode0<alpha_void, RCsource*>*	bt;
+		Cntnr<alpha_void, RCsource*>*	bt;
 		while((bt = l1())) {
 			RCsource*	higher_level = bt->payload;
 			if(!list_of_dependents_to_be_completed.find((void *) higher_level)) {
 				// for(int i = 0; i < indentation; i++) { cerr << "  "; }
 				// cerr << "Adding ptr to " << higher_level->get_key() << " to list of dependents of " << mySource->get_key() << "\n";
-				list_of_dependents_to_be_completed << new Cnode0<alpha_void, RCsource*>(higher_level, higher_level);
+				list_of_dependents_to_be_completed << new Cntnr<alpha_void, RCsource*>(higher_level, higher_level);
 			} else {
 				// for(int i = 0; i < indentation; i++) { cerr << "  "; }
 				// cerr << higher_level->get_key() << " is already in the list of dependents of " << mySource->get_key() << "\n";
@@ -426,7 +426,7 @@ apgen::RETURN_STATUS Rcontainer::complete_dependency_list(
 		// for(int i = 0; i < indentation; i++) { cerr << "  "; }
 		// cerr << "Adding ptr to " << mySource->get_key() << " to the list of good parents.\n";
 
-		list_of_good_parents << new Cnode0<alpha_void, RCsource*>((void*) mySource, mySource);
+		list_of_good_parents << new Cntnr<alpha_void, RCsource*>((void*) mySource, mySource);
 	}
 	// for(int i = 0; i < indentation; i++) { cerr << "  "; }
 	// cerr << "...END\n";
@@ -438,7 +438,7 @@ void RCsource::add_constraint(Constraint* cons) {
 	vector<Rsource*>&	vec = payload->Object->array_elements;
 
 	for(int i = 0; i < vec.size(); i++) {
-		Cnode0<alpha_void, Rsource*>*	already_found;
+		Cntnr<alpha_void, Rsource*>*	already_found;
 		if(!(already_found = Constraint::resourcesSubjectToConstraints()
 					.find((void*)vec[i]))) {
 
@@ -447,7 +447,7 @@ void RCsource::add_constraint(Constraint* cons) {
 #endif /* DEBUG_CONSTRAINTS */
 
 			Constraint::resourcesSubjectToConstraints()
-				<< (already_found = new Cnode0<alpha_void, Rsource*>(
+				<< (already_found = new Cntnr<alpha_void, Rsource*>(
 						(void*)vec[i], vec[i]));
 		}
 	}
@@ -463,6 +463,6 @@ void RCsource::add_constraint(Constraint* cons) {
 			<< get_key() << "\n";
 #endif /* DEBUG_CONSTRAINTS */
 
-		any_constraints << new Cnode0<alpha_void, Constraint*>((void*)cons, cons);
+		any_constraints << new Cntnr<alpha_void, Constraint*>((void*)cons, cons);
 	}
 }

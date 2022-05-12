@@ -31,12 +31,12 @@ extern const char*	spellEtype(int e);
 extern int		GUI_Flag;
 
 
-typedef Cnode0<alpha_string, stringtlist> tlistNode;
+typedef Cntnr<alpha_string, stringtlist> tlistNode;
 typedef tlist<alpha_string, tlistNode> tlisttlist;
 typedef slist<alpha_string, tlistNode> tlistslist;
 
 class infoPLD;
-typedef Cnode0<alpha_string, infoPLD>  infoNode;
+typedef Cntnr<alpha_string, infoPLD>  infoNode;
 typedef slist<alpha_string, infoNode> infoList;
 
 class infoPLD {

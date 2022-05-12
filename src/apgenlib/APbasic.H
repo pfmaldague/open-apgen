@@ -10,18 +10,18 @@
 
 extern thread_local int thread_index;
 
-typedef Tnode0<alpha_string> emptySymbol;
+typedef keyNode<alpha_string> emptySymbol;
 typedef slist<alpha_string, emptySymbol> stringslist;
 typedef tlist<alpha_string, emptySymbol> stringtlist;
 
-typedef Cnode0<alpha_string, int>		strint_node;
+typedef Cntnr<alpha_string, int>		strint_node;
 typedef slist<alpha_string, strint_node>	strintslist;
 typedef tlist<alpha_string, strint_node>	strinttlist;
 
-typedef Cnode0<alpha_string, stringslist> listNode;
+typedef Cntnr<alpha_string, stringslist> listNode;
 typedef tlist<alpha_string, listNode> listtlist;
 
-typedef Cnode0<alpha_string, Cstring> symNode;
+typedef Cntnr<alpha_string, Cstring> symNode;
 
 typedef slist<alpha_string, symNode> pairslist;
 typedef tlist<alpha_string, symNode> pairtlist;

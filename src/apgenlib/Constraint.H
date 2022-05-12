@@ -7,13 +7,13 @@ class RCsource;
 class con_violation_gui;
 class thread_intfc;
 
-class con_violation: public Dnode0<alpha_time, con_violation> {
+class con_violation: public baseC<alpha_time, con_violation> {
 public:
-	con_violation() : Dnode0<alpha_time, con_violation>(CTime_base()) {
+	con_violation() : baseC<alpha_time, con_violation>(CTime_base()) {
 		ID = currentID++;
 	}
 	con_violation(const con_violation& VE)
-	    : Dnode0<alpha_time, con_violation>(CTime_base()),
+	    : baseC<alpha_time, con_violation>(CTime_base()),
 		payload(VE.payload) {
 		ID = currentID++;
 	}
@@ -23,7 +23,7 @@ public:
 		const Cstring&			msg,
 		Violation_info::Severity	s,
 		int				id_to_use = -1)
-	    : Dnode0<alpha_time, con_violation>(etime),
+	    : baseC<alpha_time, con_violation>(etime),
 			payload(the_constraint, msg, s) {
 		if(id_to_use >= 0) {
 			ID = id_to_use;
@@ -48,7 +48,7 @@ public:
 	}
 
 	int		ID;
-	tlist<alpha_void, Cnode0<alpha_void, con_violation_gui*> > ds_line_owners;
+	tlist<alpha_void, Cntnr<alpha_void, con_violation_gui*> > ds_line_owners;
 
 	static int	currentID;
 };
@@ -70,7 +70,7 @@ public:
 		// Let the con_violation know that we exist, so
 		// it can delete us first when it goes away
 		//
-		cv->ds_line_owners << new Cnode0<alpha_void, con_violation_gui*>(this, this);
+		cv->ds_line_owners << new Cntnr<alpha_void, con_violation_gui*>(this, this);
 	    }
 	}
 	virtual ~con_violation_gui() {
@@ -84,7 +84,7 @@ public:
 			//
 			derivedDataDestructor(this);
 		}
-		Cnode0<alpha_void, con_violation_gui*>* ptr;
+		Cntnr<alpha_void, con_violation_gui*>* ptr;
 
 		//
 		// Let our master know that we are going away
@@ -145,7 +145,7 @@ public:
 	}
 };
 
-class Constraint: public Dnode0<alpha_string, Constraint> {
+class Constraint: public baseC<alpha_string, Constraint> {
 public:
 
     typedef Miterator_base<slist<alpha_time, value_node>, value_node> Miterclass;
@@ -153,7 +153,7 @@ public:
     Constraint(	const Cstring&		consName,
 		pEsys::PassiveCons*	consDef,
 		task*			the_constructor
-	  ) : Dnode0<alpha_string, Constraint>(consName),
+	  ) : baseC<alpha_string, Constraint>(consName),
 		beh_obj(new behaving_object(*the_constructor)),
 		payload(consDef) { 
 	if(consDef->severity == "WARNING") {
@@ -195,9 +195,9 @@ public:
     static void			check_constraints(thread_intfc*);
     static void			process_one_history_node(
 				    value_node*			res_event,
-			    	    tlist<alpha_void, Cnode0<alpha_void, Rsource*> >&
+			    	    tlist<alpha_void, Cntnr<alpha_void, Rsource*> >&
 								updated_res,
-			    	    tlist<alpha_void, Cnode0<alpha_void, Constraint*> >&
+			    	    tlist<alpha_void, Cntnr<alpha_void, Constraint*> >&
 								to_check);
 
     //
@@ -207,10 +207,10 @@ public:
     static tlist<alpha_string, Constraint>&
 				allConstraints();
 
-    static tlist<alpha_void, Cnode0<alpha_void, Rsource*> >&
+    static tlist<alpha_void, Cntnr<alpha_void, Rsource*> >&
 				resourcesSubjectToConstraints();
 
-    static tlist<alpha_void, Cnode0<alpha_void, Rsource*> >&
+    static tlist<alpha_void, Cntnr<alpha_void, Rsource*> >&
 				resourcesRecentlyUpdated();
 
     static tlist<alpha_time, con_violation>&

@@ -94,7 +94,7 @@ public:
 	tlist<alpha_string, sigInfoPtr>	Matches;
 };
 
-typedef Cnode0<alpha_string, patternInfo> sigPatternNode;
+typedef Cntnr<alpha_string, patternInfo> sigPatternNode;
 
 class eval_intfc {
 private:
@@ -158,20 +158,20 @@ public:
 	static act_lists&			get_act_lists();
 	static tlist<alpha_void, smart_actptr>&	sel_list();
 
-	static tlist<alpha_int, Cnode0<alpha_int,
+	static tlist<alpha_int, Cntnr<alpha_int,
 			instruction_node*> >&	actsOrResWaitingOnSignals();
-	static tlist<alpha_int, Cnode0<alpha_int,
+	static tlist<alpha_int, Cntnr<alpha_int,
 			instruction_node*> >&	actsOrResWaitingOnCond();
 
 	// resources
 	static void				get_list_of_ptrs_to_containers(
 							tlist<alpha_void,
-							Cnode0<alpha_void,
+							Cntnr<alpha_void,
 							RCsource*> >& l);
 
 	static void				get_list_of_ptrs_to_resources(
 							tlist<alpha_void,
-							Cnode0<alpha_void, Rsource*> >& l);
+							Cntnr<alpha_void, Rsource*> >& l);
 	static void				get_resource_subsystems(
 							flexval&);
 
@@ -213,7 +213,7 @@ public:
 	static void			add_a_signal(
 						sigInfoNode*);
 	static tlist<alpha_void,
-		Cnode0<alpha_void,
+		Cntnr<alpha_void,
 		    Constraint*> >&	active_constraints();
 
 	static bool			restore_previous_id_behavior;
@@ -234,7 +234,7 @@ public:
 	apgen::DATA_TYPE	type;
 };
 
-typedef Cnode0<alpha_string, res_info_for_constraintPLD> Res_node;
+typedef Cntnr<alpha_string, res_info_for_constraintPLD> Res_node;
 
 
 			// built-in functions:

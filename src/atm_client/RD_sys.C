@@ -77,7 +77,7 @@ const int	RD_sys::REPORT_NUMERIC_MAXFMT = 24;	//longest numeric fmt for report
 const int	RD_sys::REPORT_STRING_MAXFMT  = 40;	//longest string fmt for report
 							//  (truncate + "..." if longer)
 
-tlist<alpha_string, Cnode0<alpha_string, RD_sys::layout_stuff> >	RD_sys::list_of_tagged_layout_lists;
+tlist<alpha_string, Cntnr<alpha_string, RD_sys::layout_stuff> >	RD_sys::list_of_tagged_layout_lists;
 
 Cstring&				RD_sys::thePendingLayout() {
 	static Cstring s;
@@ -447,7 +447,7 @@ void RD_sys::reorder_legends_as_per(
 		return res_sis->implement_layout_as_per(LS);
 	} else {
 		// store in static list for later use
-		Cnode0<alpha_string, layout_stuff>* pointerToListOfLegendInfo;
+		Cntnr<alpha_string, layout_stuff>* pointerToListOfLegendInfo;
 
 		if(!id.length()) {
 			id = "layout";
@@ -479,7 +479,7 @@ void RD_sys::reorder_legends_as_per(
 		// at this point we have an id that is unique. We store a copy of the list for
 		// future use.
 		//
-		list_of_tagged_layout_lists << new Cnode0<alpha_string, layout_stuff>(id, LS);
+		list_of_tagged_layout_lists << new Cntnr<alpha_string, layout_stuff>(id, LS);
 		thePendingLayout() = id;
 	}
 }
@@ -1193,7 +1193,7 @@ void MW_widgetdraw::manage() {
 	// will initialize toggle flag and draw cursor if necessary:
 	cleargraph();
 	if(RD_sys::thePendingLayout().length()) {
-		Cnode0<alpha_string, RD_sys::layout_stuff>*
+		Cntnr<alpha_string, RD_sys::layout_stuff>*
 			tag = RD_sys::list_of_tagged_layout_lists.find(RD_sys::thePendingLayout());
 		if(tag) {
 			RD_sys::list_of_tagged_layout_lists.remove_node(tag);

@@ -40,9 +40,9 @@ class Decomp;
 // we are using a flexval to store it. See actAgent.C
 // for details.
 //
-typedef Cnode0<alpha_string,	flexval>	arrayNode;
+typedef Cntnr<alpha_string,	flexval>	arrayNode;
 typedef tlist<alpha_string,	arrayNode>	arraytypelist;
-typedef Cnode0<alpha_string,	arraytypelist>	pinfoNode;
+typedef Cntnr<alpha_string,	arraytypelist>	pinfoNode;
 typedef tlist<alpha_string,	pinfoNode>	pinfotlist;
 typedef slist<alpha_string,	pinfoNode>	pinfoslist;
 
@@ -278,7 +278,7 @@ public:
 	void			recursively_get_ptrs_to_all_descendants(
 					tlist<alpha_void, dumb_actptr>& l);
 	void			recursively_get_time_ptrs_to_nonexclusive_descendants(
-					tlist<alpha_time, Cnode0<alpha_time, ActivityInstance*> >&);
+					tlist<alpha_time, Cntnr<alpha_time, ActivityInstance*> >&);
 	ActivityInstance*		get_to_the_top() const {
 		return up_accelerator;
 	}
@@ -376,7 +376,7 @@ public:
 
 class actKey {
 public:
-	static tlist<alpha_string, Cnode0<alpha_string, bool> >& get_list();
+	static tlist<alpha_string, Cntnr<alpha_string, bool> >& get_list();
 };
 
 class act_object: public behaving_object {
@@ -749,15 +749,15 @@ public:
 					ActivityInstance*, bool force);
 };
 
-class dumb_actptr: public Dnode0<alpha_void, dumb_actptr> {
+class dumb_actptr: public baseC<alpha_void, dumb_actptr> {
 public:
 	dumb_actptr() : payload(NULL) {}
 	dumb_actptr(ActivityInstance* a)
-		: Dnode0<alpha_void, dumb_actptr>((void*) a), payload(a) {}
+		: baseC<alpha_void, dumb_actptr>((void*) a), payload(a) {}
 	dumb_actptr(void* b, ActivityInstance* a)
-		: Dnode0<alpha_void, dumb_actptr>(b), payload(a) {}
+		: baseC<alpha_void, dumb_actptr>(b), payload(a) {}
 	dumb_actptr(const dumb_actptr& DA)
-		: Dnode0<alpha_void, dumb_actptr>(DA), payload(DA.payload) {}
+		: baseC<alpha_void, dumb_actptr>(DA), payload(DA.payload) {}
 	~dumb_actptr() {
 		if(list) list->remove_node(this);
 	}

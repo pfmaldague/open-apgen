@@ -275,7 +275,7 @@ void RES_settable::evaluate_profile(
 	//
 	// settable resources only have one profile node:
 	//
-	Cnode0<alpha_time, parsedExp>*	N = theProfile.first_node();
+	Cntnr<alpha_time, parsedExp>*	N = theProfile.first_node();
 
 	if(!N) {
 		Cstring errs;
@@ -316,7 +316,7 @@ void Rsource::evaluate_profile(
 
 	ts.set_now_to(at_time);
 
-	Cnode0<alpha_time, parsedExp>*	N = theProfile.find_at_or_before(at_time);
+	Cntnr<alpha_time, parsedExp>*	N = theProfile.find_at_or_before(at_time);
 	if(!N) N = theProfile.first_node();
 	if(!N) {
 		Cstring errs;

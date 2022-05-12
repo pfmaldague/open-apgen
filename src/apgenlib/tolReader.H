@@ -10,7 +10,7 @@ namespace tol {
 class resource;
 }
 
-typedef Cnode0<alpha_string, json_object*>	subsysNode;
+typedef Cntnr<alpha_string, json_object*>	subsysNode;
 
 namespace tol_reader {
 

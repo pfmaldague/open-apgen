@@ -52,7 +52,7 @@ public:
 	    } else {
 		task* func_task = aafReader::CurrentType().tasks[iter->second];
 		if(!func_task->prog) {
-		    Cnode0<alpha_string, smart_ptr<FunctionDefinition> >* cn =
+		    Cntnr<alpha_string, smart_ptr<FunctionDefinition> >* cn =
 			aafReader::functions_declared_but_not_implemented().find(function_name);
 		    if(cn) {
 			unfinished = true;
@@ -545,7 +545,7 @@ void consolidate_one(pE& item) {
 			CurrentPass() = ImplementationPass;
 			stringslist::iterator iter2(FF.unfinished_functions);
 			while((es = iter2())) {
-				Cnode0<alpha_string, smart_ptr<FunctionDefinition> >* cn =
+				Cntnr<alpha_string, smart_ptr<FunctionDefinition> >* cn =
 					functions_declared_but_not_implemented().find(es->get_key());
 				assert(cn);
 				cn->payload->consolidate(2);
@@ -597,7 +597,7 @@ void consolidate_one(pE& item) {
 			CurrentPass() = ImplementationPass;
 			stringslist::iterator iter2(FF.unfinished_functions);
 			while((es = iter2())) {
-				Cnode0<alpha_string, smart_ptr<FunctionDefinition> >* cn =
+				Cntnr<alpha_string, smart_ptr<FunctionDefinition> >* cn =
 					functions_declared_but_not_implemented().find(es->get_key());
 				assert(cn);
 				cn->payload->consolidate(2);
@@ -681,8 +681,8 @@ void consolidate_resource_dependencies() {
 	Rsource::iterator res_iter;
 	Rsource* rs;
 	while((rs = res_iter.next())) {
-	    slist<alpha_time, Cnode0<alpha_time, parsedExp> >::iterator profile_nodes(rs->theProfile);
-	    Cnode0<alpha_time, parsedExp>* one_node;
+	    slist<alpha_time, Cntnr<alpha_time, parsedExp> >::iterator profile_nodes(rs->theProfile);
+	    Cntnr<alpha_time, parsedExp>* one_node;
 	    while((one_node = profile_nodes())) {
 		currentval_finder CF;
 		one_node->payload->recursively_apply(CF);

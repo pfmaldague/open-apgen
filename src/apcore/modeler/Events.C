@@ -28,8 +28,8 @@ Cstring describe_object(behaving_element obj) {
 	}
 }
 
-tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& eventPLD::resources_with_no_dependencies() {
-	static tlist<alpha_void, Cnode0<alpha_void, RCsource*> > C;
+tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& eventPLD::resources_with_no_dependencies() {
+	static tlist<alpha_void, Cntnr<alpha_void, RCsource*> > C;
 	return C;
 }
 
@@ -53,7 +53,7 @@ long eventPLD::event_count = 0;
 // do not use outside of factory (null payload), except for comparison
 //
 mEvent::mEvent( /* eventPLD::event_type et, */ const CTime_base& T)
-	: Dnode0<alpha_time, mEvent, eval_intfc*>(T),
+	: baseC<alpha_time, mEvent, eval_intfc*>(T),
 		/* EventType(et), */
 		eventID(++currentEventID),
 		Payload(NULL) {
@@ -657,10 +657,10 @@ void init_eventPLD::do_model() {
 
 	assert(ie);
 
-	tlist<alpha_string, Cnode0<alpha_string, Rsource*> > all_res(false);
-	slist<alpha_string, Cnode0<alpha_string, Rsource*> >::iterator
+	tlist<alpha_string, Cntnr<alpha_string, Rsource*> > all_res(false);
+	slist<alpha_string, Cntnr<alpha_string, Rsource*> >::iterator
 						all_res_iter(all_res);
-	Cnode0<alpha_string, Rsource*>*	ptr_to_res;
+	Cntnr<alpha_string, Rsource*>*	ptr_to_res;
 
 	EventLoop::theEventLoop().potential_triggers.clear();
 
