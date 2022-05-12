@@ -18,7 +18,7 @@ class flexval;
 class actAgent;
 class RES_abstract;
 
-typedef Cnode0<alpha_string, TypedValue> TaggedValue;
+typedef Cntnr<alpha_string, TypedValue> TaggedValue;
 typedef slist<alpha_string, TaggedValue> tvslist;
 typedef tlist<alpha_string, TaggedValue> tvtlist;
 
@@ -221,7 +221,7 @@ public:
 	//
 	// list of unique activity instance IDs
 	//
-	static tlist<alpha_string, Cnode0<alpha_string, ActivityInstance*> >& actIDs();
+	static tlist<alpha_string, Cntnr<alpha_string, ActivityInstance*> >& actIDs();
 
 	//
 	// Internal and library-defined functions. Note that AAF-defined functions
@@ -565,10 +565,10 @@ public:
 	void	(*tokenproc)();
 };
 
-class btokennode: public Dnode0<alpha_string, btokennode> {
+class btokennode: public baseC<alpha_string, btokennode> {
 public:
 	btokennode() {}
-	btokennode(const Cstring& s, int i, void (*f)()) : Dnode0<alpha_string, btokennode>(s), payload(tokenPLD(i, f)) {}
+	btokennode(const Cstring& s, int i, void (*f)()) : baseC<alpha_string, btokennode>(s), payload(tokenPLD(i, f)) {}
 	virtual ~btokennode() {}
 
 	btokennode*			copy() { return new btokennode(*this); }
@@ -632,9 +632,9 @@ public:
 };
 
 // NOTE: should turn the following into a template parameterized by payload class
-class problem: public Dnode0<alpha_string, problem> {
+class problem: public baseC<alpha_string, problem> {
 public:
-	problem() : Dnode0<alpha_string, problem>(Cstring()), payload(NULL, NULL, NULL, NULL) {}
+	problem() : baseC<alpha_string, problem>(Cstring()), payload(NULL, NULL, NULL, NULL) {}
 	problem(
 		const Cstring&			descr,
 		detector*			D,
@@ -642,12 +642,12 @@ public:
 		fixer*				F,
 		void				(*fix)(problem*),
 		problem*			lower_level = NULL
-		) :	Dnode0<alpha_string, problem>(descr),
+		) :	baseC<alpha_string, problem>(descr),
 			payload(D, detect, F, fix) {
 		if(lower_level) {
 			problems << lower_level; } }
 	problem(const problem& P)
-		: Dnode0<alpha_string, problem>(P), payload(P.payload), problems(P.problems) {}
+		: baseC<alpha_string, problem>(P), payload(P.payload), problems(P.problems) {}
 	~problem()  {}
 
 	problem*			copy() { return new problem(*this); }

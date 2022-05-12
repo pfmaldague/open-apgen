@@ -124,9 +124,9 @@ IO_TypedValue*	GetTypedValue(
 }
 
 void exec_agent::clear_the_discrepancy_list() {
-	tlist<alpha_void, Cnode0<alpha_void, CTime_base> >::iterator
+	tlist<alpha_void, Cntnr<alpha_void, CTime_base> >::iterator
 		suspects(act_instances_with_discrepant_durations);
-	Cnode0<alpha_void, CTime_base>*	ptp;
+	Cntnr<alpha_void, CTime_base>*	ptp;
 
 	// get rid of any previously detected discrepant instances...
 	act_instances_with_discrepant_durations.clear();
@@ -150,9 +150,9 @@ void exec_agent::instantiate_all(
 	slist<alpha_string, instance_tag>::iterator			inst_list(list_of_instance_nodes);
 	status_aware_iterator						brand_new_list(eval_intfc::get_act_lists().get_brand_new_iterator());
 	smart_actptr*							dptrnode;
-	tlist<alpha_void, Cnode0<alpha_void, CTime_base> >		temporary_discrepancy_list;
-	slist<alpha_void, Cnode0<alpha_void, CTime_base> >::iterator	suspects(temporary_discrepancy_list);
-	Cnode0<alpha_void, CTime_base>*					ptp;
+	tlist<alpha_void, Cntnr<alpha_void, CTime_base> >		temporary_discrepancy_list;
+	slist<alpha_void, Cntnr<alpha_void, CTime_base> >::iterator	suspects(temporary_discrepancy_list);
+	Cntnr<alpha_void, CTime_base>*					ptp;
 	stringstream							errs;
 
 	//
@@ -619,7 +619,7 @@ void model_intfc::doUnschedule(
 	}
 
 	emptySymbol*					es;
-	Cnode0<alpha_string, ActivityInstance*>*	ad;
+	Cntnr<alpha_string, ActivityInstance*>*	ad;
 	apgen::METHOD_TYPE				mt;
 
 	while((ret == apgen::RETURN_STATUS::SUCCESS) && (es = parents())) {

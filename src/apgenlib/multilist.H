@@ -42,7 +42,7 @@ class multilist: public tlist<keyClass, nbase, ownerData> {
 public:
 	typedef slist<keyClass, nbase, ownerData>		iterlist;
 	typedef Miterator_base<iterlist, nbase>			miterclass;
-	typedef Cnode0<alpha_void, pair<miterclass*, bool> >	miterptr;
+	typedef Cntnr<alpha_void, pair<miterclass*, bool> >	miterptr;
 	typedef tlist<alpha_void, miterptr>			mitertlist;
 	typedef slist<alpha_void, miterptr>			miterslist;
 
@@ -106,8 +106,8 @@ template <class keyClass, class nbase, class ownerData>
 void
 multilist<keyClass, nbase, ownerData>::clear() {
 	nbase*	N;
-	slist<alpha_void, Cnode0<alpha_void, nbase*> > L;
-	Cnode0<alpha_void, nbase*>*		      p;
+	slist<alpha_void, Cntnr<alpha_void, nbase*> > L;
+	Cntnr<alpha_void, nbase*>*		      p;
 
 	//
 	// No - you don't want to do that; deleting an iterator should
@@ -127,7 +127,7 @@ multilist<keyClass, nbase, ownerData>::clear() {
 	while((N = slist<keyClass, nbase, ownerData>::first_node())) {
 
 		tlist<keyClass, nbase, ownerData>::remove_node(N);
-		L << new Cnode0<alpha_void, nbase*>(N, N);
+		L << new Cntnr<alpha_void, nbase*>(N, N);
 	}
 	while((p = L.first_node())) {
 		delete p->payload;

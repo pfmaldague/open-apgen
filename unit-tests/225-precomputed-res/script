@@ -13,4 +13,6 @@ ADDRESOURCE SC_State["X"] A1R1
 ADDRESOURCE SC_State["Y"] A1R1
 ADDRESOURCE SC_State["Z"] A1R1
 NEWHORIZON A1 FROM 2030-296T09:00:00.000 TO 2030-358T21:00:00.000
-OPENFILE 225-precomputed-res/layout.apf
+
+# does not seem to exist:
+# OPENFILE 225-precomputed-res/layout.apf

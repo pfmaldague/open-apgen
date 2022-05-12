@@ -852,16 +852,16 @@ apgen::RETURN_STATUS exp_time_series(Cstring &rmessage, TypedValue *res, slst<Ty
     // that is the payload of the resource UnderConsolidation
     //
     Cstring combined_key = the_key.str();
-    Cnode0<alpha_string, aafReader::state_series>*	coeff_node =
-	new Cnode0<alpha_string, aafReader::state_series>(combined_key);
-    tlist<alpha_string, Cnode0<alpha_string, aafReader::state_series> >& coeff
+    Cntnr<alpha_string, aafReader::state_series>*	coeff_node =
+	new Cntnr<alpha_string, aafReader::state_series>(combined_key);
+    tlist<alpha_string, Cntnr<alpha_string, aafReader::state_series> >& coeff
 	= aafReader::precomputed_resource::UnderConsolidation->payload.interp_coeff;
     coeff << coeff_node;
 
     //
     // Get ready to stuff time nodes into the payload of the node just inserted
     //
-    tlist<alpha_time, Cnode0<alpha_time, aafReader::state6> >& coeff_series = coeff_node->payload;
+    tlist<alpha_time, Cntnr<alpha_time, aafReader::state6> >& coeff_series = coeff_node->payload;
 
     ArrayElement* ae;
     ListOVal&	time_coeff_pairs = b->get_array();
@@ -869,8 +869,8 @@ apgen::RETURN_STATUS exp_time_series(Cstring &rmessage, TypedValue *res, slst<Ty
 	ae = time_coeff_pairs[k];
 	CTime_base	time_stamp(ae->get_key());
 	ListOVal&	lov = ae->Val().get_array();
-	Cnode0<alpha_time, aafReader::state6>* state_node
-		= new Cnode0<alpha_time, aafReader::state6>(time_stamp);
+	Cntnr<alpha_time, aafReader::state6>* state_node
+		= new Cntnr<alpha_time, aafReader::state6>(time_stamp);
 	for(int l = 0; l < 6; l++) {
 	    ArrayElement* ae2 = lov[l];
 	    state_node->payload.s[l] = ae2->Val().get_double();
@@ -2058,8 +2058,8 @@ apgen::RETURN_STATUS exp_get_threads(
 			if(!threads_end_defined) {
 				threads_end = threads_start + time_scope;
 				threads_end_defined = true;
-				Cnode0<alpha_int, instruction_node*>*	aptr;
-				slist<alpha_int, Cnode0<alpha_int, instruction_node*> >::iterator
+				Cntnr<alpha_int, instruction_node*>*	aptr;
+				slist<alpha_int, Cntnr<alpha_int, instruction_node*> >::iterator
 							instr_node_iter(eval_intfc::actsOrResWaitingOnSignals());
 				// we insert one array for each thread waiting on a signal:
 				while((aptr = instr_node_iter())) {
@@ -2082,7 +2082,7 @@ apgen::RETURN_STATUS exp_get_threads(
 					objects->Val().get_array().add(new_ae);
 				}
 
-				slist<alpha_int, Cnode0<alpha_int, instruction_node*> >::iterator
+				slist<alpha_int, Cntnr<alpha_int, instruction_node*> >::iterator
 					instr_node_iter2(eval_intfc::actsOrResWaitingOnCond());
 				// we insert one array for each thread waiting on a condition:
 				while((aptr = instr_node_iter2())) {
@@ -2168,7 +2168,7 @@ apgen::RETURN_STATUS exp_get_threads(
 apgen::RETURN_STATUS exp_instance_with_id(Cstring &rmessage, TypedValue *res, slst<TypedValue*>& args) {
 	// We don't know how many arguments we got, so let's not use the macros.
 	int					how_many_args =  args.size();
-	Cnode0<alpha_string, ActivityInstance*>*	theTag;
+	Cntnr<alpha_string, ActivityInstance*>*	theTag;
 
 	if(how_many_args <= 0) {
 		rmessage = Cstring("too few args. in instance_with_id");
@@ -3269,8 +3269,8 @@ apgen::RETURN_STATUS	exp_intervals(Cstring& rmessage, TypedValue* result, slst<T
 		}
 
 		ArrayElement*					ae;
-		slist<alpha_time, Cnode0<alpha_time, int> >	A;
-		slist<alpha_time, Cnode0<alpha_time, int> >	B;
+		slist<alpha_time, Cntnr<alpha_time, int> >	A;
+		slist<alpha_time, Cntnr<alpha_time, int> >	B;
 		bool						first = true;
 		CTime_base					start_time, end_time, prev_end_time;
 
@@ -3300,21 +3300,21 @@ apgen::RETURN_STATUS	exp_intervals(Cstring& rmessage, TypedValue* result, slst<T
 
 			if(first) {
 				first = false;
-				A << new Cnode0<alpha_time, int>(start_time, 0);
+				A << new Cntnr<alpha_time, int>(start_time, 0);
 			} else if(start_time < prev_end_time) {
 				rmessage = "First list of intervals() contains overlapping intervals.\n";
 				rmessage << "First offending interval ends at " << prev_end_time.to_string()
 					<< ", second starts at " << start_time.to_string() << "\n";
 				return apgen::RETURN_STATUS::FAIL;
 			} else if(start_time > prev_end_time) {
-				A << new Cnode0<alpha_time, int>(prev_end_time, 0);
-				A << new Cnode0<alpha_time, int>(start_time, 0);
+				A << new Cntnr<alpha_time, int>(prev_end_time, 0);
+				A << new Cntnr<alpha_time, int>(start_time, 0);
 			}
 			prev_end_time = end_time;
 		}
 		if(!first) {
 			// A ends with the last end time
-			A << new Cnode0<alpha_time, int>(prev_end_time, 0);
+			A << new Cntnr<alpha_time, int>(prev_end_time, 0);
 		}
 
 		first = true;
@@ -3336,25 +3336,25 @@ apgen::RETURN_STATUS	exp_intervals(Cstring& rmessage, TypedValue* result, slst<T
 
 			if(first) {
 				first = false;
-				B << new Cnode0<alpha_time, int>(start_time, 0);
+				B << new Cntnr<alpha_time, int>(start_time, 0);
 			} else if(start_time < prev_end_time) {
 				rmessage = "Second list of intervals() contains overlapping intervals\n";
 				rmessage << "First offending interval ends at " << prev_end_time.to_string()
 					<< ", second starts at " << start_time.to_string() << "\n";
 				return apgen::RETURN_STATUS::FAIL;
 			} else if(start_time > prev_end_time) {
-				B << new Cnode0<alpha_time, int>(prev_end_time, 0);
-				B << new Cnode0<alpha_time, int>(start_time, 0);
+				B << new Cntnr<alpha_time, int>(prev_end_time, 0);
+				B << new Cntnr<alpha_time, int>(start_time, 0);
 			}
 			prev_end_time = end_time;
 		}
 		if(!first) {
 			// B ends with the last end time
-			B << new Cnode0<alpha_time, int>(prev_end_time, 0);
+			B << new Cntnr<alpha_time, int>(prev_end_time, 0);
 		}
 
 		lov = new ListOVal;
-		Miterator<slist<alpha_time, Cnode0<alpha_time, int> >, Cnode0<alpha_time, int> >
+		Miterator<slist<alpha_time, Cntnr<alpha_time, int> >, Cntnr<alpha_time, int> >
 			miter("miterator");
 
 		long int	Index = 0;
@@ -3363,7 +3363,7 @@ apgen::RETURN_STATUS	exp_intervals(Cstring& rmessage, TypedValue* result, slst<T
 		miter.add_thread(B, "B", 1);
 		miter.first();
 
-		Cnode0<alpha_time, int>*		curnode = NULL;
+		Cntnr<alpha_time, int>*		curnode = NULL;
 		bool				isInA = false;
 		bool				isInB = false;
 		bool				isInC = false;
@@ -3407,7 +3407,7 @@ apgen::RETURN_STATUS	exp_intervals(Cstring& rmessage, TypedValue* result, slst<T
 		}
 
 		ArrayElement*						ae;
-		tlist<alpha_time, Cnode0<alpha_time, CTime_base> >	A(true);
+		tlist<alpha_time, Cntnr<alpha_time, CTime_base> >	A(true);
 		CTime_base						itime, old_time;
 		long int						Index = 0;
 
@@ -3427,7 +3427,7 @@ apgen::RETURN_STATUS	exp_intervals(Cstring& rmessage, TypedValue* result, slst<T
 					rmessage = "list should contain time intervals() of positive duration\n";
 					return apgen::RETURN_STATUS::FAIL;
 				} else {
-					A << new Cnode0<alpha_time, CTime_base>(old_time, itime);
+					A << new Cntnr<alpha_time, CTime_base>(old_time, itime);
 				}
 			}
 			old_time = itime;
@@ -3437,8 +3437,8 @@ apgen::RETURN_STATUS	exp_intervals(Cstring& rmessage, TypedValue* result, slst<T
 		//
 		// A is a t-list with consistent linked list order
 		//
-		tlist<alpha_time, Cnode0<alpha_time, CTime_base> >::iterator	iter2(A);
-		Cnode0<alpha_time, CTime_base>*					curnode = NULL;
+		tlist<alpha_time, Cntnr<alpha_time, CTime_base> >::iterator	iter2(A);
+		Cntnr<alpha_time, CTime_base>*					curnode = NULL;
 		Index = 0;
 
 		lov = new ListOVal;
@@ -3497,8 +3497,8 @@ apgen::RETURN_STATUS	exp_int_intervals(Cstring& rmessage, TypedValue* result, sl
 		}
 
 		ArrayElement*					ae;
-		slist<alpha_int, Cnode0<alpha_int, int> >	A;
-		slist<alpha_int, Cnode0<alpha_int, int> >	B;
+		slist<alpha_int, Cntnr<alpha_int, int> >	A;
+		slist<alpha_int, Cntnr<alpha_int, int> >	B;
 		bool						first = true;
 		long int					start_int, end_int, prev_end_int;
 
@@ -3532,7 +3532,7 @@ apgen::RETURN_STATUS	exp_int_intervals(Cstring& rmessage, TypedValue* result, sl
 
 			if(first) {
 				first = false;
-				A << new Cnode0<alpha_int, int>(start_int, 0);
+				A << new Cntnr<alpha_int, int>(start_int, 0);
 			} else if(start_int < prev_end_int) {
 				rmessage = "First list of int_intervals() contains "
 					"overlapping intervals\n";
@@ -3540,8 +3540,8 @@ apgen::RETURN_STATUS	exp_int_intervals(Cstring& rmessage, TypedValue* result, sl
 					<< ", second starts at " << start_int << "\n";
 				return apgen::RETURN_STATUS::FAIL;
 			} else if(start_int > prev_end_int) {
-				A << new Cnode0<alpha_int, int>(prev_end_int, 0);
-				A << new Cnode0<alpha_int, int>(start_int, 0);
+				A << new Cntnr<alpha_int, int>(prev_end_int, 0);
+				A << new Cntnr<alpha_int, int>(start_int, 0);
 			}
 			prev_end_int = end_int;
 		}
@@ -3550,7 +3550,7 @@ apgen::RETURN_STATUS	exp_int_intervals(Cstring& rmessage, TypedValue* result, sl
 			//
 			// A ends with the last end int
 			//
-			A << new Cnode0<alpha_int, int>(prev_end_int, 0);
+			A << new Cntnr<alpha_int, int>(prev_end_int, 0);
 		}
 
 		first = true;
@@ -3574,7 +3574,7 @@ apgen::RETURN_STATUS	exp_int_intervals(Cstring& rmessage, TypedValue* result, sl
 
 			if(first) {
 				first = false;
-				B << new Cnode0<alpha_int, int>(start_int, 0);
+				B << new Cntnr<alpha_int, int>(start_int, 0);
 			} else if(start_int < prev_end_int) {
 				rmessage = "Second list of int_intervals() contains "
 					"overlapping intervals\n";
@@ -3582,18 +3582,18 @@ apgen::RETURN_STATUS	exp_int_intervals(Cstring& rmessage, TypedValue* result, sl
 					<< ", second starts at " << start_int << "\n";
 				return apgen::RETURN_STATUS::FAIL;
 			} else if(start_int > prev_end_int) {
-				B << new Cnode0<alpha_int, int>(prev_end_int, 0);
-				B << new Cnode0<alpha_int, int>(start_int, 0);
+				B << new Cntnr<alpha_int, int>(prev_end_int, 0);
+				B << new Cntnr<alpha_int, int>(start_int, 0);
 			}
 			prev_end_int = end_int;
 		}
 		if(!first) {
 			// B ends with the last end int
-			B << new Cnode0<alpha_int, int>(prev_end_int, 0);
+			B << new Cntnr<alpha_int, int>(prev_end_int, 0);
 		}
 
 		lov = new ListOVal;
-		Interator<slist<alpha_int, Cnode0<alpha_int, int> >, Cnode0<alpha_int, int>, alpha_int>
+		Interator<slist<alpha_int, Cntnr<alpha_int, int> >, Cntnr<alpha_int, int>, alpha_int>
 			miter("interator");
 
 		long int	Index = 0;
@@ -3602,7 +3602,7 @@ apgen::RETURN_STATUS	exp_int_intervals(Cstring& rmessage, TypedValue* result, sl
 		miter.add_thread(B, "B", 1);
 		miter.first();
 
-		Cnode0<alpha_int, int>*		curnode = NULL;
+		Cntnr<alpha_int, int>*		curnode = NULL;
 		bool				isInA = false;
 		bool				isInB = false;
 		bool				isInC = false;
@@ -3647,7 +3647,7 @@ apgen::RETURN_STATUS	exp_int_intervals(Cstring& rmessage, TypedValue* result, sl
 		}
 
 		ArrayElement*						ae;
-		tlist<alpha_int, Cnode0<alpha_int, long int> >		A(true);
+		tlist<alpha_int, Cntnr<alpha_int, long int> >		A(true);
 		long int						interval_bound, prev_bound;
 		long int						Index = 0;
 
@@ -3669,7 +3669,7 @@ apgen::RETURN_STATUS	exp_int_intervals(Cstring& rmessage, TypedValue* result, sl
 						"intervals of positive duration\n";
 					return apgen::RETURN_STATUS::FAIL;
 				} else {
-					A << new Cnode0<alpha_int, long int>(prev_bound, interval_bound);
+					A << new Cntnr<alpha_int, long int>(prev_bound, interval_bound);
 				}
 			}
 			prev_bound = interval_bound;
@@ -3679,8 +3679,8 @@ apgen::RETURN_STATUS	exp_int_intervals(Cstring& rmessage, TypedValue* result, sl
 		//
 		// A is a tlist with consistent linked list order
 		//
-		tlist<alpha_int, Cnode0<alpha_int, long int> >::iterator	iter2(A);
-		Cnode0<alpha_int, long int>*					curnode = NULL;
+		tlist<alpha_int, Cntnr<alpha_int, long int> >::iterator	iter2(A);
+		Cntnr<alpha_int, long int>*					curnode = NULL;
 		Index = 0;
 
 		//

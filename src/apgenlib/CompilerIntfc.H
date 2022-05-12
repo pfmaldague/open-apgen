@@ -30,7 +30,7 @@ public:
 					pEsys::Program*	opaqueParsedObject);
 	static void		(*CompileExpressionList)(
 					const Cstring&	Text,
-					slist<alpha_int, Cnode0<alpha_int, parsedExp> >&	L);
+					slist<alpha_int, Cntnr<alpha_int, parsedExp> >&	L);
 				/* we certainly need some context here
 				 * so local symbols can be obtained. Assume
 				 * a behaving element is available. The

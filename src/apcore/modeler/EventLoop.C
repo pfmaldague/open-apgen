@@ -47,9 +47,9 @@ extern "C" {
 mEvent*		EventLoop::CurrentEvent = NULL;
 long int	EventLoop::time_advance_count = 0;
 
-tlist<alpha_void, Cnode0<alpha_void, RCsource*> >&
+tlist<alpha_void, Cntnr<alpha_void, RCsource*> >&
 		EventLoop::containersToWatchForWaitUntil() {
-	static tlist<alpha_void, Cnode0<alpha_void, RCsource*> > R;
+	static tlist<alpha_void, Cntnr<alpha_void, RCsource*> > R;
 	return R;
 }
 
@@ -176,7 +176,7 @@ apgen::RETURN_STATUS first_time_waiting_for_signal_or_condition(
 		    if(!EventLoop::containersToWatchForWaitUntil().find(
 						(void *) the_container)) {
 			EventLoop::containersToWatchForWaitUntil()
-				<< new Cnode0<alpha_void, RCsource*>(
+				<< new Cntnr<alpha_void, RCsource*>(
 						the_container,
 						the_container);
 		    }
@@ -185,15 +185,15 @@ apgen::RETURN_STATUS first_time_waiting_for_signal_or_condition(
 		    // We need to add all the containers that the_container
 		    // might have a dependency on
 		    //
-		    slist<alpha_void, Cnode0<alpha_void, RCsource*> >::iterator
+		    slist<alpha_void, Cntnr<alpha_void, RCsource*> >::iterator
 				dependencies(the_container->payload->ptrs_to_containers_used_in_profile);
-		    Cnode0<alpha_void, RCsource*>*		a_ptr;
+		    Cntnr<alpha_void, RCsource*>*		a_ptr;
 		    while((a_ptr = dependencies())) {
 			RCsource*	the_dependency = a_ptr->payload;
 			if(!EventLoop::containersToWatchForWaitUntil().find(
 						(void *) the_dependency)) {
 			    EventLoop::containersToWatchForWaitUntil()
-				<< new Cnode0<alpha_void, RCsource*>(
+				<< new Cntnr<alpha_void, RCsource*>(
 						the_dependency,
 						the_dependency);
 			}
@@ -228,7 +228,7 @@ apgen::RETURN_STATUS first_time_waiting_for_signal_or_condition(
 					string_is_reg_exp)
 				);
 
-	Cnode0<alpha_int, instruction_node*>*	ptr;
+	Cntnr<alpha_int, instruction_node*>*	ptr;
 
 	//
 	// park the thread in the appropriate queue
@@ -237,7 +237,7 @@ apgen::RETURN_STATUS first_time_waiting_for_signal_or_condition(
 	    if(!(ptr = eval_intfc::actsOrResWaitingOnSignals().find(
 					EventLoop::CurrentEvent->eventID))) {
 		eval_intfc::actsOrResWaitingOnSignals()
-			<< new Cnode0<alpha_int, instruction_node*>(
+			<< new Cntnr<alpha_int, instruction_node*>(
 				EventLoop::CurrentEvent->eventID,
 				i_n);
 	    }
@@ -245,7 +245,7 @@ apgen::RETURN_STATUS first_time_waiting_for_signal_or_condition(
 	    if(!(ptr = eval_intfc::actsOrResWaitingOnCond().find(
 					EventLoop::CurrentEvent->eventID))) {
 		eval_intfc::actsOrResWaitingOnCond()
-			<< new Cnode0<alpha_int, instruction_node*>(
+			<< new Cntnr<alpha_int, instruction_node*>(
 				EventLoop::CurrentEvent->eventID,
 				i_n);
 	    }
@@ -291,10 +291,10 @@ void EventLoop::init_iterators() {
 	old_events.clear();
 
 
-	tlist<alpha_string, Cnode0<alpha_string, Rsource*> > all_res(false);
-	slist<alpha_string, Cnode0<alpha_string, Rsource*> >::iterator
+	tlist<alpha_string, Cntnr<alpha_string, Rsource*> > all_res(false);
+	slist<alpha_string, Cntnr<alpha_string, Rsource*> >::iterator
 						all_res_iter(all_res);
-	Cnode0<alpha_string, Rsource*>*	ptr_to_res;
+	Cntnr<alpha_string, Rsource*>*	ptr_to_res;
 	
 	Rsource::get_all_resources_in_dependency_order(all_res);
 	while((ptr_to_res = all_res_iter.next())) {
@@ -462,7 +462,7 @@ void	EventLoop::ProcessEvents() {
 	//
 	// Launch the constraint-checking thread if appropriate
 	//
-	Cnode0<alpha_string, thread_intfc*>* thread_node;
+	Cntnr<alpha_string, thread_intfc*>* thread_node;
 	if(APcloptions::theCmdLineOptions().constraints_active
 	   && Constraint::allConstraints().get_length()) {
 	    thread_intfc::threads()[thread_intfc::CONSTRAINT_THREAD].reset(

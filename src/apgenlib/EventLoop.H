@@ -124,8 +124,8 @@ public:
 
 	static EventLoop&	theEventLoop();
 	static EventLoop*	theEventLoopPtr;
-	static tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& containersToWatchForWaitUntil();
-	static tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& containersToWatchForScheduling();
+	static tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& containersToWatchForWaitUntil();
+	static tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& containersToWatchForScheduling();
 	static bool		try_scheduling(
 					const CTime_base&	etime,
 					pEsys::execStack&	found_this_thread);

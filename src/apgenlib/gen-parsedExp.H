@@ -3788,7 +3788,7 @@ class Resource: public pE {
 	void consolidate_one_profile(
 		RCsource*,
 		ProfileList&,
-		tlist<alpha_time, Cnode0<alpha_time, parsedExp> >&,
+		tlist<alpha_time, Cntnr<alpha_time, parsedExp> >&,
 		int);
 	parsedExp	resource_def;
 	parsedExp	resource_prefix;

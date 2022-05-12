@@ -1072,7 +1072,7 @@ void FunctionDefinition::consolidate(
 	if(!aafReader::functions_declared_but_not_implemented().find(function_name)) {
 	    smart_ptr<FunctionDefinition> ptr(this);
 	    aafReader::functions_declared_but_not_implemented()
-		<< new Cnode0<alpha_string, smart_ptr<FunctionDefinition> >(function_name, ptr);
+		<< new Cntnr<alpha_string, smart_ptr<FunctionDefinition> >(function_name, ptr);
 	}
     }
 
@@ -1312,7 +1312,7 @@ void FunctionDefinition::consolidate(
     // Remove the function from declared list since
     // now it's been fully implemented
     //
-    Cnode0<alpha_string, smart_ptr<FunctionDefinition> >* cn;
+    Cntnr<alpha_string, smart_ptr<FunctionDefinition> >* cn;
     if((cn = aafReader::functions_declared_but_not_implemented().find(function_name))) {
     	delete cn;
     }

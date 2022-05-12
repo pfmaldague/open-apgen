@@ -55,7 +55,7 @@ typedef enum {
 	TOL_FINAL } tol_output_flag;
 
 // for storing TOL values in a tlist:
-typedef Cnode0<alpha_void, pair<Rsource*, TypedValue> > res_record;
+typedef Cntnr<alpha_void, pair<Rsource*, TypedValue> > res_record;
 
 // for storing TOL values in a vector:
 class res_record2 {
@@ -84,7 +84,7 @@ public:
 	const CTime_base&					e,
 	const bool&						vis,
 	const bool&						incl_all,
-    	tlist<alpha_string, Cnode0<alpha_string, Rsource*> >&	incl_res,
+    	tlist<alpha_string, Cntnr<alpha_string, Rsource*> >&	incl_res,
 	dual_purpose_iterator&					res_iter,
 	status_aware_multiterator*				start_act_iter,
 	bool							write_both,
@@ -111,7 +111,7 @@ public:
     const bool&							include_all_res_and_acts;
     int								priority;
 
-    tlist<alpha_string, Cnode0<alpha_string, Rsource*> >&	all_included_res;
+    tlist<alpha_string, Cntnr<alpha_string, Rsource*> >&	all_included_res;
     con_violation*						last_processed_vio;
     con_violation*						next_vio_to_process;
 
@@ -561,12 +561,12 @@ public:
 	}
 };
 
-class tol_record: public Dnode0<prio_time, tol_record> {
+class tol_record: public baseC<prio_time, tol_record> {
 public:
 	tolEventPLD*   payload;
 private:
 	tol_record(const CTime_base& t, long prio, tolEventPLD* pep)
-		: Dnode0<prio_time, tol_record>(prio_time(t, prio)),
+		: baseC<prio_time, tol_record>(prio_time(t, prio)),
 			payload(pep) {
 	}
 	tol_record(const tol_record& tr) = delete;
@@ -611,7 +611,7 @@ void handle_last_resource_event(
 		bool			write_both_files) {
     bool		interpolated = false;
     TypedValue	after;
-    Cnode0<alpha_void, RCsource*>* ptr_to_dep;
+    Cntnr<alpha_void, RCsource*>* ptr_to_dep;
     bool		has_interpolation
 		= resource->properties[(int)Rsource::Property::has_interpolation];
 
@@ -634,7 +634,7 @@ void handle_last_resource_event(
 	xp.write_to_stream(TOL_FINAL, NULL);
     }
 
-    slist<alpha_void, Cnode0<alpha_void, RCsource*> >::iterator
+    slist<alpha_void, Cntnr<alpha_void, RCsource*> >::iterator
 		dep_iter(resource->parent_container.payload->containers_whose_profile_invokes_this);
 
     assert(after.get_type() != apgen::DATA_TYPE::UNINITIALIZED);

@@ -16,7 +16,7 @@ instruction_node::instruction_node(
 		behaving_element&	sym,
 		const parsedExp&	cond,
 		bool			is_regex)
-	: Dnode0<alpha_int, instruction_node>(EventLoop::CurrentEvent->eventID),
+	: baseC<alpha_int, instruction_node>(EventLoop::CurrentEvent->eventID),
 		Calls(C.get_context()),
 		Criterion(cond),
 		has_max_and_actual(false),
@@ -31,7 +31,7 @@ instruction_node::instruction_node(
 		behaving_element&	sym,
 		const parsedExp&	condition,
 		const CTime_base&	dur)
-	: Dnode0<alpha_int, instruction_node>(EventLoop::CurrentEvent->eventID),
+	: baseC<alpha_int, instruction_node>(EventLoop::CurrentEvent->eventID),
 		Calls(C.get_context()),
 		Criterion(condition),
 		Duration(dur),
@@ -46,7 +46,7 @@ instruction_node::instruction_node(
 		const CTime_base&	dur,
 		const CTime_base&	du_max,
 		const Cstring&		variableToStoreActualDuration)
-	: Dnode0<alpha_int, instruction_node>(EventLoop::CurrentEvent->eventID),
+	: baseC<alpha_int, instruction_node>(EventLoop::CurrentEvent->eventID),
 		Calls(C.get_context()),
 		Criterion(condition),
 		Duration(dur),
@@ -57,7 +57,7 @@ instruction_node::instruction_node(
 		theSymbols(sym) {}
 
 instruction_node::instruction_node(const instruction_node& inst)
-	: Dnode0<alpha_int, instruction_node>(inst),
+	: baseC<alpha_int, instruction_node>(inst),
 		Calls(inst.Calls.get_context()),
 		Criterion(inst.Criterion),
 		Duration(inst.Duration),

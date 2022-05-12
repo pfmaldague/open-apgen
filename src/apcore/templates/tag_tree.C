@@ -28,13 +28,13 @@ public:
 	tlist<alpha_string, tagO>	l;
 	};
 
-class tagO: public Dnode0<alpha_string, tagO> {
+class tagO: public baseC<alpha_string, tagO> {
 public:
 	tagO() {}
-	tagO(const Cstring& s) : Dnode0<alpha_string, tagO>(s) {}
-	tagO(const Dnode0<alpha_string, tagO>& d) : Dnode0<alpha_string, tagO>(d) {}
-	tagO(const Cstring& s, const Cstring& t) : Dnode0<alpha_string, tagO>(s), payload(t) {}
-	tagO(const Cstring& s, int i) : Dnode0<alpha_string, tagO>(s), payload(i) {}
+	tagO(const Cstring& s) : baseC<alpha_string, tagO>(s) {}
+	tagO(const baseC<alpha_string, tagO>& d) : baseC<alpha_string, tagO>(d) {}
+	tagO(const Cstring& s, const Cstring& t) : baseC<alpha_string, tagO>(s), payload(t) {}
+	tagO(const Cstring& s, int i) : baseC<alpha_string, tagO>(s), payload(i) {}
 
 	tagO*	copy() { return new tagO(*this); }
 	tagO*			get_this() { return this; }

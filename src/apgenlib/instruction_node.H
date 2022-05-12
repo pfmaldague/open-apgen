@@ -3,7 +3,7 @@
 #include "RES_eval.H"
 #include "ExecStack.H"
 
-class instruction_node: public Dnode0<alpha_int, instruction_node> {
+class instruction_node: public baseC<alpha_int, instruction_node> {
 public:
 	// for signals and resource conditions:
 	instruction_node(	pEsys::execStack& C,

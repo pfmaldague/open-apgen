@@ -65,8 +65,8 @@ Cstring fileReader::handle_environment(const Cstring &S) {
 	return T;
 }
 
-slist<alpha_int, Cnode0<alpha_int, parsedExp> >&	fileReader::expressionList() {
-	static slist<alpha_int, Cnode0<alpha_int, parsedExp> > s;
+slist<alpha_int, Cntnr<alpha_int, parsedExp> >&	fileReader::expressionList() {
+	static slist<alpha_int, Cntnr<alpha_int, parsedExp> > s;
 	return s;
 }
 
@@ -319,7 +319,7 @@ void fileReader::CompileStatement(
 
 void fileReader::CompileExpressionList(
 		const Cstring& Text,
-		slist<alpha_int, Cnode0<alpha_int, parsedExp> >& L) {
+		slist<alpha_int, Cntnr<alpha_int, parsedExp> >& L) {
 	compiler_intfc::content_type	ct = compiler_intfc::EXPRESSION_LIST;
 
 	if(!Text.length()) {

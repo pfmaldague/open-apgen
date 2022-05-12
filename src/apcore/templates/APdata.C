@@ -620,7 +620,7 @@ void TypedValue::cast(apgen::DATA_TYPE new_type) {
 		       ) {
 			Cstring				instance_type(tds1->Val().get_string());
 			Cstring				id(tds2->Val().get_string());
-			Cnode0<alpha_string, ActivityInstance*>* act_tag;
+			Cntnr<alpha_string, ActivityInstance*>* act_tag;
 
 			undefine();
 

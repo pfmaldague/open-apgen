@@ -58,14 +58,14 @@ Cstring apgen::spell(apgen::USAGE_TYPE c) {
 
 static int dummy_usage = 0;
 
-value_node1*	value_node::stateFactory(
+value_node_w_linker*	value_node::stateFactory(
 			const CTime_base&	t,
 			const TypedValue&	orig_val,
        			long			modelOrder,
        			int			depth,
        			apgen::RES_VAL_TYPE	T,
        			Rsource&		r) {
-	value_node1*	vn = new value_node1(t, modelOrder, NULL);
+	value_node_w_linker*	vn = new value_node_w_linker(t, modelOrder, NULL);
 	vn->payload = new st_value_node(
 				vn, orig_val, depth, T, r,
 				new simpleLinker<value_node>(vn));
@@ -85,14 +85,14 @@ st_value_node::st_value_node(
        	 	an_Other(NULL) {
 }
 
-value_node1*	value_node::stateFactory(
+value_node_w_linker*	value_node::stateFactory(
 			const CTime_base&	t,
 			value_node*		VN,
 			long			modelOrder,
 			int			depth,
 			apgen::RES_VAL_TYPE	T,
 			Rsource&		r) {
-	value_node1*	vn = new value_node1(t, modelOrder, NULL);
+	value_node_w_linker*	vn = new value_node_w_linker(t, modelOrder, NULL);
 	vn->payload = new st_value_node(
 				vn, VN, depth, T, r,
 				new simpleLinker<value_node>(vn));
@@ -183,53 +183,53 @@ const Cstring& value_node::get_key() const {
 	return s;
 }
 
-value_node1*	value_node::numericFloatFactory(
+value_node_w_linker*	value_node::numericFloatFactory(
 			const CTime_base&	t,
 			double			new_consumption,
 			long			modelOrder,
                 	Rsource&		r,
 			apgen::RES_VAL_TYPE	rvt) {
-	value_node1*	vn = new value_node1(t, modelOrder, NULL);
+	value_node_w_linker*	vn = new value_node_w_linker(t, modelOrder, NULL);
 	vn->payload = new num_value_node_f(
 				vn, new_consumption, r, rvt,
 				new floatLinker<value_node>(vn));
 	return vn;
 }
 
-value_node1*	value_node::numericFloatFactory(
+value_node_w_linker*	value_node::numericFloatFactory(
 			const CTime_base&	t,
 			double			new_consumption,
 			value_node*		ncv,
 			long			modelOrder,
                 	Rsource&		r,
 			apgen::RES_VAL_TYPE	rvt) {
-	value_node1*	vn = new value_node1(t, modelOrder, NULL);
+	value_node_w_linker*	vn = new value_node_w_linker(t, modelOrder, NULL);
 	vn->payload = new num_value_node_f(
 				vn, new_consumption, ncv, r, rvt,
 				new floatLinker<value_node>(vn));
 	return vn;
 }
 
-value_node1*
-value_node1::rotate() {
+value_node_w_linker*
+value_node_w_linker::rotate() {
 	TreeDir::Dir	t_direction, u_direction;
-	value_node1* new_root;
+	value_node_w_linker* new_root;
 
-	if(Dnode0::indicator == TreeDir::BALANCED) {
+	if(baseC::indicator == TreeDir::BALANCED) {
 		return NULL;
 	}
-	t_direction = Dnode0::indicator;
+	t_direction = baseC::indicator;
 	u_direction = t_direction ? TreeDir::LEFT_DIR : TreeDir::RIGHT_DIR;
 
-	new_root = (value_node1*) Dnode0::Links[t_direction];
+	new_root = (value_node_w_linker*) baseC::Links[t_direction];
 	if(new_root->indicator == u_direction) {
 		new_root = new_root->rotate();
 		((res_val_w_linker*)payload)->myLinker->attach(t_direction, new_root, TreeDir::UPDATE_CONS);
 	}
 	if(new_root->indicator == TreeDir::BALANCED)
-		Dnode0::indicator = TreeDir::BALANCED;
+		baseC::indicator = TreeDir::BALANCED;
 	else
-		Dnode0::indicator = u_direction;
+		baseC::indicator = u_direction;
 	new_root->indicator = u_direction;
 	((res_val_w_linker*)payload)->myLinker->attach(t_direction, new_root->Links[u_direction], TreeDir::UPDATE_CONS);
 	((res_val_w_linker*)new_root->payload)->myLinker->attach(u_direction, get_this(), TreeDir::UPDATE_CONS);
@@ -416,27 +416,27 @@ const TypedValue value_node::get_value() const {
 	return payload->get_value(list->Owner->get_datatype());
 }
 
-value_node1*	value_node::numericIntFactory(
+value_node_w_linker*	value_node::numericIntFactory(
 			const CTime_base&	t,
 			true_long		new_consumption,
 			long			modelOrder,
                 	Rsource&		r,
 			apgen::RES_VAL_TYPE	rvt) {
-	value_node1*	vn = new value_node1(t, modelOrder, NULL);
+	value_node_w_linker*	vn = new value_node_w_linker(t, modelOrder, NULL);
 	vn->payload = new num_value_node_i(
 				vn, new_consumption, r, rvt,
 				new intLinker<value_node>(vn));
 	return vn;
 }
 
-value_node1*	value_node::numericIntFactory(
+value_node_w_linker*	value_node::numericIntFactory(
 			const CTime_base&	t,
 			true_long		new_consumption,
 			value_node*		ncv,
 			long			modelOrder,
                 	Rsource&		r,
 			apgen::RES_VAL_TYPE	rvt) {
-	value_node1*	vn = new value_node1(t, modelOrder, NULL);
+	value_node_w_linker*	vn = new value_node_w_linker(t, modelOrder, NULL);
 	vn->payload = new num_value_node_i(
 				vn, new_consumption, ncv, r, rvt,
 				new intLinker<value_node>(vn));

@@ -1341,10 +1341,10 @@ void Program::to_stream(aoString* aos, int ind) const {
 
 void Program::to_AAF(aoString* aos, int ind) const {
 	Cstring					attribute_nickname;
-	tlist<alpha_string, Cnode0<alpha_string, Assignment*> >	correct_order(true);
-	slist<alpha_string, Cnode0<alpha_string, Assignment*> >::iterator
+	tlist<alpha_string, Cntnr<alpha_string, Assignment*> >	correct_order(true);
+	slist<alpha_string, Cntnr<alpha_string, Assignment*> >::iterator
 					CorrectOrder(correct_order);
-	Cnode0<alpha_string, Assignment*>*	tag;
+	Cntnr<alpha_string, Assignment*>*	tag;
 	Cstring					lhs;
 
 	for(int iatt = 0; iatt < statements.size(); iatt++) {
@@ -1352,7 +1352,7 @@ void Program::to_AAF(aoString* aos, int ind) const {
 			= dynamic_cast<Assignment*>(statements[iatt].object());
 		assert(assign);
 		lhs = assign->lhs_of_assign->to_string();
-		correct_order << new Cnode0<alpha_string, Assignment*>(
+		correct_order << new Cntnr<alpha_string, Assignment*>(
 						lhs,
 						assign);
 	}

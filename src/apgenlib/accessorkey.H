@@ -23,8 +23,8 @@ template <class SpecialKeys>
 class accesskey {
   Cstring		str;
 public:
-  static tlist<alpha_string, Cnode0<alpha_string, bool> >& special_keys() {
-	  static tlist<alpha_string, Cnode0<alpha_string, bool> > T(SpecialKeys::get_list());
+  static tlist<alpha_string, Cntnr<alpha_string, bool> >& special_keys() {
+	  static tlist<alpha_string, Cntnr<alpha_string, bool> > T(SpecialKeys::get_list());
 	  return T;
   }
 

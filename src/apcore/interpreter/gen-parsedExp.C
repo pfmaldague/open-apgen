@@ -742,7 +742,7 @@ AdditiveExp::AdditiveExp(
  AdditiveExp::AdditiveExp(const AdditiveExp& p)
 	: pE(origin_info(p.line, p.file)) {
 	binaryFunc = p.binaryFunc;
-	tlist<alpha_void, Cnode0<alpha_void, pE*> >	newobjs(true);
+	tlist<alpha_void, Cntnr<alpha_void, pE*> >	newobjs(true);
 	pE*						obj;
 
 	for(int i = 0; i < p.expressions.size(); i++) {
@@ -868,7 +868,7 @@ Array::Array(
 	if(A.rest_of_list) {
 		rest_of_list.reference(A.rest_of_list.object());
 	}
-	tlist<alpha_void, Cnode0<alpha_void, pE*> >	newobjs(true);
+	tlist<alpha_void, Cntnr<alpha_void, pE*> >	newobjs(true);
 	for(int i = 0; i < A.actual_values.size(); i++) {
 		actual_values.push_back(parsedExp(A.actual_values[i]->smart_copy(newobjs)));
 	}
@@ -1328,8 +1328,8 @@ void AssignmentPrecomp::recursively_apply(exp_analyzer& EA) {
 	Cstring theDataCopy(theData);
 	removeQuotes(theDataCopy);
 	CTime_base time_stamp(theDataCopy);
-	Cnode0<alpha_time, aafReader::state2>* state_node
-	    = new Cnode0<alpha_time, aafReader::state2>(time_stamp);
+	Cntnr<alpha_time, aafReader::state2>* state_node
+	    = new Cntnr<alpha_time, aafReader::state2>(time_stamp);
 
 	//
 	// Extract the position and velocity data
@@ -4154,23 +4154,23 @@ void FunctionDefinition::recursively_apply(exp_analyzer& EA) {
 	}
 	if(is_model) {
 	    aafReader::methods()
-		<< new Cnode0<alpha_string, apgen::METHOD_TYPE>(nodeData, apgen::METHOD_TYPE::MODELING);
+		<< new Cntnr<alpha_string, apgen::METHOD_TYPE>(nodeData, apgen::METHOD_TYPE::MODELING);
 	} else if(is_res) {
 	    aafReader::methods()
-		<< new Cnode0<alpha_string, apgen::METHOD_TYPE>(nodeData, apgen::METHOD_TYPE::RESUSAGE);
+		<< new Cntnr<alpha_string, apgen::METHOD_TYPE>(nodeData, apgen::METHOD_TYPE::RESUSAGE);
 	} else if(is_decomp) {
 	    if(identity->tok_decomposition->getData() == "nonexclusive_decomposition") {
 		aafReader::methods()
-		    << new Cnode0<alpha_string,
+		    << new Cntnr<alpha_string,
 				apgen::METHOD_TYPE>(nodeData, apgen::METHOD_TYPE::NONEXCLDECOMP);
 	    } else if(identity->tok_decomposition->getData() == "decomposition") {
 		aafReader::methods()
-		    << new Cnode0<alpha_string,
+		    << new Cntnr<alpha_string,
 				apgen::METHOD_TYPE>(nodeData, apgen::METHOD_TYPE::DECOMPOSITION);
 	    } else if(identity->tok_decomposition->getData() == "concurrent_expansion"
 		      || identity->tok_decomposition->getData() == "expansion") {
 		aafReader::methods()
-		    << new Cnode0<alpha_string,
+		    << new Cntnr<alpha_string,
 				apgen::METHOD_TYPE>(nodeData, apgen::METHOD_TYPE::CONCUREXP);
 	    }
 	}
@@ -5748,7 +5748,7 @@ Logical::Logical(
 	: pE(origin_info(p.line, p.file)) {
 	theData = p.getData();
 	binaryFunc = p.binaryFunc;
-	tlist<alpha_void, Cnode0<alpha_void, pE*> > newobjs(true);
+	tlist<alpha_void, Cntnr<alpha_void, pE*> > newobjs(true);
 	pE* obj;
 
 	for(int i = 0; i < p.expressions.size(); i++) {

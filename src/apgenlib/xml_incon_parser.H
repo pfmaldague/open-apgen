@@ -74,7 +74,7 @@ public:
 	const xmlpp::Element*	get_child_named(const xmlpp::Element*	parent,
 					const char*	childname);
 			// key is value as ID in this file, payload is ptr to value of instance variable
-	tlist<alpha_string, Cnode0<alpha_string, TypedValue*> > instance_values;
+	tlist<alpha_string, Cntnr<alpha_string, TypedValue*> > instance_values;
 	};
 
 Cstring	xml_incon_parser::get_node_text(const xmlpp::Element* node) {
@@ -478,7 +478,7 @@ void	xml_incon_parser::get_typed_value(
 		Cstring	s = get_node_text(stuff);
 		val.declared_type = apgen::DATA_TYPE::INSTANCE;
 		val = s;
-		instance_values << new Cnode0<alpha_string, TypedValue*>(s, &val); }
+		instance_values << new Cntnr<alpha_string, TypedValue*>(s, &val); }
 	else if(nodename == "IntegerValue") {
 		long	L;
 		Cstring	l = get_node_text(stuff);

@@ -314,9 +314,9 @@ void PassiveCons::consolidate_round_two(Constraint* constraint_ptr) {
 		// add the containers it depends on e. g. via
 		// its profile
 		//
-		slist<alpha_void, Cnode0<alpha_void, RCsource*> >::iterator it2(
+		slist<alpha_void, Cntnr<alpha_void, RCsource*> >::iterator it2(
 				container->payload->ptrs_to_containers_used_in_profile);
-		Cnode0<alpha_void, RCsource*>* ptr;
+		Cntnr<alpha_void, RCsource*>* ptr;
 
 		while((ptr = it2())) {
 		    RCsource* dependency = ptr->payload;
@@ -365,9 +365,9 @@ void PassiveCons::consolidate_round_two(Constraint* constraint_ptr) {
 		// add the containers it depends on e. g. via
 		// its profile
 		//
-		slist<alpha_void, Cnode0<alpha_void, RCsource*> >::iterator it2(
+		slist<alpha_void, Cntnr<alpha_void, RCsource*> >::iterator it2(
 				container->payload->ptrs_to_containers_used_in_profile);
-		Cnode0<alpha_void, RCsource*>* ptr;
+		Cntnr<alpha_void, RCsource*>* ptr;
 
 		while((ptr = it2())) {
 		    RCsource* dependency = ptr->payload;

@@ -473,7 +473,7 @@ void RES_state::eval_val_within_thread(
 	//  5 - Second case, not so easy: we found an end-of-usage, and/or usage depth > 0
 	//
 	else {
-		tlist<alpha_void, Cnode0<alpha_void, value_node*> >	old_usages;
+		tlist<alpha_void, Cntnr<alpha_void, value_node*> >	old_usages;
 
 		//
 		//  6 -	First sub-case: look for a start-of-usage node that has not expired.
@@ -493,7 +493,7 @@ void RES_state::eval_val_within_thread(
 						<< " that comes earlier. ";
 					throw(eval_error(rmessage));
 				}
-				old_usages << new Cnode0<alpha_void, value_node*>(
+				old_usages << new Cntnr<alpha_void, value_node*>(
 								(void *) found->get_other(),
 								found->get_other());
 			} else if(found->get_res_val_type() == apgen::RES_VAL_TYPE::START_USING
@@ -716,7 +716,7 @@ void RES_state::eval_val_within_thread(
 	//  5 - Second case, not so easy: we found an end-of-usage, and/or usage depth > 0
 	//
 	else {
-		tlist<alpha_void, Cnode0<alpha_void, value_node*> >	old_usages;
+		tlist<alpha_void, Cntnr<alpha_void, value_node*> >	old_usages;
 
 		//
 		//  6 -	First sub-case: look for a start-of-usage node that has not expired.
@@ -737,7 +737,7 @@ void RES_state::eval_val_within_thread(
 						<< " that comes earlier. ";
 					throw(eval_error(rmessage));
 				}
-				old_usages << new Cnode0<alpha_void, value_node*>(
+				old_usages << new Cntnr<alpha_void, value_node*>(
 								(void *) found->get_other(),
 								found->get_other());
 			} else if(found->get_res_val_type() == apgen::RES_VAL_TYPE::START_USING
@@ -801,7 +801,7 @@ state_state RES_state::get_resource_state_at(CTime_base given_time) {
 	//
 	//  0 -	we define a list to hold pointers to expired start-of-usage nodes
 	//
-	tlist<alpha_void, Cnode0<alpha_void, value_node*> >	old_usages;
+	tlist<alpha_void, Cntnr<alpha_void, value_node*> >	old_usages;
 
 	//
 	//  1 - first guess at a node close to given_time
@@ -863,7 +863,7 @@ state_state RES_state::get_resource_state_at(CTime_base given_time) {
 				//
 				// the corresponding START_USING node has expired
 				//
-				old_usages << new Cnode0<alpha_void, value_node*>(
+				old_usages << new Cntnr<alpha_void, value_node*>(
 							(void *) found->get_other(),
 							found->get_other());
 			} else if(found->get_res_val_type() == apgen::RES_VAL_TYPE::START_USING) {
@@ -876,7 +876,7 @@ state_state RES_state::get_resource_state_at(CTime_base given_time) {
 						ret.currentval = found->get_value();
 					}
 					assert(found->get_other());
-					ret.end_uses << new Cnode0<alpha_time, stateNodePLD>(
+					ret.end_uses << new Cntnr<alpha_time, stateNodePLD>(
 						found->get_other()->getKey().getetime(),
 						stateNodePLD(found->getKey().get_event_id(),
 						found->get_value()));
@@ -2844,9 +2844,9 @@ apgen::DATA_TYPE& RES_history::get_datatype() {
 //
 simple_res_miter*
 RES_history::get_the_multiterator() {
-	slist<alpha_void, Cnode0<alpha_void, RCsource*> >::iterator
+	slist<alpha_void, Cntnr<alpha_void, RCsource*> >::iterator
 		iter(resource_parent->parent_container.payload->ptrs_to_containers_used_in_profile);
-	Cnode0<alpha_void, RCsource*>*		ptr_to_prerequisite;
+	Cntnr<alpha_void, RCsource*>*		ptr_to_prerequisite;
 
 	the_multiterator.clear();
 	the_multiterator.add_thread(
@@ -2892,8 +2892,8 @@ void RES_history::get_discrete_values(
 	bool				first_node_occurs_after_start;
 	bool				last_iteration = false;
 
-	tlist<alpha_void, Cnode0<alpha_void, value_node*> > stack;
-	Cnode0<alpha_void, value_node*>* ptr;
+	tlist<alpha_void, Cntnr<alpha_void, value_node*> > stack;
+	Cntnr<alpha_void, value_node*>* ptr;
 	value_node*			last_set_or_reset = NULL;
 	bool				last_set_or_reset_is_set = false;
 	TypedValue			value_to_use;
@@ -2920,7 +2920,7 @@ void RES_history::get_discrete_values(
 			// this is one of 'our' nodes
 			//
 			if(current_node->get_res_val_type() == apgen::RES_VAL_TYPE::START_USING) {
-				stack << new Cnode0<alpha_void, value_node*>((void *) current_node, current_node);
+				stack << new Cntnr<alpha_void, value_node*>((void *) current_node, current_node);
 				value_to_use = current_node->get_value();
 			} else if(current_node->get_res_val_type() == apgen::RES_VAL_TYPE::END_USING) {
 				if((ptr = stack.find((void *) current_node->get_other()))) {
@@ -3119,8 +3119,8 @@ void RES_history::get_partial_state_history(
 	TypedValue			evaluated_val, profile_value, current_value, previous_value;
 	value_node*			current_node;
 
-	tlist<alpha_void, Cnode0<alpha_void, value_node*> > stack;
-	Cnode0<alpha_void, value_node*>* ptr;
+	tlist<alpha_void, Cntnr<alpha_void, value_node*> > stack;
+	Cntnr<alpha_void, value_node*>* ptr;
 	value_node*			last_set_or_reset = NULL;
 	bool				last_set_or_reset_is_set = false;
 	TypedValue			value_to_use;
@@ -3149,7 +3149,7 @@ void RES_history::get_partial_state_history(
 			// this is one of 'our' nodes
 			//
 			if(current_node->get_res_val_type() == apgen::RES_VAL_TYPE::START_USING) {
-				stack << new Cnode0<alpha_void, value_node*>((void *) current_node, current_node);
+				stack << new Cntnr<alpha_void, value_node*>((void *) current_node, current_node);
 				value_to_use = current_node->get_value();
 			} else if(current_node->get_res_val_type() == apgen::RES_VAL_TYPE::END_USING) {
 				if((ptr = stack.find((void *) current_node->get_other()))) {

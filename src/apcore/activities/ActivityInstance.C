@@ -225,7 +225,7 @@ Cstring ActivityInstance::generate_id(const Cstring& ID) {
 	}
     }
 
-    aaf_intfc::actIDs() << new Cnode0<alpha_string, ActivityInstance*>(unique_id, this);
+    aaf_intfc::actIDs() << new Cntnr<alpha_string, ActivityInstance*>(unique_id, this);
     return unique_id;
 }
 
@@ -409,7 +409,7 @@ ActivityInstance::~ActivityInstance() {
     }
 
     // defensive programming
-    Cnode0<alpha_string, ActivityInstance*>*	N;
+    Cntnr<alpha_string, ActivityInstance*>*	N;
     if((N = aaf_intfc::actIDs().find(get_unique_id()))) {
 	delete N;
     }

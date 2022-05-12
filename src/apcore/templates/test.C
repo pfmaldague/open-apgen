@@ -152,20 +152,20 @@ public:
 };
 
 // This is the canonical way of defining a ptr to a backptr.
-class imp: public Dnode0<alpha_void, imp>, public p2b<Important> {
+class imp: public baseC<alpha_void, imp>, public p2b<Important> {
 public:
 	imp(void* v, const Cstring& s, Important* i)
-		: Dnode0<alpha_void, imp>(v), payload(s),
+		: baseC<alpha_void, imp>(v), payload(s),
 		p2b<Important>(i) {}
-	imp(const imp& I) : Dnode0<alpha_void, imp>(I), p2b<Important>(I), payload(I.payload) {}
+	imp(const imp& I) : baseC<alpha_void, imp>(I), p2b<Important>(I), payload(I.payload) {}
 	~imp() {
 		if(list) {
 			list->remove_node(this); }
 		cout << payload << " disappearing\n"; }
-  void	remove(bool S) { if(S) Dnode0<alpha_void, imp>::temporarily_remove_from_list();
+  void	remove(bool S) { if(S) baseC<alpha_void, imp>::temporarily_remove_from_list();
 			else if(list) list->remove_node(this); }
   bool	reacts_to_time_events() const { return false; }
-  void	re_insert() { Dnode0<alpha_void, imp>::re_insert_in_list(); }
+  void	re_insert() { baseC<alpha_void, imp>::re_insert_in_list(); }
   imp*	copy() { return new imp(*this); }
   imp*	get_this() { return this; }
   const imp*	get_this() const { return this; }
@@ -175,21 +175,21 @@ public:
 };
 
 // This is the canonical way of defining a ptr to a backptr.
-class imp2: public Dnode0<alpha_void, imp2>, public p2b<Important> {
+class imp2: public baseC<alpha_void, imp2>, public p2b<Important> {
 public:
 	imp2(void* v, const Cstring& s, Important* i)
-		: Dnode0<alpha_void, imp2>(v),
+		: baseC<alpha_void, imp2>(v),
 		payload(s),
 		p2b<Important>(i) {}
-	imp2(const imp2& I) : Dnode0<alpha_void, imp2>(I), payload(I.payload), p2b<Important>(I) {}
+	imp2(const imp2& I) : baseC<alpha_void, imp2>(I), payload(I.payload), p2b<Important>(I) {}
 	~imp2() {
 		if(list) {
 			list->remove_node(this); }
 		cout << payload << " disappearing\n"; }
-  void	remove(bool S) { if(S) Dnode0<alpha_void, imp2>::temporarily_remove_from_list();
+  void	remove(bool S) { if(S) baseC<alpha_void, imp2>::temporarily_remove_from_list();
 			else if(list) list->remove_node(this); }
   bool	reacts_to_time_events() const { return false; }
-  void	re_insert() { Dnode0<alpha_void, imp2>::re_insert_in_list(); }
+  void	re_insert() { baseC<alpha_void, imp2>::re_insert_in_list(); }
   imp2*	copy() { return new imp2(*this); }
   imp2*	get_this() { return this; }
   const imp2*	get_this() const { return this; }
@@ -200,21 +200,21 @@ public:
 };
 
 // This is the canonical way of defining a ptr to a backptr.
-class imp3: public Dnode0<alpha_void, imp3>, public p2b<Important> {
+class imp3: public baseC<alpha_void, imp3>, public p2b<Important> {
 public:
 	imp3(void* v, const Cstring& s, Important* i)
-		: Dnode0<alpha_void, imp3>(v),
+		: baseC<alpha_void, imp3>(v),
 		payload(s),
 		p2b<Important>(i) {}
-	imp3(const imp3& I) : Dnode0<alpha_void, imp3>(I), p2b<Important>(I), payload(I.payload) {}
+	imp3(const imp3& I) : baseC<alpha_void, imp3>(I), p2b<Important>(I), payload(I.payload) {}
 	~imp3() {
 		if(list) {
 			list->remove_node(this); }
 		cout << payload << " disappearing\n"; }
-  void	remove(bool S) { if(S) Dnode0<alpha_void, imp3>::temporarily_remove_from_list();
+  void	remove(bool S) { if(S) baseC<alpha_void, imp3>::temporarily_remove_from_list();
 			else if(list) list->remove_node(this); }
   bool	reacts_to_time_events() const { return false; }
-  void	re_insert() { Dnode0<alpha_void, imp3>::re_insert_in_list(); }
+  void	re_insert() { baseC<alpha_void, imp3>::re_insert_in_list(); }
   imp3*	copy() { return new imp3(*this); }
   imp3*	get_this() { return this; }
   const imp3*	get_this() const { return this; }
@@ -226,11 +226,11 @@ public:
   Cstring	payload;
 };
 
-class ai : public Dnode0<alpha_string, ai> {
+class ai : public baseC<alpha_string, ai> {
     public:
 	ai() {}
-	ai(const Cstring& s, int i) : Dnode0<alpha_string, ai>(s), payload(i) {}
-	ai(const Cstring& s) : Dnode0<alpha_string, ai>(s), payload(0) {}
+	ai(const Cstring& s, int i) : baseC<alpha_string, ai>(s), payload(i) {}
+	ai(const Cstring& s) : baseC<alpha_string, ai>(s), payload(0) {}
 	~ai() {}
 
 	ai*		copy() { return new ai(*this); }
@@ -288,12 +288,12 @@ int test1(bool crash) {
 	cout << "All done, returning.\n";
 	return 0; }
 
-class stringintnode: public Dnode0<alpha_string, stringintnode> {
+class stringintnode: public baseC<alpha_string, stringintnode> {
     public:
 	stringintnode() : payload(0) {}
-	stringintnode(const Cstring& s, int i) : Dnode0<alpha_string, stringintnode>(s), payload(i) {}
-	stringintnode(const stringintnode& d) : Dnode0<alpha_string, stringintnode>(d), payload(d.payload) {}
-	stringintnode(const Dnode0<alpha_string, stringintnode>& d) : Dnode0<alpha_string, stringintnode>(d), payload(0) {}
+	stringintnode(const Cstring& s, int i) : baseC<alpha_string, stringintnode>(s), payload(i) {}
+	stringintnode(const stringintnode& d) : baseC<alpha_string, stringintnode>(d), payload(d.payload) {}
+	stringintnode(const baseC<alpha_string, stringintnode>& d) : baseC<alpha_string, stringintnode>(d), payload(0) {}
 	~stringintnode() {
 		if(list) {
 			list->remove_node(this); } }
@@ -304,12 +304,12 @@ class stringintnode: public Dnode0<alpha_string, stringintnode> {
 	
 	long	payload; };
 
-class intintnode: public Dnode0<ualpha_int, intintnode> {
+class intintnode: public baseC<ualpha_int, intintnode> {
     public:
-	intintnode() : payload(0), Dnode0<ualpha_int, intintnode>(0L) {}
-	intintnode(int s, int i) : Dnode0<ualpha_int, intintnode>(s), payload(i) {}
-	intintnode(const intintnode& d) : Dnode0<ualpha_int, intintnode>(d), payload(d.payload) {}
-	intintnode(const Dnode0<ualpha_int, intintnode>& d) : Dnode0<ualpha_int, intintnode>(d), payload(0) {}
+	intintnode() : payload(0), baseC<ualpha_int, intintnode>(0L) {}
+	intintnode(int s, int i) : baseC<ualpha_int, intintnode>(s), payload(i) {}
+	intintnode(const intintnode& d) : baseC<ualpha_int, intintnode>(d), payload(d.payload) {}
+	intintnode(const baseC<ualpha_int, intintnode>& d) : baseC<ualpha_int, intintnode>(d), payload(0) {}
 	~intintnode() {
 		if(list) {
 			list->remove_node(this); } }
@@ -319,12 +319,12 @@ class intintnode: public Dnode0<ualpha_int, intintnode> {
   const intintnode*	get_this() const { return this; }
 	long	payload; };
 
-class voidintnode: public Dnode0<alpha_void, voidintnode> {
+class voidintnode: public baseC<alpha_void, voidintnode> {
     public:
 	voidintnode() : payload(0) {}
-	voidintnode(void* s, int i) : Dnode0<alpha_void, voidintnode>(s), payload(i) {}
-	voidintnode(const voidintnode& d) : Dnode0<alpha_void, voidintnode>(d), payload(d.payload) {}
-	voidintnode(const Dnode0<alpha_void, voidintnode>& d) : Dnode0<alpha_void, voidintnode>(d), payload(0) {}
+	voidintnode(void* s, int i) : baseC<alpha_void, voidintnode>(s), payload(i) {}
+	voidintnode(const voidintnode& d) : baseC<alpha_void, voidintnode>(d), payload(d.payload) {}
+	voidintnode(const baseC<alpha_void, voidintnode>& d) : baseC<alpha_void, voidintnode>(d), payload(0) {}
 	~voidintnode() {
 		if(list) {
 			list->remove_node(this); } }

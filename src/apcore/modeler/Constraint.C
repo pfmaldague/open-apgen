@@ -30,15 +30,15 @@ slist<alpha_void, smart_actptr>::iterator& con_violation_gui::dummy_iterator() {
 	return D;
 }
 
-tlist<alpha_void, Cnode0<alpha_void, Rsource*> >&
+tlist<alpha_void, Cntnr<alpha_void, Rsource*> >&
 		Constraint::resourcesSubjectToConstraints() {
-	static tlist<alpha_void, Cnode0<alpha_void, Rsource*> > T;
+	static tlist<alpha_void, Cntnr<alpha_void, Rsource*> > T;
 	return T;
 }
 
-tlist<alpha_void, Cnode0<alpha_void, Rsource*> >&
+tlist<alpha_void, Cntnr<alpha_void, Rsource*> >&
 		Constraint::resourcesRecentlyUpdated() {
-	static tlist<alpha_void, Cnode0<alpha_void, Rsource*> > R;
+	static tlist<alpha_void, Cntnr<alpha_void, Rsource*> > R;
 	return R;
 }
 
@@ -51,7 +51,7 @@ tlist<alpha_time, con_violation>&
 std::atomic<con_violation*>	Constraint::last_safe_node;
 
 con_violation::~con_violation() {
-	Cnode0<alpha_void, con_violation_gui*>* dslineowner_ptr;
+	Cntnr<alpha_void, con_violation_gui*>* dslineowner_ptr;
 
 	//
 	// Delete our representatives in the GUI
@@ -93,20 +93,20 @@ long int	Constraint::release_count() {
 //
 void Constraint::process_one_history_node(
 		value_node*						res_event,
-    		tlist<alpha_void, Cnode0<alpha_void, Rsource*> >&	updated_res,
-    		tlist<alpha_void, Cnode0<alpha_void, Constraint*> >&	to_check) {
+    		tlist<alpha_void, Cntnr<alpha_void, Rsource*> >&	updated_res,
+    		tlist<alpha_void, Cntnr<alpha_void, Constraint*> >&	to_check) {
 
 	Rsource*			  res = res_event->list->Owner;
-	Cnode0<alpha_void, Constraint*>*  con;
+	Cntnr<alpha_void, Constraint*>*  con;
 
 	if(!updated_res.find(res)) {
-	    updated_res << new Cnode0<alpha_void, Rsource*>((void*)res, res);
+	    updated_res << new Cntnr<alpha_void, Rsource*>((void*)res, res);
 
 	    //
 	    // Let's use RCsource::any_constraints to figure out
 	    // which constraints to check
 	    //
-	    slist<alpha_void, Cnode0<alpha_void, Constraint*> >::iterator
+	    slist<alpha_void, Cntnr<alpha_void, Constraint*> >::iterator
 		con_iter(res->get_container()->any_constraints);
 	    while((con = con_iter())) {
 		if(!to_check.find((void*)con->payload)) {
@@ -247,9 +247,9 @@ void Constraint::check_constraints(thread_intfc* Thread) {
     try {
 	lock_guard<mutex>	lock(dual_purpose_iterator::Mutex());
 
-	tlist<alpha_string, Cnode0<alpha_string, Rsource*> >		all_res(false);
-	slist<alpha_string, Cnode0<alpha_string, Rsource*> >::iterator	all_res_iter(all_res);
-	Cnode0<alpha_string, Rsource*>*					ptr_to_res;
+	tlist<alpha_string, Cntnr<alpha_string, Rsource*> >		all_res(false);
+	slist<alpha_string, Cntnr<alpha_string, Rsource*> >::iterator	all_res_iter(all_res);
+	Cntnr<alpha_string, Rsource*>*					ptr_to_res;
 
 	Rsource::get_all_resources_in_dependency_order(all_res);
 
@@ -318,10 +318,10 @@ void Constraint::check_constraints(thread_intfc* Thread) {
 	return;
     }
 
-    tlist<alpha_void, Cnode0<alpha_void, Rsource*> >&
+    tlist<alpha_void, Cntnr<alpha_void, Rsource*> >&
 		updated = Constraint::resourcesRecentlyUpdated();
 
-    tlist<alpha_void, Cnode0<alpha_void, Constraint*> >
+    tlist<alpha_void, Cntnr<alpha_void, Constraint*> >
 		constraints_to_check(true);
 
     updated.clear();
@@ -405,7 +405,7 @@ void Constraint::check_constraints(thread_intfc* Thread) {
 				constraints_to_check);
 
 	    } else if(constraint_related_event->getKey().getetime() > curTime) {
-		Cnode0<alpha_void, Constraint*>*	con;
+		Cntnr<alpha_void, Constraint*>*	con;
 		time_saver				save_the_time;
 
 		//
@@ -424,7 +424,7 @@ void Constraint::check_constraints(thread_intfc* Thread) {
 		thread_intfc::update_current_time(curTime);
 		time_saver::set_now_to(curTime);
 
-		slist<alpha_void, Cnode0<alpha_void, Constraint*> >::iterator
+		slist<alpha_void, Cntnr<alpha_void, Constraint*> >::iterator
 			con_iter(constraints_to_check);
 		while((con = con_iter())) {
 

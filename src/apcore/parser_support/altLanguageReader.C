@@ -97,7 +97,7 @@ void fileReader::parse_xml_stream(
  *
  * Next question: we face the same issue with parameters. But there, we have
  * already done our homework: when reading from a file, parameters are supplied via
-	 * Cnode0<alpha_string, pEsys::pE> objects. We can obviously do the same thing
+	 * Cntnr<alpha_string, pEsys::pE> objects. We can obviously do the same thing
  * when extracting values from a Json string.
  *
  * List of things in fileParser that need to be cleared and

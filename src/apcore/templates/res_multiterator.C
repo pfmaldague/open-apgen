@@ -173,8 +173,8 @@ simple_res_miter::simple_res_miter(
     //
     // Reminder:
     //
-    // typedef Cnode0<relptr<iterClass>, iterClass*>	Tthread;
-    // typedef Cnode0<alpha_void, Tthread*>		threadptr;
+    // typedef Cntnr<relptr<iterClass>, iterClass*>	Tthread;
+    // typedef Cntnr<alpha_void, Tthread*>		threadptr;
     //
     threadptr*				tptr;
 
@@ -214,7 +214,7 @@ simple_res_miter::simple_res_miter(
 }
 
 void simple_res_miter::dump_one(
-		Cnode0<relptr<slist<prio_time, value_node, Rsource*>::iterator>,
+		Cntnr<relptr<slist<prio_time, value_node, Rsource*>::iterator>,
 			slist<prio_time, value_node, Rsource*>::iterator*>* n,
 		stringstream& s,
 		int k) {
@@ -321,11 +321,11 @@ simple_res_miter::add_thread(
 	Tthread*	new_thread = new Tthread(relptr<iterClass>(ic, prio), ic);
 
 
-	thread_names << new Cnode0<alpha_void, Cstring>(
+	thread_names << new Cntnr<alpha_void, Cstring>(
 		new_thread->payload->get_void_list(), thread_name);
 
 	ic->go_to_beginning();
-	pointers_to_threads << new Cnode0<alpha_void, Tthread*>(
+	pointers_to_threads << new Cntnr<alpha_void, Tthread*>(
 					new_thread->payload->get_void_list(),
 					new_thread);
 	lc.register_miterator(*this, ic, store);
@@ -333,10 +333,10 @@ simple_res_miter::add_thread(
 
 void
 simple_res_miter::remove_thread(const slist<prio_time, value_node, Rsource*>& lc) {
-	Cnode0<alpha_void, Tthread*>*	old_ptr = pointers_to_threads.find(&lc);
+	Cntnr<alpha_void, Tthread*>*	old_ptr = pointers_to_threads.find(&lc);
 	iterClass*			iter_to_delete = old_ptr->payload->payload;
 	Tthread*			old_thread = old_ptr->payload;
-	Cnode0<alpha_void, Cstring>*	nameptr
+	Cntnr<alpha_void, Cstring>*	nameptr
 		= thread_names.find(old_thread->payload->get_void_list());
 
 	delete nameptr;
@@ -634,8 +634,8 @@ res_curval_miter::res_curval_miter(
     //
     // Reminder:
     //
-    // typedef Cnode0<relptr<iterClass>, iterClass*>	Tthread;
-    // typedef Cnode0<alpha_void, Tthread*>		threadptr;
+    // typedef Cntnr<relptr<iterClass>, iterClass*>	Tthread;
+    // typedef Cntnr<alpha_void, Tthread*>		threadptr;
     //
     model_res_miter::threadptr*		tptr;
 
@@ -728,8 +728,8 @@ void res_curval_miter::prepare_for_use_at(
 	//
 	// Reminder:
 	//
-	// typedef Cnode0<relptr<iterClass>, iterClass*>	Tthread;
-	// typedef Cnode0<alpha_void, Tthread*>			threadptr;
+	// typedef Cntnr<relptr<iterClass>, iterClass*>	Tthread;
+	// typedef Cntnr<alpha_void, Tthread*>			threadptr;
 	//
 
 	iterClass*	ic = tt->payload;
@@ -908,7 +908,7 @@ res_curval_miter::add_thread(
 	Tthread*	new_thread = new Tthread(relptr<iterClass>(ic, prio), ic);
 
 
-	thread_names << new Cnode0<alpha_void, Cstring>(
+	thread_names << new Cntnr<alpha_void, Cstring>(
 		(void*)&lc, thread_name);
 
 	//
@@ -997,7 +997,7 @@ res_curval_miter::remove_thread(const slist<prio_time, value_node, Rsource*>& lc
 	iterClass*			iter_to_delete = old_ptr->payload->payload;
 	Tthread*			old_thread = old_ptr->payload;
 	ASSERT(old_thread);
-	Cnode0<alpha_void, Cstring>*	nameptr
+	Cntnr<alpha_void, Cstring>*	nameptr
 		= thread_names.find(old_thread->payload->get_void_list());
 	ASSERT(nameptr);
 

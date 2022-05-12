@@ -96,13 +96,13 @@ eval_intfc&	eval_intfc::evalIntfc() {
 /* originally indexed by (void *) AbstractResource but that was no good because
  * an abstract resource can be involved in more than one active thread.
  * Now I use the context from the execution stack. That'd BETTER be unique. */
-tlist<alpha_int, Cnode0<alpha_int, instruction_node*> >&	eval_intfc::actsOrResWaitingOnSignals() {
-	static tlist<alpha_int, Cnode0<alpha_int, instruction_node*> >	a;
+tlist<alpha_int, Cntnr<alpha_int, instruction_node*> >&	eval_intfc::actsOrResWaitingOnSignals() {
+	static tlist<alpha_int, Cntnr<alpha_int, instruction_node*> >	a;
 	return a;
 }
  
-tlist<alpha_int, Cnode0<alpha_int, instruction_node*> >&	eval_intfc::actsOrResWaitingOnCond() {
-	static tlist<alpha_int, Cnode0<alpha_int, instruction_node*> >	a;
+tlist<alpha_int, Cntnr<alpha_int, instruction_node*> >&	eval_intfc::actsOrResWaitingOnCond() {
+	static tlist<alpha_int, Cntnr<alpha_int, instruction_node*> >	a;
 	return a;
 }
  
@@ -172,25 +172,25 @@ Miterator<slist<alpha_time, mEvent, eval_intfc*>, mEvent>&	eval_intfc::Events() 
 	static Miterator<slist<alpha_time, mEvent, eval_intfc*>, mEvent> MI("Events");
 	return MI; }
 
-void eval_intfc::get_list_of_ptrs_to_resources(tlist<alpha_void, Cnode0<alpha_void, Rsource*> >& l) {
+void eval_intfc::get_list_of_ptrs_to_resources(tlist<alpha_void, Cntnr<alpha_void, Rsource*> >& l) {
 	Rsource::iterator	iter;
 	Rsource*		resnode;
 
 	while((resnode = iter.next()))
-		l << new Cnode0<alpha_void, Rsource*>(resnode, resnode);
+		l << new Cntnr<alpha_void, Rsource*>(resnode, resnode);
 }
 
-void eval_intfc::get_list_of_ptrs_to_containers(tlist<alpha_void, Cnode0<alpha_void, RCsource*> >& bl) {
+void eval_intfc::get_list_of_ptrs_to_containers(tlist<alpha_void, Cntnr<alpha_void, RCsource*> >& bl) {
 	slist<alpha_string, RCsource>::iterator	all_containers(RCsource::resource_containers());
 	RCsource*				theContainer;
 
 	while((theContainer = all_containers())) {
-		bl << new Cnode0<alpha_void, RCsource*>(theContainer, theContainer);
+		bl << new Cntnr<alpha_void, RCsource*>(theContainer, theContainer);
 	}
 }
 
-tlist<alpha_void, Cnode0<alpha_void, Constraint*> >&	eval_intfc::active_constraints() {
-	static tlist<alpha_void, Cnode0<alpha_void, Constraint*> > B;
+tlist<alpha_void, Cntnr<alpha_void, Constraint*> >&	eval_intfc::active_constraints() {
+	static tlist<alpha_void, Cntnr<alpha_void, Constraint*> > B;
 	return B;
 }
 
@@ -458,7 +458,7 @@ const Cstring&	RESptr::get_key() const {
 }
 
 RCsource::RCsource(const RCsource& rcs)
-	: Dnode0<alpha_string, RCsource>(rcs),
+	: baseC<alpha_string, RCsource>(rcs),
 		use_method_count(0),
 		payload(new Rcontainer(
 				rcs.payload->Object,
@@ -652,12 +652,12 @@ RESptr::~RESptr() {
 }
 
 template class Miterator<slist<alpha_time, mEvent>, mEvent>;
-template class Cnode0<relptr<slist<alpha_time, mEvent>::iterator>, slist<alpha_time, mEvent>::iterator*>;
-template class tlist<relptr<slist<alpha_time, mEvent>::iterator>, Cnode0<relptr<slist<alpha_time, mEvent>::iterator>, slist<alpha_time, mEvent>::iterator*> >;
-template class slist<relptr<slist<alpha_time, mEvent>::iterator>, Cnode0<relptr<slist<alpha_time, mEvent>::iterator>, slist<alpha_time, mEvent>::iterator*> >;
+template class Cntnr<relptr<slist<alpha_time, mEvent>::iterator>, slist<alpha_time, mEvent>::iterator*>;
+template class tlist<relptr<slist<alpha_time, mEvent>::iterator>, Cntnr<relptr<slist<alpha_time, mEvent>::iterator>, slist<alpha_time, mEvent>::iterator*> >;
+template class slist<relptr<slist<alpha_time, mEvent>::iterator>, Cntnr<relptr<slist<alpha_time, mEvent>::iterator>, slist<alpha_time, mEvent>::iterator*> >;
 
 // template class Miterator<slist<alpha_time, pef_record>, pef_record>;
-// template class Cnode0<relptr<slist<alpha_time, pef_record>::iterator>, slist<alpha_time, pef_record>::iterator*>;
-// template class tlist<relptr<slist<alpha_time, pef_record>::iterator>, Cnode0<relptr<slist<alpha_time, pef_record>::iterator>, slist<alpha_time, pef_record>::iterator*> >;
-// template class slist<relptr<slist<alpha_time, pef_record>::iterator>, Cnode0<relptr<slist<alpha_time, pef_record>::iterator>, slist<alpha_time, pef_record>::iterator*> >;
+// template class Cntnr<relptr<slist<alpha_time, pef_record>::iterator>, slist<alpha_time, pef_record>::iterator*>;
+// template class tlist<relptr<slist<alpha_time, pef_record>::iterator>, Cntnr<relptr<slist<alpha_time, pef_record>::iterator>, slist<alpha_time, pef_record>::iterator*> >;
+// template class slist<relptr<slist<alpha_time, pef_record>::iterator>, Cntnr<relptr<slist<alpha_time, pef_record>::iterator>, slist<alpha_time, pef_record>::iterator*> >;
 template class tlist<alpha_void, backptr<ActivityInstance>::ptr2p2b, short>;
