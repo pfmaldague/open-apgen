@@ -34,5 +34,5 @@ Over the years, a number of papers about APGen have been presented at SpaceOps m
 
 	arc.aiaa.org/seqies/6.spaceops
 
-Some of these papers are available in the ./doc subdirectory of the open-apen repository; see [the doc README](./doc/README.md) for more information.
+Some of these papers are available in the ./doc subdirectory of the open-apgen repository; see [the doc README](./doc/README.md) for more information. This README also explains some of the unusual features of APGen and how they can be leveraged to the benefit of deep-space missions.
 
