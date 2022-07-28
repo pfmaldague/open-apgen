@@ -78,7 +78,7 @@ extern "C" {		// wrapping for C++ routines used by C
 // second element is true if this is an extended maneuver,
 // false if it is instantaneous.
 //
-typedef Cnode0<alpha_time, pair<Cstring, bool> > maneuver_node;
+typedef Cntnr<alpha_time, pair<Cstring, bool> > maneuver_node;
 
 //
 // Caching interface for spkez_c
@@ -254,12 +254,12 @@ public:
 	//
 	// NOTE: the key of this node is the estimated sampling time
 	//
-	typedef Cnode0<alpha_int, infl_data>	influencer;
+	typedef Cntnr<alpha_int, infl_data>	influencer;
 
 	//
 	// NOTE: the key of this node is a body ID
 	//
-	typedef Cnode0<alpha_int, influencer*>	ptr2influencer;
+	typedef Cntnr<alpha_int, influencer*>	ptr2influencer;
 
 	//
 	// The influencers class holds data for all the influencers
@@ -393,10 +393,10 @@ public:
 	//
 	// NOTE: key is body ID of the body
 	//
-	class body_state: public Dnode0<alpha_int, body_state> {
+	class body_state: public baseC<alpha_int, body_state> {
 	public:
 	    body_state() = default;
-	    body_state(int k) : Dnode0<alpha_int, body_state>(k) {}
+	    body_state(int k) : baseC<alpha_int, body_state>(k) {}
 	    body_state(const body_state&) = default;
 	    virtual ~body_state() {
 		if(list) {

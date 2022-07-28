@@ -11,7 +11,6 @@
 
 #include "aafReader.H"
 #include "c_parser_bridge.h"
-#include "AAFlibrary.H"
 #include "lex_intfc.H"
 #include "apDEBUG.H"
 #include "fileReader.H"

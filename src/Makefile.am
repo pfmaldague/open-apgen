@@ -16,10 +16,8 @@ endif
 
 if JSON_INSTALLED
 nobase_include_HEADERS = \
-	apgenlib/AAFlibrary.H \
 	apgenlib/aafReader.H \
 	apgenlib/AbstractResource.H \
-	apgenlib/accessorkey.H \
 	apgenlib/ACT_exec.H \
 	apgenlib/action_request_client.H \
 	apgenlib/action_request.H \
@@ -35,7 +33,6 @@ nobase_include_HEADERS = \
 	apgenlib/APcoreServer.H \
 	apgenlib/apcoreWaiter.H \
 	apgenlib/APsax.H \
-	apgenlib/AP_cxx_intfc.H \
 	apgenlib/APdata.H \
 	apgenlib/apDEBUG.H \
 	apgenlib/APerrors.H \
@@ -178,10 +175,8 @@ nobase_include_HEADERS = \
 else 
 
 nobase_include_HEADERS = \
-	apgenlib/AAFlibrary.H \
 	apgenlib/aafReader.H \
 	apgenlib/AbstractResource.H \
-	apgenlib/accessorkey.H \
 	apgenlib/ACT_exec.H \
 	apgenlib/action_request_client.H \
 	apgenlib/action_request.H \
@@ -197,7 +192,6 @@ nobase_include_HEADERS = \
 	apgenlib/APcoreServer.H \
 	apgenlib/apcoreWaiter.H \
 	apgenlib/APsax.H \
-	apgenlib/AP_cxx_intfc.H \
 	apgenlib/APdata.H \
 	apgenlib/apDEBUG.H \
 	apgenlib/APerrors.H \

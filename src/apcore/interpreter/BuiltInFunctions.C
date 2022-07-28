@@ -2400,7 +2400,6 @@ apgen::RETURN_STATUS exp_DELETE_SIGNAL(	Cstring& rmessage,
 	RETRIEVE1(a , "exp_DELETE_SIGNAL")
 	if(a->is_string()) {
 		sigInfoNode*	N = eval_intfc::find_a_signal(a->get_string());
-		// Node*		M = eval_intfc::recent_cxx_signals().find(a->get_string());
 
 		if(!N) {
 			rmessage << "trying to delete non-existent signal";

@@ -14,7 +14,7 @@
 
 #include "C_string.H"
 #include "ActivityInstance.H"
-#include "AAFlibrary.H"
+// #include "AAFlibrary.H"
 #include <APbasic.H>
 #include <flexval.H>
 #include <AbstractResource.H>

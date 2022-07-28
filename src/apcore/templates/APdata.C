@@ -39,7 +39,6 @@ using namespace std;
 
 #include "C_string.H"
 #include "ActivityInstance.H"
-#include "AAFlibrary.H"
 #include "APbasic.H"
 #include "flexval.H"
 #include "AbstractResource.H"
@@ -66,16 +65,6 @@ ofstream& coutx::outfile() {
 long&	abs_res_object::currentID() {
 	static long 	l = 0L;
 	return l;
-}
-
-void *&theAAFlibHandle() {
-	static void *aaflib = NULL;
-	return aaflib;
-}
-
-blist&	theAAFActivityFactories() {
-	static blist	S(compare_function(compare_bstringnodes, false));
-	return S;
 }
 
 extern "C" {
