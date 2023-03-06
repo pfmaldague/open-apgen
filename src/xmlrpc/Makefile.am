@@ -13,6 +13,8 @@ libAPxml_la_SOURCES = \
 	XmlRpcValue.C \
 	XmlRpcCompress.C
 
+libAPxml_la_LDFLAGS= -lz
+
 autolisten_SOURCES = auto_listen.C
 
 autolisten_LDADD = ./libAPxml.la

@@ -1,6 +1,7 @@
-noinst_LIBRARIES = libAPedit.a
+## noinst_LIBRARIES = libAPedit.a
+lib_LTLIBRARIES = libAPedit.la
 
-libAPedit_a_SOURCES = \
+libAPedit_la_SOURCES = \
 	../../APedit-2.4/gtk_editwin.C \
 	../../APedit-2.4/gtk_xmlwin.C \
 	../../APedit-2.4/gtk_globwin.C \

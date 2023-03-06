@@ -334,7 +334,7 @@ AC_ARG_ENABLE(gtk-editor,
         Add the Xp library while linking. Use this if you need to.],
         [if test "X$enableval" = Xyes; then
     AM_CONDITIONAL(GTK_EDITOR_OPTION,true)
-    GTK_ED_LIB_LOC=${GTK_SUBDIRECTORY}/libAPedit.a
+    GTK_ED_LIB_LOC=${GTK_SUBDIRECTORY}/libAPedit.la
     GTK_ED_INCL_LOC=${GTK_SUBDIRECTORY}
     GTK_EDITOR_FLAG="-DGTK_EDITOR"
          fi]

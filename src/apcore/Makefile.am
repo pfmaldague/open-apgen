@@ -71,6 +71,7 @@ AM_LDFLAGS = `pkg-config --libs json-c`
 endif
 
 libAPcore_la_LIBADD = \
+	../xmlrpc/libAPxml.la \
 	parser/libParser.la \
 	@EXTRA_LIBS@
 

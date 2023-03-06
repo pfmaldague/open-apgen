@@ -4,10 +4,10 @@
 ##add more files to this library achase - 4/15/2002
 ##currently to use this library, I think you must also link with APutil
 
-noinst_LIBRARIES = libUIutil.a
+lib_LTLIBRARIES = libUIutil.la
 
 
-libUIutil_a_SOURCES = \
+libUIutil_la_SOURCES = \
 	../../../atm_client/UIutil/ComboBox.c \
 	../../../atm_client/UIutil/Converter.c \
 	../../../atm_client/UIutil/UI_motif_widget.C \

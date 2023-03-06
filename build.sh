@@ -19,7 +19,7 @@ assertZeroReturn() {
 	fi
 }
 
-# MACH should be set for bamboo builds, otherwise infer based on machine architecture.
+# Infer MACH based on machine architecture.
 if [ -z "$MACH" ]; then
 	if [ $(uname) = "Linux" ]; then
 
@@ -56,7 +56,6 @@ configureopts="--disable-shared"
 keep_generated_files=""
 
 installdir="/opt/local"
-bamboo="false"
 udeflib=""
 build_everything=""
 aafcompiler="n"
@@ -98,21 +97,6 @@ while [ $# -gt 0 ]; do
 			echo "udef should be followed by the directory in which libudef is installed; exiting."
 			exit 1
 		fi
-	elif [ $1 = "bamboo" ]; then
-		echo "Detected bamboo option."
-		configureopts="--disable-shared"
-		rm -rf bamboo
-		mkdir -p bamboo/$MACH
-		installdir="$PWD/bamboo/$MACH"
-		# setup SEQBLDTAG, but only if it does not exist
-		if [ -z "$SEQBLDTAG" ]; then
-			echo "SEQBLDTAG: $SEQBLDTAG"
-			echo "SEQBLDTAG is not set. Using MACH plus time string."
-			TIME_STRING=`date +"%y%m%d-%H%M"`
-			export SEQBLDTAG="$MACH-$TIME_STRING"
-			echo "SEQBLDTAG: $SEQBLDTAG"
-		fi
-		bamboo="true"
 	elif [ $1 = "keep" ]; then
 		echo "Detected keep generated files option."
 		keep_generated_files="y"
@@ -120,7 +104,7 @@ while [ $# -gt 0 ]; do
 		echo "Detected XML option."
 		xmloption="--with-orchestrator"
 	else
-		echo "argument $1 not understood; exiting. Valid options: debug, full, prefix <...>, compile-aaf, coverage, dynamic, keep, profile, udef <...>, bamboo."
+		echo "argument $1 not understood; exiting. Valid options: debug, full, prefix <...>, compile-aaf, coverage, dynamic, keep, profile, udef <...>."
 		exit 1
 	fi
 	shift
@@ -165,9 +149,8 @@ fi
 linkeropts=
 cflags="${cxxflags}"
 if [ $MACH = "rhel7_64" ]; then
-	export CSEDIR=/ammos/apgen/cse
-	export PKG_CONFIG_PATH=${CSEDIR}/lib64/pkgconfig:/usr/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig
-	linkeropts="${profile_options} -L${CSEDIR}/lib64 -Wl,-rpath=${CSEDIR}/lib64"
+	export PKG_CONFIG_PATH=/usr/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig
+	linkeropts="${profile_options}"
 	cxxflags="${cxxflags} -std=c++11"
 elif [ $MACH = "rhel5-64" ]; then
 	linkeropts="${profile_options}"
@@ -233,7 +216,7 @@ fi
 #
 # Dennis and I are both desperate for info regarding environment variables, so here we go:
 #
-echo "MACH = $MACH, CSEDIR = $CSEDIR, PKG_CONFIG_PATH = $PKG_CONFIG_PATH"
+echo "MACH = $MACH, PKG_CONFIG_PATH = $PKG_CONFIG_PATH"
 
 #
 # check if json-c package exists.
@@ -300,45 +283,6 @@ if ! make -j 5 install CFLAGS="${cflags}" CXXFLAGS="${cxxflags}" LDFLAGS="${link
     popd
     echo make error
     exit 2
-fi
-
-#
-# if bamboo build, tar up install files
-#
-if [ $bamboo = "true" ]; then
-	# run rpath -d on binaries and executables to remove all hard-coded
-	# references to build directories
-	pushd bamboo/$MACH
-	if [ $MACH = "rhel7_64" ]; then
-		echo "Modifiying rpath for all binaries and libraries to ${CSEDIR}/lib64"
-		chrpath -r "${CSEDIR}/lib64" bin/* lib/*.so.*.*.*
-	else
-		echo "Deleting rpath for all binaries and libraries"
-		chrpath -d bin/* lib/*.so.*.*.*
-	fi
-	popd
-
-	# reorganize directory structure; make sure install directory
-	# is at the same level as src, where the test script expects it
-	rm -rf ../install
-	mkdir -p ../install/bin
-	mkdir -p ../install/lib
-	mkdir -p ../install/etc
-	mkdir -p ../install/include
-	cp -rp bamboo/$MACH/bin/* ../install/bin/
-	assertZeroReturn $LINENO
-	cp -rp bamboo/$MACH/lib/* ../install/lib/
-	assertZeroReturn $LINENO
-	cp -rp bamboo/$MACH/etc/* ../install/etc/
-	assertZeroReturn $LINENO
-	cp -rp bamboo/$MACH/include/* ../install/include/
-	assertZeroReturn $LINENO
-
-	# create tarball
-	pushd ../install
-	echo "creating tar file apgen-$SEQBLDTAG.tar.gz"
-	tar czvf apgen-$SEQBLDTAG.tar.gz *
-	popd
 fi
 
 #

@@ -1,4 +1,4 @@
-libATM_client_a_SOURCES=  \
+libATM_client_la_SOURCES=  \
 	../../atm_client/ACT_sys.C \
 	../../atm_client/APconfig.C \
 	../../atm_client/CON_sys.C \

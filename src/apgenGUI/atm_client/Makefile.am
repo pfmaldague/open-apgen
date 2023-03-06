@@ -1,4 +1,4 @@
-noinst_LIBRARIES = libATM_client.a
+lib_LTLIBRARIES = libATM_client.la
 bin_PROGRAMS = atm
 
 ## do not include the udef directories, which are handled automatically.
@@ -14,8 +14,8 @@ EXTRA_DIST = atm_sources aTM_client
 appdefaultsdir=${sysconfdir}/app-defaults
 appdefaults_DATA = aTM_client
 
-atm_LDADD =	libATM_client.a \
-	 	UIutil/libUIutil.a \
+atm_LDADD =	libATM_client.la \
+	 	UIutil/libUIutil.la \
 		../../apcore/libAPcore.la \
 		../../apcore/parser/libParser.la \
 		@GTK_ED_LIB_LOC@
