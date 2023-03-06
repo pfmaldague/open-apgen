@@ -1,5 +1,5 @@
 
-AC_INIT([apgen], [0.5])
+AC_INIT([apgen],[0.5])
 AC_CONFIG_SRCDIR([apgen.c])
 AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_HEADERS(apgenlib/config.h)
